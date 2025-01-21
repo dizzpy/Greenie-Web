@@ -19,6 +19,15 @@ echo "📝 Files to check:"
 echo "$FILES_TO_CHECK"
 echo "\n"
 
+# Remove extra empty lines from staged files
+for FILE in $FILES_TO_CHECK; do
+  if [[ "$FILE" =~ \.(js|jsx|css|html)$ ]]; then
+    echo "🧹 Cleaning empty lines in $FILE"
+    sed -i '' '/^[[:space:]]*$/d' "$FILE"
+    git add "$FILE"
+  fi
+done
+
 # Run ESLint on JS files
 JS_FILES=$(echo "$FILES_TO_CHECK" | grep -E '\.(js|jsx)$' || true)
 if [ -n "$JS_FILES" ]; then
