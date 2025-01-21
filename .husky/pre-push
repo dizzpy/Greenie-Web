@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🚀 Running pre-push hook..."
+echo "Building project to ensure it compiles correctly..."
+
+# Save the current branch name
+current_branch=$(git symbolic-ref --short HEAD)
+echo "📦 Current branch: $current_branch"
+
+# Run build and capture both output and exit code
+output=$(npm run build 2>&1)
+exit_code=$?
+
+# Print the output
+echo "$output"
+
+if [ $exit_code -eq 0 ]; then
+    echo "✅ Build completed successfully"
+else
+    echo "❌ Build failed. Please fix the build errors before pushing"
+    exit 1
+fi

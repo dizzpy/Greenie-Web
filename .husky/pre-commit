@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "\n🔍 Running pre-commit hook...\n"
+
+# Format all files first
+echo "💅 Running Prettier on all files..."
+npm run format
+
+# Get all files that have changes (staged and unstaged)
+FILES_TO_CHECK=$(git diff --name-only --cached --diff-filter=ACMR && git diff --name-only --diff-filter=ACMR)
+
+if [ -z "$FILES_TO_CHECK" ]; then
+    echo "No files to check. Skipping pre-commit hooks."
+    exit 0
+fi
+
+echo "📝 Files to check:"
+echo "$FILES_TO_CHECK"
+echo "\n"
+
+# Run ESLint on JS files
+JS_FILES=$(echo "$FILES_TO_CHECK" | grep -E '\.(js|jsx)$' || true)
+if [ -n "$JS_FILES" ]; then
+    echo "🔬 Running ESLint..."
+    npx eslint --fix $JS_FILES
+    if [ $? -ne 0 ]; then
+        echo "❌ ESLint found issues that need to be fixed\n"
+        exit 1
+    fi
+    echo "✅ ESLint completed successfully\n"
+fi
+
+# Stage all modified files
+echo "📦 Staging modified files..."
+git add .
+
+echo "✨ All checks passed! Proceeding with commit...\n"
