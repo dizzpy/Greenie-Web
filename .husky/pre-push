@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+
+echo "🚀 Running pre-push hook..."
+echo "📦 Building project to ensure it compiles correctly..."
+
+# Save the current branch name
+current_branch=$(git symbolic-ref --short HEAD)
+echo "🔀 Current branch: $current_branch"
+
+# Check if npm is installed
+if ! command -v npm > /dev/null; then
+    echo "❌ npm is not installed or not in PATH. Please install npm to proceed."
+    exit 1
+fi
+
+# Skip build for specific branches (optional)
+if [[ "$current_branch" == "main" || "$current_branch" == "master" ]]; then
+    echo "🛑 Skipping build check for $current_branch branch."
+    exit 0
+fi
+
+# Run build and capture output
+output=$(npm run build 2>&1)
+exit_code=$?
+
+# Print the output
+echo "$output"
+
+# Save build logs for debugging
+echo "$output" > build.log
+
+if [ $exit_code -eq 0 ]; then
+    echo "✅ Build completed successfully."
+else
+    echo "❌ Build failed. Please fix the build errors before pushing."
+    echo "📜 Check build.log for details."
+    exit 1
+fi
