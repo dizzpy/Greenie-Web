@@ -98,7 +98,7 @@ function ShopHome() {
       <ShopNav />
 
       {/* Filter nav */}
-      <div className="inline-flex items-center bg-white p-4 rounded-full border border-outline mt-4">
+      <div className="inline-flex items-center bg-white p-4 rounded-full border border-outline sm:mt-0 mt-5">
         <img src={sortIcon} alt="Sort Icon" className="w-6 h-6 mr-2" />
         <p className="mr-2">Sort by</p>
         <select className="font-medium bg-transparent outline-none cursor-pointer">
