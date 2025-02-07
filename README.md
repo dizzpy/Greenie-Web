@@ -61,3 +61,39 @@ Greenie Web Application is an eco-friendly platform designed to promote sustaina
 ## CI/CD
 
 We use GitHub Actions for continuous integration. The project is built on every pull request. Once merged, Vercel automatically deploys the updated project.
+
+## Folder Structure
+
+```
+📂 project-root
+┣ 📂 src
+┃ ┣ 📂 assets            # Images, icons, fonts
+┃ ┣ 📂 components        # Reusable UI components (Navbar, Button, etc.)
+┃ ┃ ┣ 📂 common          # Shared UI components (Button, Modal, etc.)
+┃ ┃ ┣ 📂 layout          # Navbar, Sidebar, Footer
+┃ ┣ 📂 pages             # Main pages/screens
+┃ ┃ ┣ 📂 auth            # Login, Register, Forgot Password
+┃ ┃ ┣ 📂 feed            # User feed, posts, comments
+┃ ┃ ┣ 📂 challenges      # Challenge listing, details
+┃ ┃ ┣ 📂 leaderboard     # Leaderboard, rankings
+┃ ┃ ┣ 📂 shop            # Store, Cart, Checkout, Redeem points
+┃ ┃ ┣ 📂 settings        # User settings, profile
+┃ ┃ ┗ 📜 NotFound.jsx    # 404 Page
+┃ ┣ 📂 services          # API calls (REST API)
+┃ ┃ ┣ 📜 authService.js  # Authentication API
+┃ ┃ ┣ 📜 challengeService.js # Challenges API
+┃ ┃ ┣ 📜 leaderboardService.js # Leaderboard API
+┃ ┃ ┣ 📜 shopService.js  # E-commerce API
+┃ ┃ ┗ 📜 userService.js  # Profile API
+┃ ┣ 📂 store             # Global state management (Redux/Zustand)
+┃ ┣ 📂 utils             # Helper functions, constants
+┃ ┣ 📂 routes            # React Router configuration
+┃ ┣ 📜 App.jsx           # Main App Component
+┃ ┣ 📜 main.jsx          # ReactDOM render file
+┃ ┗ 📜 index.css         # Global styles
+┣ 📜 .gitignore
+┣ 📜 README.md
+┣ 📜 package.json
+┗ 📜 tailwind.config.js
+
+```
