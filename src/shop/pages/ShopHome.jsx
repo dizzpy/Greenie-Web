@@ -1,5 +1,6 @@
 import ShopNav from '../components/ShopNav';
 import ProductCard from '../components/ProductCard';
+import sortIcon from '../../assets/icons/sort.svg';
 
 // Sample Product Data
 const products = [
@@ -97,8 +98,15 @@ function ShopHome() {
       <ShopNav />
 
       {/* Filter nav */}
-      <div className="bg-green-300 py-4 mx-auto my-4 rounded-lg">
-        <p className="text-start">Filter Nav</p>
+      <div className="inline-flex items-center bg-white p-4 rounded-full border border-outline mt-4">
+        <img src={sortIcon} alt="Sort Icon" className="w-6 h-6 mr-2" />
+        <p className="mr-2">Sort by</p>
+        <select className="font-medium bg-transparent outline-none cursor-pointer">
+          <option value="popular">Most Popular</option>
+          <option value="low-to-high">Lowest Price</option>
+          <option value="high-to-low">Highest Price</option>
+          <option value="newest">Newest</option>
+        </select>
       </div>
 
       {/* Shop item grid */}
