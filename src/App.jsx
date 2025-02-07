@@ -5,14 +5,15 @@ import Cart from './shop/pages/Cart';
 import Checkout from './shop/pages/Checkout';
 import RedeemStore from './shop/pages/RedeemStore';
 import NotFound from './pages/NotFound';
+import HomePage from './pages/HomePage';
 
 function App() {
   return (
     <Router>
-      <div className="text-black h-screen flex items-center justify-center">
+      <div>
         <Routes>
           {/* Home Route */}
-          <Route path="/" element={<ShopHome />} />
+          <Route path="/" element={<HomePage />} />
 
           {/* Shop Routes */}
           <Route path="/shop" element={<ShopHome />} />
