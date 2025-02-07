@@ -11,8 +11,10 @@ function App() {
     <Router>
       <div className="text-black h-screen flex items-center justify-center">
         <Routes>
-          {/* Shop Routes */}
+          {/* Home Route */}
           <Route path="/" element={<ShopHome />} />
+
+          {/* Shop Routes */}
           <Route path="/shop" element={<ShopHome />} />
           <Route path="/shop/product/:id" element={<ProductDetails />} />
           <Route path="/shop/cart" element={<Cart />} />
