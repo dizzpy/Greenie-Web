@@ -4,7 +4,7 @@ function ProductCard({ product }) {
   return (
     <div className="h-auto bg-bg-light p-4 rounded-2xl">
       {/* Product Image */}
-      <div className="h-40 sm:h-48 bg-outline rounded-2xl overflow-hidden">
+      <div className="h-52 sm:h-60 bg-outline rounded-2xl overflow-hidden">
         <img
           src={product.image}
           alt={product.name}
