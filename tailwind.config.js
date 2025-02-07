@@ -5,6 +5,9 @@ export default {
     extend: {
       colors: {
         'primary-green': '#1BAC5F',
+        'text-gray': '#585656',
+        'bg-light': '#F8F8F8',
+        outline: '#DBDBDB',
       },
       fontFamily: {
         sans: ['DM Sans', 'sans-serif'],

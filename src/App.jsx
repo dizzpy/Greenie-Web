@@ -9,7 +9,7 @@ import NotFound from './pages/NotFound';
 function App() {
   return (
     <Router>
-      <div className="text-black h-screen flex items-center justify-center">
+      <div>
         <Routes>
           {/* Home Route */}
           <Route path="/" element={<ShopHome />} />
