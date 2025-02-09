@@ -53,7 +53,7 @@ const ProductDetails = () => {
       <div className="container mx-auto py-4 md:py-8">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8">
           {/* Product Image */}
-          <div className="md:col-span-5 bg-bg-light rounded-3xl overflow-hidden">
+          <div className="md:col-span-5 bg-bg-light/50 rounded-3xl overflow-hidden">
             <img
               src={product.image}
               alt={product.name}
@@ -62,7 +62,7 @@ const ProductDetails = () => {
           </div>
 
           {/* Product Info */}
-          <div className="md:col-span-7 bg-bg-light p-6 md:p-10 rounded-3xl">
+          <div className="md:col-span-7 bg-bg-light/50 p-6 md:p-10 rounded-3xl">
             {/* product name */}
             <h1 className="text-2xl md:text-3xl font-medium text-text-gray mb-2">
               {product.name}
