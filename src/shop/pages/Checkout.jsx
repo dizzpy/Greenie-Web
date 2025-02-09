@@ -1,7 +1,7 @@
-// import { useNavigate } from 'react-router-dom';
 import CartButton from '../components/CartButton';
 import { LuArrowRight } from 'react-icons/lu';
 import ShopNav from '../components/ShopNav';
+import Breadcrumb from '../components/Breadcrumb';
 
 const Checkout = () => {
   // const navigate = useNavigate();
@@ -31,6 +31,16 @@ const Checkout = () => {
       </div>
 
       <ShopNav />
+
+      <div className="my-4">
+        <Breadcrumb
+          items={[
+            { label: 'Shop', link: '/shop' },
+            { label: 'Cart', link: '/shop/cart' },
+            { label: 'Checkout' },
+          ]}
+        />
+      </div>
 
       <div className="my-8">
         <h1 className="text-2xl md:text-3xl font-medium text-text-gray mb-6">
