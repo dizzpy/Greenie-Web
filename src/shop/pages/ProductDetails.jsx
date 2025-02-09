@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useState } from 'react'; // Add this import
+import { useState, useMemo } from 'react'; // Add this import
 import { products } from '../data/products';
 import ShopNav from '../components/ShopNav';
 import cartIcon from '../../assets/icons/shopping-cart.svg';
@@ -27,13 +27,11 @@ const ProductDetails = () => {
     console.log('Adding to cart:', product, 'quantity:', quantity);
   };
 
-  // Get 3 random products excluding current product
-  const getRandomProducts = () => {
-    const otherProducts = products.filter((p) => p.id !== parseInt(id));
+  // Memoize random products to prevent re-renders
+  const relatedProducts = useMemo(() => {
+    const otherProducts = products.filter((p) => p.productID !== parseInt(id));
     return otherProducts.sort(() => 0.5 - Math.random()).slice(0, 3);
-  };
-
-  const relatedProducts = getRandomProducts();
+  }, [id]); // Only re-calculate when product ID changes
 
   if (!product) {
     return <div>Product not found</div>;
@@ -53,7 +51,7 @@ const ProductDetails = () => {
       <div className="container mx-auto py-4 md:py-8">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8">
           {/* Product Image */}
-          <div className="md:col-span-5 bg-bg-light/50 rounded-3xl overflow-hidden">
+          <div className="md:col-span-5 bg-bg-light rounded-3xl overflow-hidden">
             <img
               src={product.imgURL}
               alt={product.productName}
@@ -62,7 +60,7 @@ const ProductDetails = () => {
           </div>
 
           {/* Product Info */}
-          <div className="md:col-span-7 bg-bg-light/50 p-6 md:p-10 rounded-3xl">
+          <div className="md:col-span-7 bg-bg-light p-6 md:p-10 rounded-3xl">
             {/* product name */}
             <h1 className="text-2xl md:text-3xl font-medium text-text-gray mb-2">
               {product.productName}
@@ -146,7 +144,7 @@ const ProductDetails = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
             {relatedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.productID} product={product} />
             ))}
           </div>
         </div>

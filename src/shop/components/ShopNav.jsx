@@ -27,10 +27,9 @@ function ShopNav() {
     <>
       <div className="flex flex-row space-x-3 justify-end items-center">
         {/* User Points Count */}
-        <div className="flex items-center">
-          <IconButton icon={searchIcon} />
+        <IconButton icon={searchIcon}>
           <p className="ml-3 text-text-gray">365 Points</p>
-        </div>
+        </IconButton>
 
         {/* search icon */}
         <IconButton icon={searchIcon} />
