@@ -10,7 +10,7 @@ import HomePage from './pages/HomePage';
 function App() {
   return (
     <Router>
-      <div>
+      <div className="min-h-screen bg-white">
         <Routes>
           {/* Home Route */}
           <Route path="/" element={<HomePage />} />

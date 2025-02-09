@@ -1,16 +1,27 @@
-import { useParams } from 'react-router-dom';
-import { useState } from 'react'; // Add this import
+import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useMemo, useEffect } from 'react'; // Add this import
 import { products } from '../data/products';
 import ShopNav from '../components/ShopNav';
 import cartIcon from '../../assets/icons/shopping-cart.svg';
 import CartButton from '../components/CartButton';
 import { LuArrowRight } from 'react-icons/lu';
 import ProductCard from '../components/ProductCard';
+import Breadcrumb from '../components/Breadcrumb';
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const product = products.find((p) => p.id === parseInt(id));
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+  const product = products.find((p) => p.productID === parseInt(id));
   const [quantity, setQuantity] = useState(1);
+
+  useEffect(() => {
+    // Simulate loading
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+  }, [id]);
 
   const incrementQuantity = () => {
     setQuantity((prev) => prev + 1);
@@ -27,17 +38,38 @@ const ProductDetails = () => {
     console.log('Adding to cart:', product, 'quantity:', quantity);
   };
 
-  // Get 3 random products excluding current product
-  const getRandomProducts = () => {
-    const otherProducts = products.filter((p) => p.id !== parseInt(id));
+  // Memoize random products to prevent re-renders
+  const relatedProducts = useMemo(() => {
+    const otherProducts = products.filter((p) => p.productID !== parseInt(id));
     return otherProducts.sort(() => 0.5 - Math.random()).slice(0, 3);
-  };
+  }, [id]); // Only re-calculate when product ID changes
 
-  const relatedProducts = getRandomProducts();
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
   if (!product) {
-    return <div>Product not found</div>;
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+        <h2 className="text-2xl font-medium">Product not found</h2>
+        <button
+          onClick={() => navigate('/shop')}
+          className="text-primary-green hover:underline"
+        >
+          Return to Shop
+        </button>
+      </div>
+    );
   }
+
+  const breadcrumbItems = [
+    { label: 'Shop', link: '/shop' },
+    { label: product.productName },
+  ];
 
   return (
     <div className="max-w-screen-xl container mx-auto px-4 md:px-0">
@@ -49,14 +81,18 @@ const ProductDetails = () => {
       {/* shop nav */}
       <ShopNav />
 
+      <div className="my-4">
+        <Breadcrumb items={breadcrumbItems} />
+      </div>
+
       {/* Product content */}
       <div className="container mx-auto py-4 md:py-8">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8">
           {/* Product Image */}
           <div className="md:col-span-5 bg-bg-light rounded-3xl overflow-hidden">
             <img
-              src={product.image}
-              alt={product.name}
+              src={product.imgURL}
+              alt={product.productName}
               className="w-full h-[300px] md:h-[500px] rounded-lg object-cover"
             />
           </div>
@@ -65,19 +101,19 @@ const ProductDetails = () => {
           <div className="md:col-span-7 bg-bg-light p-6 md:p-10 rounded-3xl">
             {/* product name */}
             <h1 className="text-2xl md:text-3xl font-medium text-text-gray mb-2">
-              {product.name}
+              {product.productName}
             </h1>
             <p className="text-sm md:text-base text-lightred">
-              Only 3 units left
+              Only {product.quantity} units left
             </p>
 
             {/* price section */}
             <div className="mt-4 md:mt-5">
               <p className="text-lg md:text-xl text-text-gray">
-                ${product.price}
+                Rs {product.price}
               </p>
               <p className="text-sm md:text-base text-primary-green">
-                {product.points} Points
+                {product.numberOfPoints} Points
               </p>
               <p className="text-xs md:text-sm text-text-gray">
                 or you can redeem green points
@@ -88,9 +124,7 @@ const ProductDetails = () => {
             <div className="mt-4 md:mt-5">
               <h2 className="text-base font-medium">Description</h2>
               <p className="text-sm md:text-base text-text-gray">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
-                suscipit fringilla aliquet. Phasellus vel leo sem. Nunc at
-                congue augue. Vestibulum ante ipsum primis ngue quam
+                {product.fullDescription}
               </p>
             </div>
 
@@ -100,20 +134,27 @@ const ProductDetails = () => {
               <div className="flex items-center space-x-4 mt-2 mb-4 md:mb-6 bg-white w-fit p-2 rounded-full">
                 <button
                   onClick={decrementQuantity}
-                  className="w-8 h-8 flex items-center justify-center bg-bg-light rounded-full hover:bg-gray-200 transition-colors"
+                  disabled={quantity <= 1}
+                  className="w-8 h-8 flex items-center justify-center bg-bg-light rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   -
                 </button>
-                <span className="text-base text-text-gray font-normal w-3 text-center">
+                <span className="text-base text-text-gray font-normal w-6 text-center">
                   {quantity}
                 </span>
                 <button
                   onClick={incrementQuantity}
-                  className="w-8 h-8 flex items-center justify-center bg-bg-light rounded-full hover:bg-gray-200 transition-colors"
+                  disabled={quantity >= (product.quantity || 10)}
+                  className="w-8 h-8 flex items-center justify-center bg-bg-light rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   +
                 </button>
               </div>
+              {quantity >= (product.quantity || 10) && (
+                <p className="text-sm text-lightred mt-1">
+                  Maximum quantity reached
+                </p>
+              )}
             </div>
 
             {/* button section */}
@@ -131,12 +172,12 @@ const ProductDetails = () => {
               />
             </div>
 
-            <CartButton
+            {/* <CartButton
               className="mt-3 md:mt-5"
               onClick={handleAddToCart}
               icon={<LuArrowRight />}
               text="Redeem Green Points"
-            />
+            /> */}
           </div>
         </div>
 
@@ -148,7 +189,7 @@ const ProductDetails = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
             {relatedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.productID} product={product} />
             ))}
           </div>
         </div>
