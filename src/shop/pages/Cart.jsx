@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import CartItem from '../components/CartItem';
+import CartItemCard from '../components/CartItemCard';
 import CartButton from '../components/CartButton';
 import { LuArrowRight } from 'react-icons/lu';
 import ShopNav from '../components/ShopNav';
@@ -18,6 +18,14 @@ const Cart = () => {
       imgURL: 'https://via.placeholder.com/300',
       numberOfPoints: 120,
     },
+    {
+      productID: 2,
+      productName: 'Eco-Friendly Bottle',
+      price: 4300,
+      quantity: 2,
+      imgURL: 'https://via.placeholder.com/300',
+      numberOfPoints: 120,
+    },
   ];
 
   const total = cartItems.reduce(
@@ -27,6 +35,16 @@ const Cart = () => {
 
   const handleCheckout = () => {
     navigate('/shop/checkout');
+  };
+
+  const handleUpdateQuantity = (productId, newQuantity) => {
+    console.log('Update quantity:', productId, newQuantity);
+    // Add your quantity update logic here
+  };
+
+  const handleRemoveItem = (productId) => {
+    console.log('Remove item:', productId);
+    // Add your remove item logic here
   };
 
   return (
@@ -49,28 +67,28 @@ const Cart = () => {
           Shopping Cart
         </h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Cart Items Section */}
-          <div className="lg:col-span-8">
+        <div className="grid grid-cols-12 gap-8">
+          {/* Cart Items Section - 7 columns */}
+          <div className="col-span-12 lg:col-span-7">
             {cartItems.length === 0 ? (
               <p className="text-center text-gray-500 py-8">
                 Your cart is empty
               </p>
             ) : (
               cartItems.map((item) => (
-                <CartItem
+                <CartItemCard
                   key={item.productID}
                   item={item}
-                  onUpdateQuantity={(id, qty) => console.log(id, qty)}
-                  onDelete={(id) => console.log('delete', id)}
+                  onUpdateQuantity={handleUpdateQuantity}
+                  onRemove={handleRemoveItem}
                 />
               ))
             )}
           </div>
 
-          {/* Summary Section */}
-          <div className="lg:col-span-4">
-            <div className="bg-bg-light p-6 rounded-3xl">
+          {/* Summary Section - 5 columns */}
+          <div className="col-span-12 lg:col-span-5">
+            <div className="bg-bg-light p-6 rounded-3xl sticky top-4 max-w-md mx-auto lg:mx-0">
               <h2 className="text-xl font-medium text-text-gray mb-4">
                 Order Summary
               </h2>
