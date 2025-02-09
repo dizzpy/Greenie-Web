@@ -5,6 +5,7 @@ import ShopNav from '../components/ShopNav';
 import cartIcon from '../../assets/icons/shopping-cart.svg';
 import CartButton from '../components/CartButton';
 import { LuArrowRight } from 'react-icons/lu';
+import ProductCard from '../components/ProductCard';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -25,6 +26,14 @@ const ProductDetails = () => {
     // Add your cart logic here
     console.log('Adding to cart:', product, 'quantity:', quantity);
   };
+
+  // Get 3 random products excluding current product
+  const getRandomProducts = () => {
+    const otherProducts = products.filter((p) => p.id !== parseInt(id));
+    return otherProducts.sort(() => 0.5 - Math.random()).slice(0, 3);
+  };
+
+  const relatedProducts = getRandomProducts();
 
   if (!product) {
     return <div>Product not found</div>;
@@ -119,6 +128,19 @@ const ProductDetails = () => {
               icon={<LuArrowRight />}
               text="Redeem Green Points"
             />
+          </div>
+        </div>
+
+        {/* Related products */}
+        <div className="mt-24">
+          <h2 className="text-2xl font-medium text-text-gray mb-6">
+            You may also like
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {relatedProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
           </div>
         </div>
       </div>
