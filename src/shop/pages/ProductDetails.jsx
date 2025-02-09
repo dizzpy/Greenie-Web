@@ -9,7 +9,7 @@ import ProductCard from '../components/ProductCard';
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const product = products.find((p) => p.id === parseInt(id));
+  const product = products.find((p) => p.productID === parseInt(id));
   const [quantity, setQuantity] = useState(1);
 
   const incrementQuantity = () => {
@@ -55,8 +55,8 @@ const ProductDetails = () => {
           {/* Product Image */}
           <div className="md:col-span-5 bg-bg-light/50 rounded-3xl overflow-hidden">
             <img
-              src={product.image}
-              alt={product.name}
+              src={product.imgURL}
+              alt={product.productName}
               className="w-full h-[300px] md:h-[500px] rounded-lg object-cover"
             />
           </div>
@@ -65,19 +65,19 @@ const ProductDetails = () => {
           <div className="md:col-span-7 bg-bg-light/50 p-6 md:p-10 rounded-3xl">
             {/* product name */}
             <h1 className="text-2xl md:text-3xl font-medium text-text-gray mb-2">
-              {product.name}
+              {product.productName}
             </h1>
             <p className="text-sm md:text-base text-lightred">
-              Only 3 units left
+              Only {product.quantity} units left
             </p>
 
             {/* price section */}
             <div className="mt-4 md:mt-5">
               <p className="text-lg md:text-xl text-text-gray">
-                ${product.price}
+                Rs {product.price}
               </p>
               <p className="text-sm md:text-base text-primary-green">
-                {product.points} Points
+                {product.numberOfPoints} Points
               </p>
               <p className="text-xs md:text-sm text-text-gray">
                 or you can redeem green points
@@ -88,9 +88,7 @@ const ProductDetails = () => {
             <div className="mt-4 md:mt-5">
               <h2 className="text-base font-medium">Description</h2>
               <p className="text-sm md:text-base text-text-gray">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
-                suscipit fringilla aliquet. Phasellus vel leo sem. Nunc at
-                congue augue. Vestibulum ante ipsum primis ngue quam
+                {product.fullDescription}
               </p>
             </div>
 

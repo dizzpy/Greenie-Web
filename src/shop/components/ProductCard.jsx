@@ -3,31 +3,27 @@ import { Link } from 'react-router-dom';
 
 function ProductCard({ product }) {
   return (
-    <Link to={`/shop/product/${product.id}`} className="group">
+    <Link to={`/shop/product/${product.productID}`} className="group">
       <div className="h-auto bg-bg-light p-4 rounded-2xl">
-        {/* Product Image */}
         <div className="h-52 sm:h-60 bg-outline rounded-2xl overflow-hidden">
           <img
-            src={product.image}
-            alt={product.name}
+            src={product.imgURL}
+            alt={product.productName}
             className="w-full h-full object-cover"
           />
         </div>
 
-        {/* Product Title */}
         <p className="text-text-gray text-lg sm:text-xl font-medium mt-3">
-          {product.name}
+          {product.productName}
         </p>
 
-        {/* Product Description */}
         <p className="text-text-gray text-sm sm:text-base mt-1">
-          {product.description}
+          {product.shortDescription}
         </p>
 
-        {/* Price + Points */}
         <div className="flex space-x-3 mt-3 items-center">
           <p className="text-text-gray text-sm sm:text-base">
-            🎯 {product.points} Points
+            🎯 {product.numberOfPoints} Points
           </p>
 
           <div className="h-1 w-1 bg-text-gray rounded-full my-2"></div>
@@ -41,15 +37,15 @@ function ProductCard({ product }) {
   );
 }
 
-// props validation
 ProductCard.propTypes = {
   product: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
+    productID: PropTypes.number.isRequired,
+    productName: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
-    image: PropTypes.string.isRequired,
-    points: PropTypes.number.isRequired,
-    description: PropTypes.string.isRequired,
+    imgURL: PropTypes.string.isRequired,
+    numberOfPoints: PropTypes.number.isRequired,
+    shortDescription: PropTypes.string.isRequired,
+    quantity: PropTypes.number.isRequired,
   }).isRequired,
 };
 

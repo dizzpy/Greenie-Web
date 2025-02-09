@@ -1,8 +1,19 @@
 import PropTypes from 'prop-types';
-import { LuX } from 'react-icons/lu';
+import { IoCloseCircleOutline } from 'react-icons/io5';
 import CartButton from './CartButton';
+import CartItem from './CartItem';
 
 const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
+  const handleUpdateQuantity = (itemId, newQuantity) => {
+    console.log('Update quantity:', itemId, newQuantity);
+    // Add your quantity update logic here
+  };
+
+  const handleDeleteItem = (itemId) => {
+    console.log('Delete item:', itemId);
+    // Add your delete logic here
+  };
+
   const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0,
@@ -20,18 +31,18 @@ const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 right-0 w-full md:w-[400px] h-full bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-50 ${
+        className={`fixed top-0 right-0 w-full md:w-[450px] h-full bg-bg-light shadow-lg transform transition-transform duration-300 ease-in-out z-50 ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b">
-          <h2 className="text-xl font-medium">Shopping Cart</h2>
+        <div className="flex justify-between items-center px-5 py-2 bg-white m-5 rounded-2xl">
+          <h2 className="text-lg text-text-gray">Cart</h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-full"
           >
-            <LuX size={24} />
+            <IoCloseCircleOutline size={24} />
           </button>
         </div>
 
@@ -41,25 +52,12 @@ const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
             <p className="text-center text-gray-500">Your cart is empty</p>
           ) : (
             cartItems.map((item) => (
-              <div
+              <CartItem
                 key={item.id}
-                className="flex gap-4 mb-4 p-4 bg-bg-light rounded-xl"
-              >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-20 h-20 object-cover rounded-lg"
-                />
-                <div className="flex-1">
-                  <h3 className="font-medium">{item.name}</h3>
-                  <p className="text-sm text-gray-500">
-                    Quantity: {item.quantity}
-                  </p>
-                  <p className="text-primary-green">
-                    ${item.price * item.quantity}
-                  </p>
-                </div>
-              </div>
+                item={item}
+                onUpdateQuantity={handleUpdateQuantity}
+                onDelete={handleDeleteItem}
+              />
             ))
           )}
         </div>
