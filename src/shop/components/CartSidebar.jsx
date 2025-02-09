@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import CartButton from './CartButton';
 import CartItem from './CartItem';
+import cartIcon from '../../assets/icons/shopping-cart.svg';
+import { LuArrowRight } from 'react-icons/lu';
 
 const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
   const handleUpdateQuantity = (itemId, newQuantity) => {
@@ -63,12 +65,23 @@ const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
         </div>
 
         {/* Footer */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 border-t bg-white">
-          <div className="flex justify-between mb-4">
+        <div className="absolute bottom-0 left-0 right-0">
+          <div className="flex justify-between mb-4 px-5 py-4 bg-white m-5 rounded-2xl">
             <span>Total</span>
             <span className="font-medium">${total}</span>
           </div>
-          <CartButton text="Checkout" onClick={() => console.log('Checkout')} />
+
+          {/* button section */}
+          <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4 m-5">
+            <CartButton icon={cartIcon} text="View Cart" />
+
+            <CartButton
+              icon={<LuArrowRight />}
+              text="Buy it Now"
+              className="bg-primary-green text-white"
+              textColor="text-white"
+            />
+          </div>
         </div>
       </aside>
     </>
