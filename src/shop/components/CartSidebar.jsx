@@ -4,8 +4,21 @@ import CartButton from './CartButton';
 import CartItem from './CartItem';
 import cartIcon from '../../assets/icons/shopping-cart.svg';
 import { LuArrowRight } from 'react-icons/lu';
+import { useNavigate } from 'react-router-dom';
 
 const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
+  const navigate = useNavigate();
+
+  const handleViewCart = () => {
+    onClose(); // Close sidebar
+    navigate('/shop/cart'); // Navigate to cart page
+  };
+
+  const handleCheckout = () => {
+    onClose(); // Close sidebar
+    navigate('/shop/checkout'); // Navigate to checkout page
+  };
+
   const handleUpdateQuantity = (itemId, newQuantity) => {
     console.log('Update quantity:', itemId, newQuantity);
     // Add your quantity update logic here
@@ -73,13 +86,18 @@ const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
 
           {/* button section */}
           <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4 m-5">
-            <CartButton icon={cartIcon} text="View Cart" />
+            <CartButton
+              icon={cartIcon}
+              text="View Cart"
+              onClick={handleViewCart}
+            />
 
             <CartButton
               icon={<LuArrowRight />}
-              text="Buy it Now"
-              className="bg-primary-green text-white"
+              text="Checkout"
+              className="bg-primary-green"
               textColor="text-white"
+              onClick={handleCheckout}
             />
           </div>
         </div>
