@@ -4,7 +4,7 @@ const IconButton = ({ icon, onClick, children, className = '' }) => {
   return (
     <button
       onClick={onClick}
-      className={`p-2 rounded-full bg-white hover:bg-gray-50 transition-colors ${className}`}
+      className={`bg-bg-light p-4 rounded-full inline-flex items-center ${className}`}
     >
       <img src={icon} alt="icon" className="w-6 h-6" />
       {children}
