@@ -62,38 +62,72 @@ Greenie Web Application is an eco-friendly platform designed to promote sustaina
 
 We use GitHub Actions for continuous integration. The project is built on every pull request. Once merged, Vercel automatically deploys the updated project.
 
-## Folder Structure
 
-```
-📂 project-root
-┣ 📂 src
-┃ ┣ 📂 assets            # Images, icons, fonts
-┃ ┣ 📂 components        # Reusable UI components (Navbar, Button, etc.)
-┃ ┃ ┣ 📂 common          # Shared UI components (Button, Modal, etc.)
-┃ ┃ ┣ 📂 layout          # Navbar, Sidebar, Footer
-┃ ┣ 📂 pages             # Main pages/screens
-┃ ┃ ┣ 📂 auth            # Login, Register, Forgot Password
-┃ ┃ ┣ 📂 feed            # User feed, posts, comments
-┃ ┃ ┣ 📂 challenges      # Challenge listing, details
-┃ ┃ ┣ 📂 leaderboard     # Leaderboard, rankings
-┃ ┃ ┣ 📂 shop            # Store, Cart, Checkout, Redeem points
-┃ ┃ ┣ 📂 settings        # User settings, profile
-┃ ┃ ┗ 📜 NotFound.jsx    # 404 Page
-┃ ┣ 📂 services          # API calls (REST API)
-┃ ┃ ┣ 📜 authService.js  # Authentication API
-┃ ┃ ┣ 📜 challengeService.js # Challenges API
-┃ ┃ ┣ 📜 leaderboardService.js # Leaderboard API
-┃ ┃ ┣ 📜 shopService.js  # E-commerce API
-┃ ┃ ┗ 📜 userService.js  # Profile API
-┃ ┣ 📂 store             # Global state management (Redux/Zustand)
-┃ ┣ 📂 utils             # Helper functions, constants
-┃ ┣ 📂 routes            # React Router configuration
-┃ ┣ 📜 App.jsx           # Main App Component
-┃ ┣ 📜 main.jsx          # ReactDOM render file
-┃ ┗ 📜 index.css         # Global styles
-┣ 📜 .gitignore
-┣ 📜 README.md
-┣ 📜 package.json
-┗ 📜 tailwind.config.js
 
+## Common Folder Structure & Guidelines
+
+```plaintext
+📂 src
+ ┣ 📂 assets           # Stores static assets (icons, images, etc.)
+ ┃ ┣ 📂 icons         # SVGs and icons
+ ┃ ┗ 📂 images        # Static images
+ ┃
+ ┣ 📂 components       # Reusable global UI components
+ ┃ ┣ 📂 Buttons      # Button components (e.g., IconButton, PrimaryButton)
+ ┃ ┣ 📂 Shared       # Common components (e.g., Navbar, Footer, Modal)
+ ┃ ┗ 📂 Forms        # Form elements (e.g., InputField, Checkbox)
+ ┃
+ ┣ 📂 pages           # All page components
+ ┃ ┣ 📜 HomePage.jsx  
+ ┃ ┗ 📜 NotFound.jsx  
+ ┃
+ ┣ 📂 [feature-name]       # Feature-specific folder (e.g., shop, user)
+ ┃ ┣ 📂 components   # UI components specific to this feature
+ ┃ ┣ 📂 pages        # Pages related to this feature
+ ┃ ┣ 📂 data         # Static or mock data (e.g., product lists)
+ ┃ ┣ 📂 services     # API calls, Firebase, or business logic for this feature
+ ┃ ┗ 📜 index.jsx    # Entry file for the feature
+ ┃
+ ┣ 📂 services         # API services and Firebase functions
+ ┃ ┣ 📜 api.js        # General API calls
+ ┃ ┗ 📜 auth.js       # Authentication services
+ ┃
+ ┣ 📂 utils            # Utility functions/helpers
+ ┃ ┗ 📜 formatDate.js  # Example: date formatter
+ ┃
+ ┣ 📜 App.jsx          # Main application component
+ ┣ 📜 main.jsx         # Entry point for rendering the app
+ ┗ 📜 index.css        # Global styles
 ```
+
+---
+
+## What to Add in Each Folder?
+
+### 📂 `assets/`  
+- **icons/** → SVG icons  
+- **images/** → Static images  
+
+### 📂 `components/`  
+- **Buttons/** → Buttons (PrimaryButton, IconButton)  
+- **Shared/** → Common UI components (Navbar, Footer, Modal)  
+- **Forms/** → Form inputs, text fields, dropdowns  
+
+### 📂 `pages/`  
+- Global pages (e.g., `HomePage.jsx`, `NotFound.jsx`)  
+
+### 📂 `[feature-name]/` (e.g., `shop/`, `user/`)  
+- **components/** → UI components for that feature  
+- **pages/** → Pages related to the feature  
+- **data/** → Mock/static data files  
+- **services/** → API calls and business logic  
+- **index.jsx** → Main entry file for the feature  
+
+### 📂 `services/`  
+- API handling and Firebase functions  
+
+### 📂 `utils/`  
+- Helper functions (e.g., date formatting, number conversions)  
+
+
+
