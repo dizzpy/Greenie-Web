@@ -62,8 +62,6 @@ Greenie Web Application is an eco-friendly platform designed to promote sustaina
 
 We use GitHub Actions for continuous integration. The project is built on every pull request. Once merged, Vercel automatically deploys the updated project.
 
-
-
 ## Common Folder Structure & Guidelines
 
 ```plaintext
@@ -78,8 +76,8 @@ We use GitHub Actions for continuous integration. The project is built on every 
  ┃ ┗ 📂 Forms        # Form elements (e.g., InputField, Checkbox)
  ┃
  ┣ 📂 pages           # All page components
- ┃ ┣ 📜 HomePage.jsx  
- ┃ ┗ 📜 NotFound.jsx  
+ ┃ ┣ 📜 HomePage.jsx
+ ┃ ┗ 📜 NotFound.jsx
  ┃
  ┣ 📂 [feature-name]       # Feature-specific folder (e.g., shop, user)
  ┃ ┣ 📂 components   # UI components specific to this feature
@@ -104,30 +102,33 @@ We use GitHub Actions for continuous integration. The project is built on every 
 
 ## What to Add in Each Folder?
 
-### 📂 `assets/`  
-- **icons/** → SVG icons  
-- **images/** → Static images  
+### 📂 `assets/`
 
-### 📂 `components/`  
-- **Buttons/** → Buttons (PrimaryButton, IconButton)  
-- **Shared/** → Common UI components (Navbar, Footer, Modal)  
-- **Forms/** → Form inputs, text fields, dropdowns  
+- **icons/** → SVG icons
+- **images/** → Static images
 
-### 📂 `pages/`  
-- Global pages (e.g., `HomePage.jsx`, `NotFound.jsx`)  
+### 📂 `components/`
 
-### 📂 `[feature-name]/` (e.g., `shop/`, `user/`)  
-- **components/** → UI components for that feature  
-- **pages/** → Pages related to the feature  
-- **data/** → Mock/static data files  
-- **services/** → API calls and business logic  
-- **index.jsx** → Main entry file for the feature  
+- **Buttons/** → Buttons (PrimaryButton, IconButton)
+- **Shared/** → Common UI components (Navbar, Footer, Modal)
+- **Forms/** → Form inputs, text fields, dropdowns
 
-### 📂 `services/`  
-- API handling and Firebase functions  
+### 📂 `pages/`
 
-### 📂 `utils/`  
-- Helper functions (e.g., date formatting, number conversions)  
+- Global pages (e.g., `HomePage.jsx`, `NotFound.jsx`)
 
+### 📂 `[feature-name]/` (e.g., `shop/`, `user/`)
 
+- **components/** → UI components for that feature
+- **pages/** → Pages related to the feature
+- **data/** → Mock/static data files
+- **services/** → API calls and business logic
+- **index.jsx** → Main entry file for the feature
 
+### 📂 `services/`
+
+- API handling and Firebase functions
+
+### 📂 `utils/`
+
+- Helper functions (e.g., date formatting, number conversions)
