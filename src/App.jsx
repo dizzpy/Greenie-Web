@@ -6,6 +6,7 @@ import Checkout from './shop/pages/Checkout';
 import RedeemStore from './shop/pages/RedeemStore';
 import NotFound from './pages/NotFound';
 import HomePage from './pages/HomePage';
+import Feed from './feed/pages/Feed';
 import ChallengesHome from './challenges/pages/ChallengesHome';
 
 function App() {
@@ -25,6 +26,9 @@ function App() {
 
           {/* Challenges Routes */}
           <Route path="/challenges" element={<ChallengesHome />} />
+
+          {/* Feed Routes */}
+          <Route path="/feed" element={<Feed />} />
 
           {/* 404 Error Page */}
           <Route path="*" element={<NotFound />} />
