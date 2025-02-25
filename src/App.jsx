@@ -6,6 +6,7 @@ import Checkout from './shop/pages/Checkout';
 import RedeemStore from './shop/pages/RedeemStore';
 import NotFound from './pages/NotFound';
 import HomePage from './pages/HomePage';
+import Feed from './feed/Feed';
 
 function App() {
   return (
@@ -21,6 +22,9 @@ function App() {
           <Route path="/shop/cart" element={<Cart />} />
           <Route path="/shop/checkout" element={<Checkout />} />
           <Route path="/shop/redeem" element={<RedeemStore />} />
+
+          {/* Feed Routes */}
+          <Route path="/feed" element={<Feed />} />
 
           {/* 404 Error Page */}
           <Route path="*" element={<NotFound />} />
