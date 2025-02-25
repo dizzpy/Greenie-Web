@@ -6,6 +6,7 @@ import Checkout from './shop/pages/Checkout';
 import RedeemStore from './shop/pages/RedeemStore';
 import NotFound from './pages/NotFound';
 import HomePage from './pages/HomePage';
+import ChallengesHome from './challenges/pages/ChallengesHome';
 
 function App() {
   return (
@@ -21,6 +22,9 @@ function App() {
           <Route path="/shop/cart" element={<Cart />} />
           <Route path="/shop/checkout" element={<Checkout />} />
           <Route path="/shop/redeem" element={<RedeemStore />} />
+
+          {/* Challenges Routes */}
+          <Route path="/challenges" element={<ChallengesHome />} />
 
           {/* 404 Error Page */}
           <Route path="*" element={<NotFound />} />
