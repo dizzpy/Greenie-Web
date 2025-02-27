@@ -6,13 +6,14 @@ import { MdOutlineLeaderboard } from 'react-icons/md';
 import { RiShoppingBagLine, RiSettings3Line } from 'react-icons/ri';
 import { BiGift, BiHomeAlt2 } from 'react-icons/bi';
 import SlideBarItems from './SlideBarItems';
+import logo from '../../assets/icons/greenlogo.svg';
 
 const SlideBar = () => {
   return (
-    <div className="bg-white h-screen w-72 p-3 shadow-md fixed left-6 top-0 flex flex-col">
+    <div className=" h-screen w-72 p-3 fixed left-6 top-0 flex flex-col">
       {/* Logo */}
       <div className="text-xl font-bold text-primary-green">
-        <span className="text-black">logo</span>-ipsum
+        <img src={logo} alt="Logo" className="h-12 w-auto" />
       </div>
 
       {/* Navigation Items */}
