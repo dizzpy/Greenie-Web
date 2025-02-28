@@ -8,6 +8,10 @@ import NotFound from './pages/NotFound';
 import HomePage from './pages/HomePage';
 import Feed from './feed/pages/Feed';
 import ChallengesHome from './challenges/pages/ChallengesHome';
+import Login from './auth/Login';
+import Register from './auth/Register';
+import ForgotPassword from './auth/ForgotPassword';
+import SetNewPassword from './auth/SetNewPassword';
 
 function App() {
   return (
@@ -29,6 +33,12 @@ function App() {
 
           {/* Feed Routes */}
           <Route path="/feed" element={<Feed />} />
+
+          {/* Auth Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/set-new-password" element={<SetNewPassword />} />
 
           {/* 404 Error Page */}
           <Route path="*" element={<NotFound />} />
