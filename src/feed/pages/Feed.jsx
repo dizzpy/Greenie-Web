@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import CreatePost from '../components/CreatePost';
 import SlideBar from '../components/SlideBar';
 import Poster from '../components/Poster';
+import CommentPopup from '../components/CommentPopup';
 
 function Feed() {
-  // Dummy posts array (replace with actual API data)
   const [posts, setPosts] = useState([
     {
       id: 1,
@@ -17,7 +17,20 @@ function Feed() {
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
       image: 'post1.jpg',
       likes: 1700,
-      comments: 1200,
+      comments: [
+        {
+          user: 'Alice',
+          profileImage: 'user1.jpg',
+          text: 'Amazing post!',
+          time: '1h ago',
+        },
+        {
+          user: 'Bob',
+          profileImage: 'user2.jpg',
+          text: 'Great content, keep sharing!',
+          time: '2h ago',
+        },
+      ],
     },
     {
       id: 2,
@@ -29,9 +42,24 @@ function Feed() {
       content: 'Just had a great day at the beach! 🌊',
       image: 'post2.jpg',
       likes: 2100,
-      comments: 800,
+      comments: [
+        {
+          user: 'Chris',
+          profileImage: 'user3.jpg',
+          text: 'Looks like fun!',
+          time: '30m ago',
+        },
+        {
+          user: 'Diana',
+          profileImage: 'user4.jpg',
+          text: 'I miss the beach so much!',
+          time: '45m ago',
+        },
+      ],
     },
   ]);
+
+  const [selectedPost, setSelectedPost] = useState(null);
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -47,11 +75,23 @@ function Feed() {
           {/* Posts Section */}
           <div className="mt-6">
             {posts.map((post) => (
-              <Poster key={post.id} {...post} />
+              <Poster
+                key={post.id}
+                {...post}
+                onCommentClick={() => setSelectedPost(post)}
+              />
             ))}
           </div>
         </div>
       </div>
+
+      {/* Comment Popup */}
+      {selectedPost && (
+        <CommentPopup
+          comments={selectedPost.comments}
+          onClose={() => setSelectedPost(null)}
+        />
+      )}
     </div>
   );
 }
