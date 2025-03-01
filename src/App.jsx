@@ -8,10 +8,10 @@ import NotFound from './pages/NotFound';
 import HomePage from './pages/HomePage';
 import Feed from './feed/pages/Feed';
 import ChallengesHome from './challenges/pages/ChallengesHome';
-import Login from './auth/Login';
-import Register from './auth/Register';
-import ForgotPassword from './auth/ForgotPassword';
-import SetNewPassword from './auth/SetNewPassword';
+import Login from './auth/pages/Login';
+import Register from './auth/pages/Register';
+import ForgotPassword from './auth/pages/ForgotPassword';
+import SetNewPassword from './auth/pages/SetNewPassword';
 
 function App() {
   return (
