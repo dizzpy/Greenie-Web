@@ -1,9 +1,12 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Heart, MessageCircle } from 'lucide-react';
+import CommentPopup from './CommentPopup'; // Import the CommentPopup component
 
 const Poster = ({ user, content, image, likes, comments }) => {
+  const [showComments, setShowComments] = useState(false);
+
   return (
     <div className="bg-white p-4 rounded-2xl shadow-md w-full max-w-2xl mx-auto mt-4">
       {/* User Info */}
@@ -39,11 +42,22 @@ const Poster = ({ user, content, image, likes, comments }) => {
           <Heart className="text-lightred" size={18} />
           <span className="text-text-gray">{likes} Likes</span>
         </div>
-        <div className="flex items-center gap-1 text-primary-green">
+        <div
+          className="flex items-center gap-1 text-primary-green cursor-pointer"
+          onClick={() => setShowComments(true)}
+        >
           <MessageCircle className="text-primary-green" size={18} />
-          <span className="text-text-gray">{comments} Comments</span>
+          <span className="text-text-gray">{comments.length} Comments</span>
         </div>
       </div>
+
+      {/* Comment Popup */}
+      {showComments && (
+        <CommentPopup
+          comments={comments}
+          onClose={() => setShowComments(false)}
+        />
+      )}
     </div>
   );
 };
@@ -57,7 +71,7 @@ Poster.propTypes = {
   content: PropTypes.string.isRequired,
   image: PropTypes.string,
   likes: PropTypes.number.isRequired,
-  comments: PropTypes.number.isRequired,
+  comments: PropTypes.array.isRequired,
 };
 
 export default Poster;
