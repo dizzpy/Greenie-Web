@@ -12,9 +12,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Remove unused 'response' variable here
       await axios.post('/api/auth/login', { email, password });
-      // On successful login
       navigate('/dashboard');
     } catch (error) {
       setErr(error.response?.data?.message || 'Something went wrong!');
