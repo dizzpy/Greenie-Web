@@ -13,12 +13,6 @@ if ! command -v npm > /dev/null; then
     exit 1
 fi
 
-# Skip build for specific branches (optional)
-if [[ "$current_branch" == "main" || "$current_branch" == "master" ]]; then
-    echo "🛑 Skipping build check for $current_branch branch."
-    exit 0
-fi
-
 # Run build and capture output
 output=$(npm run build 2>&1)
 exit_code=$?
