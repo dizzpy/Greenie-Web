@@ -12,6 +12,7 @@ import Login from './[features]/auth/pages/Login';
 import Register from './[features]/auth/pages/Register';
 import ForgotPassword from './[features]/auth/pages/ForgotPassword';
 import SetNewPassword from './[features]/auth/pages/SetNewPassword';
+import LeaderboardHome from './[features]/leaderboard/pages/LeaderboardHome';
 
 function App() {
   return (
@@ -30,6 +31,9 @@ function App() {
 
           {/* Challenges Routes */}
           <Route path="/challenges" element={<ChallengesHome />} />
+
+          {/* Leaderboard Routes */}
+          <Route path="/leaderboard" element={<LeaderboardHome />} />
 
           {/* Feed Routes */}
           <Route path="/feed" element={<Feed />} />
