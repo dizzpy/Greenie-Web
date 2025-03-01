@@ -8,7 +8,7 @@ import NotFound from './pages/NotFound';
 import HomePage from './pages/HomePage';
 import Feed from './feed/pages/Feed';
 import ChallengesHome from './challenges/pages/ChallengesHome';
-import Login from './auth/pages/Login';
+import Login from './auth/Pages/Login';
 import Register from './auth/pages/Register';
 import ForgotPassword from './auth/pages/ForgotPassword';
 import SetNewPassword from './auth/pages/SetNewPassword';
