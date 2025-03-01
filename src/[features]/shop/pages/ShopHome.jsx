@@ -1,6 +1,6 @@
 import ShopNav from '../components/ShopNav';
 import ProductCard from '../components/ProductCard';
-import sortIcon from '../../assets/icons/sort.svg';
+import sortIcon from '../../../assets/icons/sort.svg';
 import { products } from '../data/products';
 
 function ShopHome() {

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import CartButton from './CartButton';
 import CartItem from './CartItem';
-import cartIcon from '../../assets/icons/shopping-cart.svg';
+import cartIcon from '../../../assets/icons/shopping-cart.svg';
 import { LuArrowRight } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 

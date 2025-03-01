@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import searchIcon from '../../assets/icons/search.svg';
-import shoppingCart from '../../assets/icons/shopping-cart.svg';
-import IconButton from '../../components/Buttons/IconButton';
+import searchIcon from '../../../assets/icons/search.svg';
+import shoppingCart from '../../../assets/icons/shopping-cart.svg';
+import IconButton from '../../../components/Buttons/IconButton';
 import CartSidebar from './CartSidebar';
 
 function ShopNav() {

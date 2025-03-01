@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useMemo, useEffect } from 'react'; // Add this import
 import { products } from '../data/products';
 import ShopNav from '../components/ShopNav';
-import cartIcon from '../../assets/icons/shopping-cart.svg';
+import cartIcon from '../../../assets/icons/shopping-cart.svg';
 import CartButton from '../components/CartButton';
 import { LuArrowRight } from 'react-icons/lu';
 import ProductCard from '../components/ProductCard';
