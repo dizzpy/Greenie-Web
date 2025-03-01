@@ -13,7 +13,6 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if password and confirm password match
     if (password !== confirmPassword) {
       setErr('Passwords do not match!');
       return;
@@ -21,7 +20,6 @@ const Register = () => {
 
     try {
       await axios.post('/api/auth/register', { email, password });
-      // On successful registration, redirect to login page
       navigate('/login');
     } catch (error) {
       setErr(error.response?.data?.message || 'Something went wrong!');
