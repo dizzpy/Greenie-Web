@@ -6,7 +6,7 @@ import { MdOutlineLeaderboard } from 'react-icons/md';
 import { RiShoppingBagLine, RiSettings3Line } from 'react-icons/ri';
 import { BiGift, BiHomeAlt2 } from 'react-icons/bi';
 import SlideBarItems from './SlideBarItems';
-import logo from '../../assets/icons/greenlogo.svg';
+import logo from '../../../assets/icons/greenlogo.svg';
 
 const SlideBar = () => {
   return (

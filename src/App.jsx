@@ -1,17 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import ShopHome from './shop/pages/ShopHome';
-import ProductDetails from './shop/pages/ProductDetails';
-import Cart from './shop/pages/Cart';
-import Checkout from './shop/pages/Checkout';
-import RedeemStore from './shop/pages/RedeemStore';
+import ShopHome from './[features]/shop/pages/ShopHome';
+import ProductDetails from './[features]/shop/pages/ProductDetails';
+import Cart from './[features]/shop/pages/Cart';
+import Checkout from './[features]/shop/pages/Checkout';
+import RedeemStore from './[features]/shop/pages/RedeemStore';
 import NotFound from './pages/NotFound';
 import HomePage from './pages/HomePage';
-import Feed from './feed/pages/Feed';
-import ChallengesHome from './challenges/pages/ChallengesHome';
-import Login from './auth/Login';
-import Register from './auth/Register';
-import ForgotPassword from './auth/ForgotPassword';
-import SetNewPassword from './auth/SetNewPassword';
+import Feed from './[features]/feed/pages/Feed';
+import ChallengesHome from './[features]/challenges/pages/ChallengesHome';
+import Login from './[features]/auth/pages/Login';
+import Register from './[features]/auth/pages/Register';
+import ForgotPassword from './[features]/auth/pages/ForgotPassword';
+import SetNewPassword from './[features]/auth/pages/SetNewPassword';
 
 function App() {
   return (
