@@ -2,11 +2,18 @@
 import React from 'react';
 
 import { FaRegComments } from 'react-icons/fa';
-import { MdOutlineLeaderboard } from 'react-icons/md';
+import { MdHouse, MdOutlineLeaderboard } from 'react-icons/md';
 import { RiShoppingBagLine, RiSettings3Line } from 'react-icons/ri';
-import { BiGift, BiHomeAlt2 } from 'react-icons/bi';
+import { BiGift, BiHomeAlt2, BiShoppingBag } from 'react-icons/bi';
 import SlideBarItems from './SlideBarItems';
 import logo from '../../../assets/icons/greenlogo.svg';
+import {
+  ChartColumnBig,
+  House,
+  Settings,
+  ShoppingBag,
+  Swords,
+} from 'lucide-react';
 
 const SlideBar = () => {
   return (
@@ -18,11 +25,11 @@ const SlideBar = () => {
 
       {/* Navigation Items */}
       <nav className="flex flex-col gap-3 mt-12">
-        <SlideBarItems icon={<BiHomeAlt2 />} text="Feed" active />
-        <SlideBarItems icon={<FaRegComments />} text="Shop" />
-        <SlideBarItems icon={<MdOutlineLeaderboard />} text="Leaderboard" />
-        <SlideBarItems icon={<BiGift />} text="Challenges" />
-        <SlideBarItems icon={<RiShoppingBagLine />} text="Settings" />
+        <SlideBarItems icon={<House />} text="Feed" active />
+        <SlideBarItems icon={<ShoppingBag />} text="Shop" />
+        <SlideBarItems icon={<ChartColumnBig />} text="Leaderboard" />
+        <SlideBarItems icon={<Swords />} text="Challenges" />
+        <SlideBarItems icon={<Settings />} text="Settings" />
         {/* <SlideBarItems icon={<RiSettings3Line />} text="Settings" /> */}
       </nav>
     </div>
