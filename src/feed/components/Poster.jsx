@@ -1,8 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FaHeart, FaComment } from 'react-icons/fa';
-import { SiReact } from '@icons-pack/react-simple-icons';
 import { Heart, MessageCircle } from 'lucide-react';
 
 const Poster = ({ user, content, image, likes, comments }) => {
