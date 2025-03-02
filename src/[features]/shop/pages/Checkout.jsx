@@ -143,7 +143,7 @@ const Checkout = () => {
                 icon={<LuArrowRight />}
                 text="Place Order"
                 className="bg-primary-green mt-6"
-                textColor="text-white"
+                textColor="text-primary-green"
                 onClick={() => console.log('Place order')}
               />
             </div>

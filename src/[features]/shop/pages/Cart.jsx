@@ -90,7 +90,7 @@ const Cart = () => {
                   icon={<LuArrowRight />}
                   text="Proceed to Checkout"
                   className="bg-primary-green mt-6"
-                  textColor="text-white"
+                  textColor="text-primary-green"
                   onClick={handleCheckout}
                 />
               </div>

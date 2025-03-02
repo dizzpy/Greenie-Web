@@ -100,7 +100,7 @@ const CartSidebar = () => {
               icon={<LuArrowRight />}
               text="Checkout"
               className="bg-primary-green"
-              textColor="text-white"
+              textColor="text-primary-green"
               onClick={handleCheckout}
             />
           </div>
