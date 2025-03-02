@@ -32,11 +32,28 @@ export const CartProvider = ({ children }) => {
       );
 
       if (existingItem) {
+        // Check if adding quantity exceeds available stock
+        const newQuantity = existingItem.quantity + quantity;
+        if (newQuantity > product.quantity) {
+          setNotificationMessage(`Only ${product.quantity} items available`);
+          setShowNotification(true);
+          setTimeout(() => setShowNotification(false), 3000);
+          return prev;
+        }
+
         return prev.map((item) =>
           item.productID === product.productID
-            ? { ...item, quantity: item.quantity + quantity }
+            ? { ...item, quantity: newQuantity }
             : item,
         );
+      }
+
+      // Check if initial quantity exceeds available stock
+      if (quantity > product.quantity) {
+        setNotificationMessage(`Only ${product.quantity} items available`);
+        setShowNotification(true);
+        setTimeout(() => setShowNotification(false), 3000);
+        return prev;
       }
 
       return [...prev, { ...product, quantity }];
@@ -53,14 +70,24 @@ export const CartProvider = ({ children }) => {
   };
 
   const updateQuantity = (productId, newQuantity) => {
-    if (newQuantity < 1) return;
-    setCartItems((prev) =>
-      prev.map((item) =>
+    setCartItems((prev) => {
+      const item = prev.find((item) => item.productID === productId);
+      if (!item) return prev;
+
+      // Check if new quantity exceeds available stock
+      if (newQuantity > item.quantity) {
+        setNotificationMessage(`Only ${item.quantity} items available`);
+        setShowNotification(true);
+        setTimeout(() => setShowNotification(false), 3000);
+        return prev;
+      }
+
+      return prev.map((item) =>
         item.productID === productId
           ? { ...item, quantity: newQuantity }
           : item,
-      ),
-    );
+      );
+    });
   };
 
   const getCartTotal = () => calculateCartTotal(cartItems);

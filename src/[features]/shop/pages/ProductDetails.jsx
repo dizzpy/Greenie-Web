@@ -17,7 +17,17 @@ const ProductDetails = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const { addToCart } = useCart();
+  const { addToCart, cartItems } = useCart();
+
+  // Get current cart quantity for this product
+  const currentCartQuantity =
+    cartItems.find((item) => item.productID === product?.productID)?.quantity ||
+    0;
+
+  // Calculate remaining available quantity
+  const availableQuantity = product
+    ? product.quantity - currentCartQuantity
+    : 0;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,7 +57,9 @@ const ProductDetails = () => {
   }, [id]);
 
   const incrementQuantity = () => {
-    setQuantity((prev) => prev + 1);
+    if (quantity < availableQuantity) {
+      setQuantity((prev) => prev + 1);
+    }
   };
 
   const decrementQuantity = () => {
@@ -148,29 +160,30 @@ const ProductDetails = () => {
             <div className="mt-4 md:mt-5">
               <h2 className="text-base font-medium">Quantity</h2>
               <div className="flex items-center space-x-4 mt-2 mb-4 md:mb-6 bg-white w-fit p-2 rounded-full">
-                <button
-                  onClick={decrementQuantity}
-                  disabled={quantity <= 1}
-                  className="w-8 h-8 flex items-center justify-center bg-bg-light rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  -
-                </button>
-                <span className="text-base text-text-gray font-normal w-6 text-center">
-                  {quantity}
-                </span>
-                <button
-                  onClick={incrementQuantity}
-                  disabled={quantity >= (product.quantity || 10)}
-                  className="w-8 h-8 flex items-center justify-center bg-bg-light rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  +
-                </button>
+                {availableQuantity > 0 ? (
+                  <>
+                    <button
+                      onClick={decrementQuantity}
+                      disabled={quantity <= 1}
+                      className="w-8 h-8 flex items-center justify-center bg-bg-light rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      -
+                    </button>
+                    <span className="text-base text-text-gray font-normal w-6 text-center">
+                      {quantity}
+                    </span>
+                    <button
+                      onClick={incrementQuantity}
+                      disabled={quantity >= availableQuantity}
+                      className="w-8 h-8 flex items-center justify-center bg-bg-light rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      +
+                    </button>
+                  </>
+                ) : (
+                  <p className="text-lightred">Out of stock</p>
+                )}
               </div>
-              {quantity >= (product.quantity || 10) && (
-                <p className="text-sm text-lightred mt-1">
-                  Maximum quantity reached
-                </p>
-              )}
             </div>
 
             {/* button section */}
