@@ -2,26 +2,28 @@ import CartButton from '../components/CartButton';
 import { LuArrowRight } from 'react-icons/lu';
 import ShopNav from '../components/ShopNav';
 import Breadcrumb from '../components/Breadcrumb';
+import { useCart } from '../../../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 const Checkout = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { cartItems, getCartTotal } = useCart();
+  const total = getCartTotal();
 
-  // Temporary cart items (replace with your cart state management)
-  const cartItems = [
-    {
-      productID: 1,
-      productName: 'Eco-Friendly Bottle',
-      price: 4300,
-      quantity: 2,
-      imgURL: 'https://via.placeholder.com/300',
-      numberOfPoints: 120,
-    },
-  ];
-
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
-  );
+  // Redirect to cart if cart is empty
+  if (cartItems.length === 0) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+        <h2 className="text-2xl font-medium">Your cart is empty</h2>
+        <button
+          onClick={() => navigate('/shop')}
+          className="text-primary-green hover:underline"
+        >
+          Return to Shop
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-screen-xl container mx-auto px-4 md:px-0">
