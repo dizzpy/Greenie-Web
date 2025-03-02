@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://52.90.77.36:8080/api';
+// Use environment variable with fallback
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || 'http://52.90.77.36:8080/api';
 
 export const getAllProducts = async () => {
   try {
@@ -15,7 +17,6 @@ export const getAllProducts = async () => {
 export const getProductById = async (id) => {
   try {
     const allProducts = await getAllProducts();
-    // Convert id to number since productID is numeric
     const numericId = parseInt(id);
     const product = allProducts.find((p) => p.productID === numericId);
 
