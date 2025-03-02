@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useCart } from '../../../context/CartContext';
 import searchIcon from '../../../assets/icons/search.svg';
+import coinIcon from '../../../assets/icons/coin.svg';
 import shoppingCart from '../../../assets/icons/shopping-cart.svg';
 import IconButton from '../../../components/Buttons/IconButton';
 import SearchBar from './SearchBar';
@@ -13,10 +14,11 @@ function ShopNav() {
   return (
     <>
       <div className="flex flex-row space-x-3 justify-end items-center">
-        {/* User Points Count */}
-        <IconButton icon={searchIcon}>
-          <p className="ml-3 text-text-gray">365 Points</p>
-        </IconButton>
+        {/* User Points Count - Updated with coin icon */}
+        <div className="bg-bg-light p-4 rounded-full inline-flex items-center">
+          <img src={coinIcon} alt="Points" className="w-6 h-6" />
+          <p className="text-primary-green font-medium ml-2">365 Points</p>
+        </div>
 
         {/* search icon */}
         <IconButton icon={searchIcon} onClick={() => setIsSearchOpen(true)} />
