@@ -49,13 +49,13 @@ const CartSidebar = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 right-0 w-full md:w-[450px] h-full bg-bg-light shadow-lg transform transition-transform duration-300 ease-in-out z-50 ${
+        className={`fixed top-0 right-0 w-full md:w-[450px] h-full bg-bg-light shadow-lg transform transition-transform duration-300 ease-in-out z-50 flex flex-col ${
           isCartOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Header */}
         <div className="flex justify-between items-center px-5 py-2 bg-white m-5 rounded-2xl">
-          <h2 className="text-lg text-text-gray">Cart</h2>
+          <h2 className="text-lg text-text-gray">Cart ({cartItems.length})</h2>
           <button
             onClick={() => setIsCartOpen(false)}
             className="p-2 hover:bg-gray-100 rounded-full"
@@ -64,32 +64,32 @@ const CartSidebar = () => {
           </button>
         </div>
 
-        {/* Cart Items */}
-        <div className="p-6 h-[calc(100vh-220px)] overflow-y-auto">
+        {/* Cart Items - Updated scroll container */}
+        <div className="flex-1 overflow-y-auto px-5">
           {cartItems.length === 0 ? (
             <p className="text-center text-gray-500">Your cart is empty</p>
           ) : (
-            cartItems.map((item) => (
-              <CartItem
-                key={item.productID} // Changed from id to productID
-                item={item}
-                onUpdateQuantity={handleUpdateQuantity}
-                onDelete={handleDeleteItem}
-              />
-            ))
+            <div className="space-y-4">
+              {cartItems.map((item) => (
+                <CartItem
+                  key={item.productID}
+                  item={item}
+                  onUpdateQuantity={handleUpdateQuantity}
+                  onDelete={handleDeleteItem}
+                />
+              ))}
+            </div>
           )}
         </div>
 
-        {/* Footer */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <div className="flex justify-between mb-4 px-5 py-4 bg-white m-5 rounded-2xl">
+        {/* Footer - Fixed at bottom */}
+        <div className="p-5 border-t bg-bg-light">
+          <div className="flex justify-between mb-4 px-5 py-4 bg-white rounded-2xl">
             <span>Total</span>
-            <span className="font-medium">Rs {total}</span>{' '}
-            {/* Changed from $ to Rs */}
+            <span className="font-medium">Rs {total}</span>
           </div>
 
-          {/* button section */}
-          <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4 m-5">
+          <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4">
             <CartButton
               icon={cartIcon}
               text="View Cart"
