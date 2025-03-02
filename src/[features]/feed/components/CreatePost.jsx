@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import { FaImage } from 'react-icons/fa';
 import { IoMdSend } from 'react-icons/io';
 import { MdClose } from 'react-icons/md';
+import axios from 'axios';
 
 const CreatePost = () => {
   const [postContent, setPostContent] = useState('');
   const [image, setImage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -19,9 +21,35 @@ const CreatePost = () => {
     setImage(null);
   };
 
-  const handleSubmit = () => {
-    console.log('Post submitted:', { postContent, image });
-    // Handle API call for post submission
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append('content', postContent);
+    if (image) {
+      // Directly append the image file, no need to convert to base64
+      formData.append('image', image);
+    }
+
+    try {
+      const response = await axios.post(
+        'http://16.170.224.209:8080/api/posts',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
+
+      if (response.status === 200) {
+        console.log('Post created successfully:', response.data);
+        setSuccessMessage('Post created successfully!'); // Set success message
+        // Reset the form after successful submission
+        setPostContent('');
+        setImage(null);
+      }
+    } catch (error) {
+      console.error('Error creating post:', error);
+    }
   };
 
   return (
@@ -49,6 +77,13 @@ const CreatePost = () => {
           >
             <MdClose size={20} />
           </button>
+        </div>
+      )}
+
+      {/* Success Message */}
+      {successMessage && (
+        <div className="mt-4 p-2 bg-green-100 text-green-700 rounded-md">
+          {successMessage}
         </div>
       )}
 
