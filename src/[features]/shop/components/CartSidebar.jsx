@@ -1,60 +1,63 @@
-import PropTypes from 'prop-types';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import CartButton from './CartButton';
 import CartItem from './CartItem';
 import cartIcon from '../../../assets/icons/shopping-cart.svg';
 import { LuArrowRight } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../../../context/CartContext';
 
-const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
+const CartSidebar = () => {
   const navigate = useNavigate();
+  const {
+    isCartOpen,
+    setIsCartOpen,
+    cartItems,
+    removeFromCart,
+    updateQuantity,
+    getCartTotal,
+  } = useCart();
 
   const handleViewCart = () => {
-    onClose(); // Close sidebar
+    setIsCartOpen(false); // Close sidebar
     navigate('/shop/cart'); // Navigate to cart page
   };
 
   const handleCheckout = () => {
-    onClose(); // Close sidebar
+    setIsCartOpen(false); // Close sidebar
     navigate('/shop/checkout'); // Navigate to checkout page
   };
 
   const handleUpdateQuantity = (itemId, newQuantity) => {
-    console.log('Update quantity:', itemId, newQuantity);
-    // Add your quantity update logic here
+    updateQuantity(itemId, newQuantity);
   };
 
   const handleDeleteItem = (itemId) => {
-    console.log('Delete item:', itemId);
-    // Add your delete logic here
+    removeFromCart(itemId);
   };
 
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
-  );
+  const total = getCartTotal();
 
   return (
     <>
       {/* Overlay */}
       <div
         className={`fixed inset-0 bg-black transition-opacity duration-300 ${
-          isOpen ? 'opacity-50 z-40' : 'opacity-0 -z-10'
+          isCartOpen ? 'opacity-50 z-40' : 'opacity-0 -z-10'
         }`}
-        onClick={onClose}
+        onClick={() => setIsCartOpen(false)}
       />
 
       {/* Sidebar */}
       <aside
         className={`fixed top-0 right-0 w-full md:w-[450px] h-full bg-bg-light shadow-lg transform transition-transform duration-300 ease-in-out z-50 ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
+          isCartOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Header */}
         <div className="flex justify-between items-center px-5 py-2 bg-white m-5 rounded-2xl">
           <h2 className="text-lg text-text-gray">Cart</h2>
           <button
-            onClick={onClose}
+            onClick={() => setIsCartOpen(false)}
             className="p-2 hover:bg-gray-100 rounded-full"
           >
             <IoCloseCircleOutline size={24} />
@@ -68,7 +71,7 @@ const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
           ) : (
             cartItems.map((item) => (
               <CartItem
-                key={item.id}
+                key={item.productID} // Changed from id to productID
                 item={item}
                 onUpdateQuantity={handleUpdateQuantity}
                 onDelete={handleDeleteItem}
@@ -81,7 +84,8 @@ const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
         <div className="absolute bottom-0 left-0 right-0">
           <div className="flex justify-between mb-4 px-5 py-4 bg-white m-5 rounded-2xl">
             <span>Total</span>
-            <span className="font-medium">${total}</span>
+            <span className="font-medium">Rs {total}</span>{' '}
+            {/* Changed from $ to Rs */}
           </div>
 
           {/* button section */}
@@ -104,20 +108,6 @@ const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
       </aside>
     </>
   );
-};
-
-CartSidebar.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  cartItems: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-      quantity: PropTypes.number.isRequired,
-      image: PropTypes.string.isRequired,
-    }),
-  ),
 };
 
 export default CartSidebar;

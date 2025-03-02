@@ -4,47 +4,24 @@ import CartButton from '../components/CartButton';
 import { LuArrowRight } from 'react-icons/lu';
 import ShopNav from '../components/ShopNav';
 import Breadcrumb from '../components/Breadcrumb';
+import { useCart } from '../../../context/CartContext';
 
 const Cart = () => {
   const navigate = useNavigate();
+  const { cartItems, removeFromCart, updateQuantity, getCartTotal } = useCart();
 
-  // Temporary cart items (replace with your cart state management)
-  const cartItems = [
-    {
-      productID: 1,
-      productName: 'Eco-Friendly Bottle',
-      price: 4300,
-      quantity: 2,
-      imgURL: 'https://via.placeholder.com/300',
-      numberOfPoints: 120,
-    },
-    {
-      productID: 2,
-      productName: 'Eco-Friendly Bottle',
-      price: 4300,
-      quantity: 2,
-      imgURL: 'https://via.placeholder.com/300',
-      numberOfPoints: 120,
-    },
-  ];
-
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
-  );
+  const total = getCartTotal();
 
   const handleCheckout = () => {
     navigate('/shop/checkout');
   };
 
   const handleUpdateQuantity = (productId, newQuantity) => {
-    console.log('Update quantity:', productId, newQuantity);
-    // Add your quantity update logic here
+    updateQuantity(productId, newQuantity);
   };
 
   const handleRemoveItem = (productId) => {
-    console.log('Remove item:', productId);
-    // Add your remove item logic here
+    removeFromCart(productId);
   };
 
   return (
@@ -68,12 +45,18 @@ const Cart = () => {
         </h1>
 
         <div className="grid grid-cols-12 gap-8">
-          {/* Cart Items Section - 7 columns */}
+          {/* Cart Items Section */}
           <div className="col-span-12 lg:col-span-7">
             {cartItems.length === 0 ? (
-              <p className="text-center text-gray-500 py-8">
-                Your cart is empty
-              </p>
+              <div className="text-center py-16">
+                <p className="text-gray-500 mb-4">Your cart is empty</p>
+                <button
+                  onClick={() => navigate('/shop')}
+                  className="text-primary-green hover:underline"
+                >
+                  Continue Shopping
+                </button>
+              </div>
             ) : (
               cartItems.map((item) => (
                 <CartItemCard

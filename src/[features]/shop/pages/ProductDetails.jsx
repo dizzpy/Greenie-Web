@@ -7,6 +7,7 @@ import CartButton from '../components/CartButton';
 import { LuArrowRight } from 'react-icons/lu';
 import ProductCard from '../components/ProductCard';
 import Breadcrumb from '../components/Breadcrumb';
+import { useCart } from '../../../context/CartContext';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -16,6 +17,7 @@ const ProductDetails = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,8 +57,7 @@ const ProductDetails = () => {
   };
 
   const handleAddToCart = () => {
-    // Add your cart logic here
-    console.log('Adding to cart:', product, 'quantity:', quantity);
+    addToCart(product, quantity);
   };
 
   if (isLoading) {
