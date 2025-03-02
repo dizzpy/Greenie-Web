@@ -1,91 +1,95 @@
-import PropTypes from 'prop-types';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import CartButton from './CartButton';
 import CartItem from './CartItem';
 import cartIcon from '../../../assets/icons/shopping-cart.svg';
 import { LuArrowRight } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../../../context/CartContext';
 
-const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
+const CartSidebar = () => {
   const navigate = useNavigate();
+  const {
+    isCartOpen,
+    setIsCartOpen,
+    cartItems,
+    removeFromCart,
+    updateQuantity,
+    getCartTotal,
+  } = useCart();
 
   const handleViewCart = () => {
-    onClose(); // Close sidebar
+    setIsCartOpen(false); // Close sidebar
     navigate('/shop/cart'); // Navigate to cart page
   };
 
   const handleCheckout = () => {
-    onClose(); // Close sidebar
+    setIsCartOpen(false); // Close sidebar
     navigate('/shop/checkout'); // Navigate to checkout page
   };
 
   const handleUpdateQuantity = (itemId, newQuantity) => {
-    console.log('Update quantity:', itemId, newQuantity);
-    // Add your quantity update logic here
+    updateQuantity(itemId, newQuantity);
   };
 
   const handleDeleteItem = (itemId) => {
-    console.log('Delete item:', itemId);
-    // Add your delete logic here
+    removeFromCart(itemId);
   };
 
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
-  );
+  const total = getCartTotal();
 
   return (
     <>
       {/* Overlay */}
       <div
         className={`fixed inset-0 bg-black transition-opacity duration-300 ${
-          isOpen ? 'opacity-50 z-40' : 'opacity-0 -z-10'
+          isCartOpen ? 'opacity-50 z-40' : 'opacity-0 -z-10'
         }`}
-        onClick={onClose}
+        onClick={() => setIsCartOpen(false)}
       />
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 right-0 w-full md:w-[450px] h-full bg-bg-light shadow-lg transform transition-transform duration-300 ease-in-out z-50 ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
+        className={`fixed top-0 right-0 w-full md:w-[450px] h-full bg-bg-light shadow-lg transform transition-transform duration-300 ease-in-out z-50 flex flex-col ${
+          isCartOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Header */}
         <div className="flex justify-between items-center px-5 py-2 bg-white m-5 rounded-2xl">
-          <h2 className="text-lg text-text-gray">Cart</h2>
+          <h2 className="text-lg text-text-gray">Cart ({cartItems.length})</h2>
           <button
-            onClick={onClose}
+            onClick={() => setIsCartOpen(false)}
             className="p-2 hover:bg-gray-100 rounded-full"
           >
             <IoCloseCircleOutline size={24} />
           </button>
         </div>
 
-        {/* Cart Items */}
-        <div className="p-6 h-[calc(100vh-220px)] overflow-y-auto">
+        {/* Cart Items - Updated scroll container */}
+        <div className="flex-1 overflow-y-auto px-5">
           {cartItems.length === 0 ? (
             <p className="text-center text-gray-500">Your cart is empty</p>
           ) : (
-            cartItems.map((item) => (
-              <CartItem
-                key={item.id}
-                item={item}
-                onUpdateQuantity={handleUpdateQuantity}
-                onDelete={handleDeleteItem}
-              />
-            ))
+            <div className="space-y-4">
+              {cartItems.map((item) => (
+                <CartItem
+                  key={item.productID}
+                  item={item}
+                  onUpdateQuantity={handleUpdateQuantity}
+                  onDelete={handleDeleteItem}
+                />
+              ))}
+            </div>
           )}
         </div>
 
-        {/* Footer */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <div className="flex justify-between mb-4 px-5 py-4 bg-white m-5 rounded-2xl">
+        {/* Footer - Fixed at bottom */}
+        <div className="p-5 border-t bg-bg-light">
+          <div className="flex justify-between mb-4 px-5 py-4 bg-white rounded-2xl">
             <span>Total</span>
-            <span className="font-medium">${total}</span>
+            <span className="font-medium">Rs {total}</span>
           </div>
 
-          {/* button section */}
-          <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4 m-5">
+          <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4">
             <CartButton
               icon={cartIcon}
               text="View Cart"
@@ -96,7 +100,7 @@ const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
               icon={<LuArrowRight />}
               text="Checkout"
               className="bg-primary-green"
-              textColor="text-white"
+              textColor="text-primary-green"
               onClick={handleCheckout}
             />
           </div>
@@ -104,20 +108,6 @@ const CartSidebar = ({ isOpen, onClose, cartItems = [] }) => {
       </aside>
     </>
   );
-};
-
-CartSidebar.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  cartItems: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-      quantity: PropTypes.number.isRequired,
-      image: PropTypes.string.isRequired,
-    }),
-  ),
 };
 
 export default CartSidebar;

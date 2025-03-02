@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import coinIcon from '../../../assets/icons/coin.svg';
 
 function ProductCard({ product }) {
   return (
@@ -22,9 +23,10 @@ function ProductCard({ product }) {
         </p>
 
         <div className="flex space-x-3 mt-3 items-center">
-          <p className="text-text-gray text-sm sm:text-base">
-            🎯 {product.numberOfPoints} Points
-          </p>
+          <div className="flex items-center text-text-gray text-sm sm:text-base">
+            <img src={coinIcon} alt="Points" className="w-5 h-5 mr-1" />
+            <span>{product.numberOfPoints} Points</span>
+          </div>
 
           <div className="h-1 w-1 bg-text-gray rounded-full my-2"></div>
 
