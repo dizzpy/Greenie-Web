@@ -82,29 +82,37 @@ const SearchBar = ({ isOpen, onClose }) => {
 
           {/* Search Results */}
           {searchTerm && (
-            <div className="mt-4 max-h-96 overflow-y-auto">
+            <div className="mt-6 max-h-[70vh] overflow-y-auto px-2">
               {isLoading ? (
                 <p className="text-center py-4">Loading...</p>
               ) : filteredProducts.length === 0 ? (
                 <p className="text-center py-4">No products found</p>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-4">
                   {filteredProducts.map((product) => (
                     <div
                       key={product.productID}
                       onClick={() => handleProductClick(product.productID)}
-                      className="flex items-center gap-4 p-3 rounded-xl hover:bg-bg-light cursor-pointer"
+                      className="flex items-center gap-6 p-4 rounded-2xl hover:bg-bg-light cursor-pointer transition-colors duration-200"
                     >
                       <img
                         src={product.imgURL}
                         alt={product.productName}
-                        className="w-12 h-12 object-cover rounded-lg"
+                        className="w-20 h-20 object-cover rounded-xl"
                       />
-                      <div>
-                        <h3 className="font-medium">{product.productName}</h3>
-                        <p className="text-sm text-text-gray">
-                          Rs {product.price}
+                      <div className="flex-1">
+                        <h3 className="font-medium text-lg mb-1">
+                          {product.productName}
+                        </h3>
+                        <p className="text-text-gray mb-2">
+                          {product.shortDescription}
                         </p>
+                        <div className="flex items-center gap-4">
+                          <p className="text-primary-green">
+                            🎯 {product.numberOfPoints} Points
+                          </p>
+                          <p className="text-text-gray">Rs {product.price}</p>
+                        </div>
                       </div>
                     </div>
                   ))}
