@@ -25,11 +25,8 @@ const CreatePost = () => {
     const formData = new FormData();
     formData.append('content', postContent);
     if (image) {
-      // Convert image to a file object from the base64 URL
-      const imageFile = await fetch(image)
-        .then((res) => res.blob())
-        .then((blob) => new File([blob], 'image.jpg', { type: 'image/jpeg' }));
-      formData.append('image', imageFile);
+      // Directly append the image file, no need to convert to base64
+      formData.append('image', image);
     }
 
     try {
