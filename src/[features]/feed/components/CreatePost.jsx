@@ -31,7 +31,7 @@ const CreatePost = () => {
 
     try {
       const response = await axios.post(
-        'http://16.170.224.209:8080/api/posts',
+        'https://16.170.224.209:8080/api/posts',
         formData,
         {
           headers: {
