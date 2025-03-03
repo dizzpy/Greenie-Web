@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Use environment variable with fallback
 const API_BASE_URL =
-  import.meta.env.VITE_API_URL || 'http://52.90.77.36:8080/api';
+  import.meta.env.VITE_API_URL || 'http://16.170.224.209:8080/api';
 
 export const getAllProducts = async () => {
   try {
