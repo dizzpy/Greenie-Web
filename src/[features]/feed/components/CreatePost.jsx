@@ -8,25 +8,27 @@ import axios from 'axios';
 const CreatePost = () => {
   const [postContent, setPostContent] = useState('');
   const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file));
+      setImage(file); // Store the actual file for submission
+      setImagePreview(URL.createObjectURL(file)); // Generate a preview
     }
   };
 
   const handleRemoveImage = () => {
     setImage(null);
+    setImagePreview(null);
   };
 
   const handleSubmit = async () => {
     const formData = new FormData();
-    formData.append('content', postContent);
+    formData.append('content', postContent); // ✅ Ensure this key matches backend
     if (image) {
-      // Directly append the image file, no need to convert to base64
-      formData.append('image', image);
+      formData.append('image', image); // ✅ Use `imageFile` to match backend
     }
 
     try {
@@ -42,13 +44,16 @@ const CreatePost = () => {
 
       if (response.status === 200) {
         console.log('Post created successfully:', response.data);
-        setSuccessMessage('Post created successfully!'); // Set success message
-        // Reset the form after successful submission
+        setSuccessMessage('Post created successfully!');
         setPostContent('');
         setImage(null);
+        setImagePreview(null);
       }
     } catch (error) {
-      console.error('Error creating post:', error);
+      console.error(
+        'Error creating post:',
+        error.response ? error.response.data : error,
+      );
     }
   };
 
@@ -62,11 +67,11 @@ const CreatePost = () => {
         onChange={(e) => setPostContent(e.target.value)}
       ></textarea>
 
-      {/* Display Uploaded Image */}
-      {image && (
+      {/* Display Uploaded Image Preview */}
+      {imagePreview && (
         <div className="relative mt-2">
           <img
-            src={image}
+            src={imagePreview}
             alt="Uploaded"
             className="w-full h-40 object-cover rounded-lg"
           />
