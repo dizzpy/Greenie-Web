@@ -21,6 +21,7 @@ const TopLeaderboardCard = ({
   points,
   challenges,
   position,
+  avatar,
 }) => {
   const config = positionConfig[position];
   const isFirstPlace = position === 1;
@@ -50,8 +51,8 @@ const TopLeaderboardCard = ({
           <div className="flex items-center gap-3 mb-7">
             <div className="h-10 w-10 overflow-hidden rounded-full">
               <img
-                src="https://avatars.githubusercontent.com/u/28524634?v=4"
-                alt="User avatar"
+                src={avatar}
+                alt={`${fullName}'s avatar`}
                 className="h-full w-full object-cover"
               />
             </div>
@@ -94,6 +95,7 @@ TopLeaderboardCard.propTypes = {
   points: PropTypes.number.isRequired,
   challenges: PropTypes.number.isRequired,
   position: PropTypes.oneOf([1, 2, 3]).isRequired,
+  avatar: PropTypes.string.isRequired,
 };
 
 export default TopLeaderboardCard;
