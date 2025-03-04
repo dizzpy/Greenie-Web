@@ -2,22 +2,22 @@ import PropTypes from 'prop-types';
 
 const TopLeaderboardCard = ({ fullName, username, points, challenges }) => {
   return (
-    <div className="rounded-[22px] bg-gradient-to-b from-green-400 to-transparent p-[3px] h-[220px]">
-      <div className="rounded-[22px] bg-bg-light p-4 h-full relative">
-        {/* Medal image - positioned relative to the card border */}
-        <div className="absolute left-1/2 -top-8 -translate-x-1/2">
+    <div className="rounded-[22px] bg-gradient-to-b from-green-400 to-transparent p-[3px] h-[200px]">
+      <div className="rounded-[22px] bg-bg-light p-3 h-full relative">
+        {/* Medal image */}
+        <div className="absolute left-1/2 -top-6 -translate-x-1/2">
           <img
             src="/src/assets/icons/leaderboard/third-med.svg"
             alt="Third Medal"
-            className="w-16 h-16"
+            className="w-14 h-14"
           />
         </div>
 
-        {/* Content wrapper with reduced spacing */}
-        <div className="flex flex-col items-center h-full pt-10">
-          {/* Profile section - reduced margin bottom */}
-          <div className="flex items-center gap-4 mb-6">
-            <div className="h-12 w-12 overflow-hidden rounded-full">
+        {/* Content wrapper */}
+        <div className="flex flex-col items-center h-full pt-8">
+          {/* Profile section - increased margin bottom */}
+          <div className="flex items-center gap-3 mb-7">
+            <div className="h-10 w-10 overflow-hidden rounded-full">
               <img
                 src="https://avatars.githubusercontent.com/u/28524634?v=4"
                 alt="User avatar"
@@ -31,7 +31,7 @@ const TopLeaderboardCard = ({ fullName, username, points, challenges }) => {
             </div>
           </div>
 
-          {/* Stats section - removed margin bottom */}
+          {/* Stats section */}
           <div className="flex justify-center gap-16">
             <div className="flex flex-col items-center gap-1">
               <span className="text-xs text-text-gray">Points Earned</span>
