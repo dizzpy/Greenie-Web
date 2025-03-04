@@ -1,7 +1,75 @@
 import TopLeaderboardCard from '../components/TopLeaderboardCard';
 import UserScoreCard from '../components/UserScoreCard';
+import RisingMembersTable from '../components/RisingMembersTable';
 
 function LeaderboardHome() {
+  // Sample data for rising members
+  const risingMembers = [
+    {
+      id: '1',
+      rank: 4,
+      name: 'Jane Doe',
+      username: 'jane_doe',
+      avatar: 'https://avatars.githubusercontent.com/u/28524634?v=4',
+      points: 654,
+      challenges: 7,
+    },
+    {
+      id: '2',
+      rank: 5,
+      name: 'John Smith',
+      username: 'johnsmith',
+      avatar: 'https://avatars.githubusercontent.com/u/28524634?v=4',
+      points: 623,
+      challenges: 6,
+    },
+    {
+      id: '3',
+      rank: 6,
+      name: 'Alice Johnson',
+      username: 'alice_j',
+      avatar: 'https://avatars.githubusercontent.com/u/28524634?v=4',
+      points: 589,
+      challenges: 5,
+    },
+    {
+      id: '4',
+      rank: 7,
+      name: 'Bob Wilson',
+      username: 'bobwil',
+      avatar: 'https://avatars.githubusercontent.com/u/28524634?v=4',
+      points: 567,
+      challenges: 5,
+    },
+    {
+      id: '5',
+      rank: 8,
+      name: 'Emma Davis',
+      username: 'emma_d',
+      avatar: 'https://avatars.githubusercontent.com/u/28524634?v=4',
+      points: 543,
+      challenges: 4,
+    },
+    {
+      id: '6',
+      rank: 9,
+      name: 'Michael Brown',
+      username: 'mike_b',
+      avatar: 'https://avatars.githubusercontent.com/u/28524634?v=4',
+      points: 521,
+      challenges: 4,
+    },
+    {
+      id: '7',
+      rank: 10,
+      name: 'Sarah Lee',
+      username: 'slee',
+      avatar: 'https://avatars.githubusercontent.com/u/28524634?v=4',
+      points: 498,
+      challenges: 3,
+    },
+  ];
+
   return (
     <div className="container mx-auto px-4">
       {/* Global nav */}
@@ -45,6 +113,16 @@ function LeaderboardHome() {
                 challenges={8}
                 position={3}
               />
+            </div>
+          </div>
+
+          {/* Rising Members section */}
+          <div className="mt-12">
+            <h2 className="text-xl font-normal text-text-gray mb-6 px-5">
+              Rising Members
+            </h2>
+            <div className="px-5">
+              <RisingMembersTable members={risingMembers} />
             </div>
           </div>
         </div>
