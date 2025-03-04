@@ -2,28 +2,23 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Button from '../Components/Button';
-import RegisterImage from '../../../assets/CCC.svg';
+import RegisterImage from '../../../assets/LoginImage.svg';
+
 const Register = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [err, setErr] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (password !== confirmPassword) {
-      setErr('Passwords do not match!');
-      return;
-    }
-
     setErr('');
     setLoading(true);
 
     try {
-      await axios.post('/api/auth/register', { email, password });
+      await axios.post('/api/auth/register', { name, email, password });
       navigate('/login');
     } catch (error) {
       setErr(error.response?.data?.message || 'Something went wrong!');
@@ -33,9 +28,9 @@ const Register = () => {
   };
 
   return (
-    <div className="flex h-screen">
-      {/* Left Side - Image Section */}
-      <div className="w-1/2 flex items-center justify-center bg-green-100">
+    <div className="flex flex-col md:flex-row h-screen">
+      {/* Left Side - Image Section (Hidden on Mobile) */}
+      <div className="hidden md:flex w-1/2 items-center justify-center bg-green-100">
         <img
           src={RegisterImage}
           alt="Register Illustration"
@@ -44,75 +39,66 @@ const Register = () => {
       </div>
 
       {/* Right Side - Form Section */}
-      <div className="w-1/2 flex items-center justify-center">
-        <div className="w-full max-w-md mx-auto">
-          <h2 className="text-center text-3xl font-bold text-primary-green">
-            Register
+      <div className="w-full md:w-1/2 flex items-center justify-center p-4">
+        <div className="w-full max-w-sm md:max-w-md mx-auto">
+          <h2 className="text-center text-3xl font-bold text-gray-800">
+            Create an Account
           </h2>
           {err && <p className="text-red-500 text-center mt-4">{err}</p>}
 
-          <form
-            onSubmit={handleSubmit}
-            className="bg-white p-6 rounded-lg shadow-md"
-          >
+          <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg">
+            <div className="mb-4">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700"
+              ></label>
+              <input
+                type="text"
+                id="name"
+                className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-primary-green focus:border-primary-green"
+                placeholder="Your Name *"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
             <div className="mb-4">
               <label
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
-              >
-                Email
-              </label>
+              ></label>
               <input
                 type="email"
                 id="email"
                 className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-primary-green focus:border-primary-green"
-                placeholder="Enter your email"
+                placeholder="E-mail Here *"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
-            <div className="mb-4">
+            <div className="mb-6">
               <label
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
+              ></label>
               <input
                 type="password"
                 id="password"
                 className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-primary-green focus:border-primary-green"
-                placeholder="Enter your password"
+                placeholder="Password *"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
-            <div className="mb-6">
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-primary-green focus:border-primary-green"
-                placeholder="Confirm your password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-            </div>
             <Button className="w-full" disabled={loading}>
-              {loading ? 'Registering...' : 'Register'}
+              {loading ? 'Creating...' : 'Create'}
             </Button>
             <p className="text-center text-sm mt-4">
               Already have an account?{' '}
               <a href="/login" className="text-primary-green font-semibold">
-                Login here
+                Sign Up
               </a>
             </p>
           </form>

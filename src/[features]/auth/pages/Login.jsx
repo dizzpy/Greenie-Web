@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Button from '../Components/Button';
-import LoginImage from '/src/assets/LoginImage.svg'; // Absolute path for Vite
-// Updated path for SVG image
+import LoginImage from '/src/assets/CCC.svg'; // Absolute path for Vite
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -27,9 +26,9 @@ const Login = () => {
   };
 
   return (
-    <div className="flex h-screen">
-      {/* Left Side - Image Section */}
-      <div className="w-1/2 flex items-center justify-center bg-green-100">
+    <div className="flex flex-col md:flex-row h-screen">
+      {/* Left Side - Image Section (Hidden on Mobile) */}
+      <div className="hidden md:flex w-1/2 items-center justify-center bg-green-100">
         <img
           src={LoginImage}
           alt="Login Illustration"
@@ -38,17 +37,12 @@ const Login = () => {
       </div>
 
       {/* Right Side - Form Section */}
-      <div className="w-1/2 flex items-center justify-center">
-        <div className="w-full max-w-md mx-auto">
-          <h2 className="text-center text-3xl font-bold text-primary-green">
-            Login
-          </h2>
+      <div className="w-full md:w-1/2 flex items-center justify-center p-4">
+        <div className="w-full max-w-sm md:max-w-md mx-auto">
+          <h2 className="text-center text-3xl font-bold text-gray">Login</h2>
           {err && <p className="text-red-500 text-center mt-4">{err}</p>}
 
-          <form
-            onSubmit={handleSubmit}
-            className="bg-white p-6 rounded-lg shadow-md"
-          >
+          <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg">
             <div className="mb-4">
               <label
                 htmlFor="email"

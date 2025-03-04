@@ -9,7 +9,7 @@ import HomePage from './pages/HomePage';
 import Feed from './[features]/feed/pages/Feed';
 import ChallengesHome from './[features]/challenges/pages/ChallengesHome';
 import Login from './[features]/auth/pages/Login';
-import Register from './[features]/auth/pages/Register';
+import Register from './[features]/auth/pages/CreateAccount';
 import ForgotPassword from './[features]/auth/pages/ForgotPassword';
 import SetNewPassword from './[features]/auth/pages/SetNewPassword';
 import LeaderboardHome from './[features]/leaderboard/pages/LeaderboardHome';
