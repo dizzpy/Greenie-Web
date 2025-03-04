@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 const RisingMembersTable = ({ members }) => {
   return (
-    <div className="w-full">
+    <div className="w-full min-w-[768px]">
       <table className="w-full">
         <thead>
           <tr className="text-sm text-text-gray border-b border-gray-200">

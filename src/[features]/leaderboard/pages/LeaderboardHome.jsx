@@ -119,22 +119,22 @@ function LeaderboardHome() {
   ];
 
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto px-4 mb-10">
       {/* Global nav */}
       <div className="bg-green-300 py-4 mx-auto my-4 rounded-lg">
         <p className="text-center">Global Nav</p>
       </div>
 
-      {/* grid */}
-      <div className="flex flex-col lg:flex-row gap-4 mt-20">
+      {/* grid - adjusted for mobile */}
+      <div className="flex flex-col lg:flex-row gap-8 mt-10 lg:mt-20">
         {/* leaderboard section */}
         <div className="w-full lg:w-9/12">
-          <h2 className="text-xl font-normal text-text-gray mb-6 px-5">
+          <h2 className="text-xl font-normal text-text-gray mb-6 px-2 lg:px-5">
             Current Leaderboard
           </h2>
 
           {/* 3 top card section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 px-2 lg:p-5">
             <div className="order-2 lg:order-1">
               <TopLeaderboardCard
                 fullName="Layla"
@@ -168,18 +168,18 @@ function LeaderboardHome() {
           </div>
 
           {/* Rising Members section */}
-          <div className="mt-12">
-            <h2 className="text-xl font-normal text-text-gray mb-6 px-5">
+          <div className="mt-8 lg:mt-12">
+            <h2 className="text-xl font-normal text-text-gray mb-6 px-2 lg:px-5">
               Rising Members
             </h2>
-            <div className="px-5">
+            <div className="px-2 lg:px-5 overflow-x-auto">
               <RisingMembersTable members={risingMembers} />
             </div>
           </div>
         </div>
 
         {/* score section */}
-        <div className="w-full lg:w-3/12">
+        <div className="w-full lg:w-3/12 order-first lg:order-none">
           <h2 className="text-xl font-normal text-text-gray mb-6">
             Your Score
           </h2>
