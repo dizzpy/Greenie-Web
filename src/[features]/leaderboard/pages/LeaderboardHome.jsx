@@ -1,6 +1,7 @@
 import TopLeaderboardCard from '../components/TopLeaderboardCard';
 import UserScoreCard from '../components/UserScoreCard';
 import RisingMembersTable from '../components/RisingMembersTable';
+import UserBadgesCard from '../components/UserBadgesCard';
 
 function LeaderboardHome() {
   // Sample data for rising members with Arcane characters
@@ -77,6 +78,46 @@ function LeaderboardHome() {
     },
   ];
 
+  // Sample data for badges
+  const userBadges = [
+    {
+      id: '1',
+      name: 'Quick Starter',
+      icon: 'https://github.githubassets.com/images/modules/profile/achievements/quickdraw-default.png',
+      isUnlocked: true,
+    },
+    {
+      id: '2',
+      name: 'Pull Shark',
+      icon: 'https://github.githubassets.com/images/modules/profile/achievements/pull-shark-default.png',
+      isUnlocked: true,
+    },
+    {
+      id: '3',
+      name: 'Galaxy Brain',
+      icon: 'https://github.githubassets.com/images/modules/profile/achievements/galaxy-brain-default.png',
+      isUnlocked: true,
+    },
+    {
+      id: '4',
+      name: 'YOLO',
+      icon: 'https://github.githubassets.com/images/modules/profile/achievements/yolo-default.png',
+      isUnlocked: false,
+    },
+    {
+      id: '5',
+      name: 'Arctic Code',
+      icon: 'https://github.githubassets.com/images/modules/profile/achievements/arctic-code-vault-contributor-default.png',
+      isUnlocked: false,
+    },
+    {
+      id: '6',
+      name: 'Pair Pro',
+      icon: 'https://github.githubassets.com/images/modules/profile/achievements/pair-extraordinaire-default.png',
+      isUnlocked: false,
+    },
+  ];
+
   return (
     <div className="container mx-auto px-4">
       {/* Global nav */}
@@ -149,6 +190,10 @@ function LeaderboardHome() {
             challenges={15}
             points={1234}
           />
+          <h2 className="text-xl font-normal text-text-gray mb-6 mt-8">
+            Achievements
+          </h2>
+          <UserBadgesCard badges={userBadges} />
         </div>
       </div>
     </div>
