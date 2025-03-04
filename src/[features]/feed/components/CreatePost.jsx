@@ -3,25 +3,58 @@ import React, { useState } from 'react';
 import { FaImage } from 'react-icons/fa';
 import { IoMdSend } from 'react-icons/io';
 import { MdClose } from 'react-icons/md';
+import axios from 'axios';
 
 const CreatePost = () => {
   const [postContent, setPostContent] = useState('');
   const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file));
+      setImage(file); // Store the actual file for submission
+      setImagePreview(URL.createObjectURL(file)); // Generate a preview
     }
   };
 
   const handleRemoveImage = () => {
     setImage(null);
+    setImagePreview(null);
   };
 
-  const handleSubmit = () => {
-    console.log('Post submitted:', { postContent, image });
-    // Handle API call for post submission
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append('content', postContent); // ✅ Ensure this key matches backend
+    if (image) {
+      formData.append('image', image); // ✅ Use `imageFile` to match backend
+    }
+
+    try {
+      const response = await axios.post(
+        'http://16.170.224.209:8080/api/posts',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
+
+      if (response.status === 200) {
+        console.log('Post created successfully:', response.data);
+        setSuccessMessage('Post created successfully!');
+        setPostContent('');
+        setImage(null);
+        setImagePreview(null);
+      }
+    } catch (error) {
+      console.error(
+        'Error creating post:',
+        error.response ? error.response.data : error,
+      );
+    }
   };
 
   return (
@@ -34,11 +67,11 @@ const CreatePost = () => {
         onChange={(e) => setPostContent(e.target.value)}
       ></textarea>
 
-      {/* Display Uploaded Image */}
-      {image && (
+      {/* Display Uploaded Image Preview */}
+      {imagePreview && (
         <div className="relative mt-2">
           <img
-            src={image}
+            src={imagePreview}
             alt="Uploaded"
             className="w-full h-40 object-cover rounded-lg"
           />
@@ -49,6 +82,13 @@ const CreatePost = () => {
           >
             <MdClose size={20} />
           </button>
+        </div>
+      )}
+
+      {/* Success Message */}
+      {successMessage && (
+        <div className="mt-4 p-2 bg-green-100 text-green-700 rounded-md">
+          {successMessage}
         </div>
       )}
 

@@ -1,30 +1,65 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useMemo, useEffect } from 'react'; // Add this import
-import { products } from '../data/products';
+import { useState, useEffect } from 'react';
+import { getProductById, getAllProducts } from '../../../services/shopService';
 import ShopNav from '../components/ShopNav';
 import cartIcon from '../../../assets/icons/shopping-cart.svg';
 import CartButton from '../components/CartButton';
 import { LuArrowRight } from 'react-icons/lu';
 import ProductCard from '../components/ProductCard';
 import Breadcrumb from '../components/Breadcrumb';
+import { useCart } from '../../../context/CartContext';
 
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const product = products.find((p) => p.productID === parseInt(id));
+  const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const { addToCart, cartItems } = useCart();
+
+  // Get current cart quantity for this product
+  const currentCartQuantity =
+    cartItems.find((item) => item.productID === product?.productID)?.quantity ||
+    0;
+
+  // Calculate remaining available quantity
+  const availableQuantity = product
+    ? product.quantity - currentCartQuantity
+    : 0;
 
   useEffect(() => {
-    // Simulate loading
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        // Fetch current product
+        const productData = await getProductById(id);
+        setProduct(productData);
+
+        // Fetch all products for related section
+        const allProducts = await getAllProducts();
+        const filtered = allProducts
+          .filter((p) => p.productID !== productData.productID)
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 3);
+        setRelatedProducts(filtered);
+
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError('Failed to load product details');
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, [id]);
 
   const incrementQuantity = () => {
-    setQuantity((prev) => prev + 1);
+    if (quantity < availableQuantity) {
+      setQuantity((prev) => prev + 1);
+    }
   };
 
   const decrementQuantity = () => {
@@ -34,15 +69,8 @@ const ProductDetails = () => {
   };
 
   const handleAddToCart = () => {
-    // Add your cart logic here
-    console.log('Adding to cart:', product, 'quantity:', quantity);
+    addToCart(product, quantity);
   };
-
-  // Memoize random products to prevent re-renders
-  const relatedProducts = useMemo(() => {
-    const otherProducts = products.filter((p) => p.productID !== parseInt(id));
-    return otherProducts.sort(() => 0.5 - Math.random()).slice(0, 3);
-  }, [id]); // Only re-calculate when product ID changes
 
   if (isLoading) {
     return (
@@ -52,10 +80,10 @@ const ProductDetails = () => {
     );
   }
 
-  if (!product) {
+  if (error || !product) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-        <h2 className="text-2xl font-medium">Product not found</h2>
+        <h2 className="text-2xl font-medium">{error || 'Product not found'}</h2>
         <button
           onClick={() => navigate('/shop')}
           className="text-primary-green hover:underline"
@@ -132,29 +160,30 @@ const ProductDetails = () => {
             <div className="mt-4 md:mt-5">
               <h2 className="text-base font-medium">Quantity</h2>
               <div className="flex items-center space-x-4 mt-2 mb-4 md:mb-6 bg-white w-fit p-2 rounded-full">
-                <button
-                  onClick={decrementQuantity}
-                  disabled={quantity <= 1}
-                  className="w-8 h-8 flex items-center justify-center bg-bg-light rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  -
-                </button>
-                <span className="text-base text-text-gray font-normal w-6 text-center">
-                  {quantity}
-                </span>
-                <button
-                  onClick={incrementQuantity}
-                  disabled={quantity >= (product.quantity || 10)}
-                  className="w-8 h-8 flex items-center justify-center bg-bg-light rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  +
-                </button>
+                {availableQuantity > 0 ? (
+                  <>
+                    <button
+                      onClick={decrementQuantity}
+                      disabled={quantity <= 1}
+                      className="w-8 h-8 flex items-center justify-center bg-bg-light rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      -
+                    </button>
+                    <span className="text-base text-text-gray font-normal w-6 text-center">
+                      {quantity}
+                    </span>
+                    <button
+                      onClick={incrementQuantity}
+                      disabled={quantity >= availableQuantity}
+                      className="w-8 h-8 flex items-center justify-center bg-bg-light rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      +
+                    </button>
+                  </>
+                ) : (
+                  <p className="text-lightred">Out of stock</p>
+                )}
               </div>
-              {quantity >= (product.quantity || 10) && (
-                <p className="text-sm text-lightred mt-1">
-                  Maximum quantity reached
-                </p>
-              )}
             </div>
 
             {/* button section */}
