@@ -8,6 +8,7 @@ function ChallengesHome() {
         <p className="text-center">Global Nav</p>
       </div>
 
+      {/* header section */}
       <div className="flex justify-between items-center mb-6 mt-14">
         <div>
           <h1 className="text-3xl text-text-gray">Challenges</h1>
@@ -21,6 +22,13 @@ function ChallengesHome() {
             <span className="text-text-gray text-xl">1,234</span>
           </div>
         </div>
+      </div>
+
+      {/* add challenge button */}
+      <div className="flex justify-end mb-6">
+        <button className="bg-primary-green text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">
+          Add Challenge
+        </button>
       </div>
     </div>
   );
