@@ -12,8 +12,8 @@ function LeaderboardHome() {
       <div className="flex gap-4 mt-10">
         {/* Left section (9/12) */}
         <div className="w-9/12">
-          {/* 3x3 grid */}
-          <div className="grid grid-cols-3 gap-4">
+          {/* 3x3 grid - added padding */}
+          <div className="grid grid-cols-3 gap-4 p-5">
             <TopLeaderboardCard
               fullName="Anuja Rathnayaka"
               username="dizzpy"
