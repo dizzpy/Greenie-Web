@@ -4,7 +4,6 @@ import RisingMembersTable from '../components/RisingMembersTable';
 import UserBadgesCard from '../components/UserBadgesCard';
 
 function LeaderboardHome() {
-  // Sample data for rising members with Arcane characters
   const risingMembers = [
     {
       id: '1',
