@@ -1,15 +1,46 @@
 import PropTypes from 'prop-types';
 
-const TopLeaderboardCard = ({ fullName, username, points, challenges }) => {
+const positionConfig = {
+  1: {
+    borderColor: '#e7b659',
+    medalSrc: '/src/assets/icons/leaderboard/first-med.svg',
+  },
+  2: {
+    borderColor: '#B6B7B2',
+    medalSrc: '/src/assets/icons/leaderboard/second-med.svg',
+  },
+  3: {
+    borderColor: '#C86B58',
+    medalSrc: '/src/assets/icons/leaderboard/third-med.svg',
+  },
+};
+
+const TopLeaderboardCard = ({
+  fullName,
+  username,
+  points,
+  challenges,
+  position,
+}) => {
+  const config = positionConfig[position];
+  const isFirstPlace = position === 1;
+
   return (
-    <div className="rounded-[22px] bg-gradient-to-b from-green-400 to-transparent p-[3px] h-[200px]">
+    <div
+      className={`rounded-[22px] p-[3px] h-[200px] ${isFirstPlace ? '-mb-4' : ''}`}
+      style={{
+        background: `linear-gradient(180deg, ${config.borderColor} 0%, transparent 100%)`,
+      }}
+    >
       <div className="rounded-[22px] bg-bg-light p-3 h-full relative">
         {/* Medal image */}
-        <div className="absolute left-1/2 -top-6 -translate-x-1/2">
+        <div
+          className={`absolute left-1/2 -translate-x-1/2 ${isFirstPlace ? '-top-8' : '-top-6'}`}
+        >
           <img
-            src="/src/assets/icons/leaderboard/third-med.svg"
-            alt="Third Medal"
-            className="w-14 h-14"
+            src={config.medalSrc}
+            alt={`${position} Place Medal`}
+            className={`${isFirstPlace ? 'w-16 h-16' : 'w-14 h-14'}`}
           />
         </div>
 
@@ -62,6 +93,7 @@ TopLeaderboardCard.propTypes = {
   username: PropTypes.string.isRequired,
   points: PropTypes.number.isRequired,
   challenges: PropTypes.number.isRequired,
+  position: PropTypes.oneOf([1, 2, 3]).isRequired,
 };
 
 export default TopLeaderboardCard;
