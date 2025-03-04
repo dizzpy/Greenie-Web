@@ -39,7 +39,9 @@ const Login = () => {
       {/* Right Side - Form Section */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-4">
         <div className="w-full max-w-sm md:max-w-md mx-auto">
-          <h2 className="text-center text-3xl font-bold text-gray">Login</h2>
+          <h2 className="text-center text-3xl font-bold text-gray">
+            Log in to your Account
+          </h2>
           {err && <p className="text-red-500 text-center mt-4">{err}</p>}
 
           <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg">
@@ -47,14 +49,12 @@ const Login = () => {
               <label
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
-              >
-                Email
-              </label>
+              ></label>
               <input
                 type="email"
                 id="email"
                 className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-primary-green focus:border-primary-green"
-                placeholder="Enter your email"
+                placeholder="E mail *"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -64,26 +64,24 @@ const Login = () => {
               <label
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
+              ></label>
               <input
                 type="password"
                 id="password"
                 className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-primary-green focus:border-primary-green"
-                placeholder="Enter your password"
+                placeholder="Password *"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
             <Button className="w-full" disabled={loading}>
-              {loading ? 'Logging in...' : 'Login'}
+              {loading ? 'Logging in...' : 'Login to Account'}
             </Button>
             <p className="text-center text-sm mt-4">
               Don&apos;t have an account?{' '}
               <a href="/register" className="text-primary-green font-semibold">
-                Register here
+                Sign Up
               </a>
             </p>
           </form>
