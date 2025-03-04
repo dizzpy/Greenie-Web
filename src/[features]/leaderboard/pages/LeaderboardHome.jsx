@@ -1,4 +1,5 @@
 import TopLeaderboardCard from '../components/TopLeaderboardCard';
+import UserScoreCard from '../components/UserScoreCard';
 
 function LeaderboardHome() {
   return (
@@ -8,11 +9,15 @@ function LeaderboardHome() {
         <p className="text-center">Global Nav</p>
       </div>
 
-      {/* Main grid container - make it column on mobile */}
-      <div className="flex flex-col lg:flex-row gap-4 mt-10">
-        {/* Left section - full width on mobile */}
+      {/* grid */}
+      <div className="flex flex-col lg:flex-row gap-4 mt-20">
+        {/* leaderboard section */}
         <div className="w-full lg:w-9/12">
-          {/* 3x3 grid - 1 column on mobile, 2 on tablet, 3 on desktop */}
+          <h2 className="text-xl font-normal text-text-gray mb-6 px-5">
+            Current Leaderboard
+          </h2>
+
+          {/* 3 top card section */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-5">
             <div className="order-2 lg:order-1">
               <TopLeaderboardCard
@@ -44,9 +49,18 @@ function LeaderboardHome() {
           </div>
         </div>
 
-        {/* Right section - full width on mobile */}
-        <div className="w-full lg:w-3/12 bg-pink-200 p-4 rounded-lg">
-          Right Section
+        {/* score section */}
+        <div className="w-full lg:w-3/12">
+          <h2 className="text-xl font-normal text-text-gray mb-6">
+            Your Score
+          </h2>
+          <UserScoreCard
+            fullName="Anuja Rathnayaka"
+            username="dizzpy"
+            rank={5}
+            challenges={15}
+            points={1234}
+          />
         </div>
       </div>
     </div>
