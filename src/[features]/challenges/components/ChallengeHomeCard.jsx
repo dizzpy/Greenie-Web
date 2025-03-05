@@ -3,11 +3,11 @@ import CoinIcon from '../../../assets/icons/coin.svg';
 
 function ChallengeHomeCard({ challenge }) {
   return (
-    <div className="flex flex-col md:flex-row bg-bg-light rounded-lg p-4 h-full">
+    <div className="flex flex-col md:flex-row bg-bg-light rounded-lg p-5 h-full">
       {/* Image section */}
       <a
         href="#"
-        className="group w-full md:w-1/3 md:flex-shrink-0 mb-4 md:mb-0"
+        className="group w-full md:w-1/3 md:flex-shrink-0 mb-5 md:mb-0"
       >
         <div className="h-48 md:h-full">
           <img
@@ -19,29 +19,36 @@ function ChallengeHomeCard({ challenge }) {
       </a>
 
       {/* Content section */}
-      <div className="flex-1 md:ml-6">
+      <div className="flex-1 md:ml-6 flex flex-col">
         {/* Tags/Points section */}
-        <div className="flex flex-wrap items-center gap-2 md:gap-3">
-          <span className="inline-flex items-center px-2.5 py-1.5 text-sm font-medium text-text-gray rounded-full border border-gray-200">
-            <img src={CoinIcon} alt="coin" className="w-4 h-4 mr-1.5" />
-            {challenge.points} Points
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="inline-flex items-center px-3.5 py-2 text-sm font-medium text-emerald-700 rounded-full border border-emerald-200">
+            <div className="flex items-center gap-1.5">
+              <img src={CoinIcon} alt="coin" className="w-5 h-5" />
+              <span className="tabular-nums font-semibold">
+                {challenge.points}
+              </span>
+            </div>
           </span>
-          <span className="inline-flex items-center px-2.5 py-1.5 text-sm font-medium text-text-gray rounded-full border border-gray-200">
-            {challenge.enrolled} Enrolled
+          <span className="inline-flex items-center px-3.5 py-2 text-sm font-medium text-emerald-700 rounded-full border border-emerald-200">
+            <span className="tabular-nums font-semibold">
+              {challenge.enrolled}
+            </span>
+            <span className="ml-1">Enrolled</span>
           </span>
         </div>
 
         {/* Title and description */}
-        <div className="mt-3 md:mt-2">
-          <h4 className="text-lg leading-6 font-medium text-text-gray group-hover:text-primary-green">
+        <div className="mt-4">
+          <h4 className="text-lg leading-6 font-medium text-text-gray group-hover:text-primary-green mb-2">
             {challenge.name}
           </h4>
-          <p className="mt-2 text-sm font-normal text-gray-600 leading-5">
+          <p className="text-sm font-normal text-gray-600 leading-relaxed">
             {challenge.description}
           </p>
 
           {/* Footer section */}
-          <div className="mt-4 flex justify-end">
+          <div className="mt-auto pt-4">
             <button className="text-primary-green hover:text-green-600">
               View Details →
             </button>

@@ -65,42 +65,43 @@ function ChallengesHome() {
   ];
 
   return (
-    <div className="max-w-screen-xl container mx-auto px-4">
+    <div className="max-w-screen-xl container mx-auto px-6 py-8">
       {/* Global nav */}
-      <div className="bg-green-300 py-4 mx-auto my-4 rounded-lg">
+      <div className="bg-green-300 py-4 mx-auto rounded-lg mb-10">
         <p className="text-center">Global Nav</p>
       </div>
 
-      {/* header section */}
-      <div className="flex justify-between items-center mb-6 mt-14">
-        <div>
-          <h1 className="text-3xl text-text-gray">Challenges</h1>
-          <p className="text-text-gray">Available Challenges</p>
+      {/* Improved header section */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <div className="space-y-3">
+          <h1 className="text-2xl md:text-3xl font-semibold text-text-gray">
+            Challenges
+          </h1>
+          <p className="text-gray-500 text-sm md:text-base">
+            Explore and participate in environmental challenges
+          </p>
         </div>
 
-        <div className="flex flex-col items-end gap-2">
-          <span className="text-gray-700">Current Points</span>
-          <div className="flex flex-row gap-x-2 items-center">
-            <img src={CoinIcon} alt="coin" className="w-6 h-6" />
-            <span className="text-text-gray text-xl">1,234</span>
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+          <div className="inline-flex items-center px-5 py-2.5 text-sm font-medium rounded-full border border-emerald-200 bg-white shadow-sm">
+            <span className="mr-3">Current Points</span>
+            <div className="flex items-center gap-1.5">
+              <img src={CoinIcon} alt="coin" className="w-5 h-5" />
+              <span className="font-bold text-base tabular-nums">1,234</span>
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* add challenge button */}
-      <div className="flex justify-end mb-6">
-        <button className="bg-primary-green text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">
-          Add Challenge
-        </button>
+          <button className="bg-primary-green text-white px-6 py-2.5 rounded-lg hover:bg-green-600 transition-colors font-medium w-full md:w-auto">
+            Add Challenge
+          </button>
+        </div>
       </div>
 
       {/* card section */}
-      <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {challenges.map((challenge) => (
-            <ChallengeHomeCard key={challenge.id} challenge={challenge} />
-          ))}
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {challenges.map((challenge) => (
+          <ChallengeHomeCard key={challenge.id} challenge={challenge} />
+        ))}
       </div>
     </div>
   );
