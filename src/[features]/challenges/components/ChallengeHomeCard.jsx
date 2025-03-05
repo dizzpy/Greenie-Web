@@ -48,7 +48,7 @@ function ChallengeHomeCard({ challenge }) {
           </p>
 
           {/* Footer section */}
-          <div className="mt-auto pt-4">
+          <div className="md:text-end text-start pt-4">
             <button className="text-primary-green hover:text-green-600">
               View Details →
             </button>
