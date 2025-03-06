@@ -54,7 +54,7 @@ const Login = () => {
                 type="email"
                 id="email"
                 className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-primary-green focus:border-primary-green"
-                placeholder="E mail *"
+                placeholder="E mail "
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -69,7 +69,7 @@ const Login = () => {
                 type="password"
                 id="password"
                 className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-primary-green focus:border-primary-green"
-                placeholder="Password *"
+                placeholder="Password "
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
