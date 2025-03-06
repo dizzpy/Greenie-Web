@@ -27,8 +27,8 @@ const Login = () => {
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
-      {/* Left Side - Image Section (Hidden on Mobile) */}
-      <div className="hidden md:flex w-1/2 items-center justify-center bg-green-100">
+      {/* Left Side - Image Section (Always Visible) */}
+      <div className="flex flex-1 items-center justify-center bg-green-100 p-4">
         <img
           src={LoginImage}
           alt="Login Illustration"
@@ -37,9 +37,9 @@ const Login = () => {
       </div>
 
       {/* Right Side - Form Section */}
-      <div className="w-full md:w-1/2 flex items-center justify-center p-4">
+      <div className="flex flex-1 items-center justify-center p-6">
         <div className="w-full max-w-sm md:max-w-md mx-auto">
-          <h2 className="text-center text-3xl font-bold text-gray">
+          <h2 className="text-center text-3xl font-bold text-gray-800">
             Log in to your Account
           </h2>
           {err && <p className="text-red-500 text-center mt-4">{err}</p>}
@@ -54,7 +54,7 @@ const Login = () => {
                 type="email"
                 id="email"
                 className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-primary-green focus:border-primary-green"
-                placeholder="E mail "
+                placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -69,7 +69,7 @@ const Login = () => {
                 type="password"
                 id="password"
                 className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-primary-green focus:border-primary-green"
-                placeholder="Password "
+                placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
