@@ -72,7 +72,7 @@ function Feed() {
       </div>
 
       {/* Main Content + Challenges */}
-      <div className="flex flex-1 justify-start px-6 py-4 space-x-8">
+      <div className="flex flex-1 justify-start px-6 py-4 ml-12">
         {/* Main Feed Section (Shifted right) */}
         <div className="w-full max-w-2xl ml-10">
           {' '}
