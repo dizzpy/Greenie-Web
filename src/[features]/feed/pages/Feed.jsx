@@ -4,6 +4,7 @@ import CreatePost from '../components/CreatePost';
 import SlideBar from '../components/SlideBar';
 import Poster from '../components/Poster';
 import CommentPopup from '../components/CommentPopup';
+import ChallengeList from '../components/ChallengeList';
 
 function Feed() {
   const [posts, setPosts] = useState([
@@ -63,17 +64,23 @@ function Feed() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
-      <SlideBar />
+      {/* Left Sidebar */}
+      <div className="w-64">
+        {' '}
+        {/* Reduced width */}
+        <SlideBar />
+      </div>
 
-      {/* Main Content */}
-      <div className="flex flex-col items-center w-full p-6">
-        <div className="w-full max-w-2xl">
+      {/* Main Content + Challenges */}
+      <div className="flex flex-1 justify-start px-6 py-4 space-x-8">
+        {/* Main Feed Section (Shifted right) */}
+        <div className="w-full max-w-2xl ml-10">
+          {' '}
+          {/* Added margin-left */}
           {/* Create Post Section */}
           <CreatePost />
-
           {/* Posts Section */}
-          <div className="mt-6">
+          <div className="mt-6 space-y-4">
             {posts.map((post) => (
               <Poster
                 key={post.id}
@@ -83,6 +90,13 @@ function Feed() {
             ))}
           </div>
         </div>
+
+        {/* Right Sidebar: Challenges (Slightly bigger & more visible) */}
+        <aside className="hidden lg:block w-96">
+          {' '}
+          {/* Increased width */}
+          <ChallengeList />
+        </aside>
       </div>
 
       {/* Comment Popup */}
