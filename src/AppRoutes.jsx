@@ -22,6 +22,7 @@ import ProfilePage from './[features]/auth/pages/ProfilePage';
 import LeaderboardHome from './[features]/leaderboard/pages/LeaderboardHome';
 import CartSidebar from './[features]/shop/components/CartSidebar';
 import Notification from './components/Shop/Notification';
+import AddChallenge from './[features]/challenges/pages/AddChallenge';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -104,6 +105,14 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <ChallengesHome />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/challenges/add"
+          element={
+            <ProtectedRoute>
+              <AddChallenge />
             </ProtectedRoute>
           }
         />
