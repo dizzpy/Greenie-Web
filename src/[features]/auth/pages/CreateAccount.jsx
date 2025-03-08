@@ -4,6 +4,9 @@ import axios from 'axios';
 import Button from '../Components/Button';
 import RegisterImage from '../../../assets/LoginImage.svg';
 
+// Add axios base URL configuration
+axios.defaults.baseURL = 'http://localhost:8080';
+
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -18,10 +21,21 @@ const Register = () => {
     setLoading(true);
 
     try {
-      await axios.post('/api/auth/register', { name, email, password });
-      navigate('/login');
+      const response = await axios.post('/api/auth/register', {
+        fullName: name,
+        email,
+        password,
+      });
+
+      if (response.data) {
+        navigate('/login');
+      }
     } catch (error) {
-      setErr(error.response?.data?.message || 'Something went wrong!');
+      if (error.response?.status === 400) {
+        setErr(error.response.data.message || 'Validation error occurred');
+      } else {
+        setErr('Something went wrong! Please try again.');
+      }
     } finally {
       setLoading(false);
     }
