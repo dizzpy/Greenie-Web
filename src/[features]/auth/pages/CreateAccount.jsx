@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Button from '../Components/Button';
 import RegisterImage from '../../../assets/LoginImage.svg';
-
-// Add axios base URL configuration
-axios.defaults.baseURL = 'http://localhost:8080';
+import { API_CONFIG } from '../../../config/api.config';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -21,7 +19,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('/api/auth/register', {
+      const response = await axios.post(API_CONFIG.ENDPOINTS.REGISTER, {
         fullName: name,
         email,
         password,

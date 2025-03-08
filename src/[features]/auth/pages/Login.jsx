@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Button from '../Components/Button';
 import LoginImage from '../../../assets/LoginImage.svg';
+import { API_CONFIG } from '../../../config/api.config';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -17,13 +18,10 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        'http://localhost:8080/api/auth/login',
-        {
-          email,
-          password,
-        },
-      );
+      const response = await axios.post(API_CONFIG.ENDPOINTS.LOGIN, {
+        email,
+        password,
+      });
 
       if (response.data) {
         // You might want to store the token in localStorage or context
