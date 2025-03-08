@@ -1,8 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import CoinIcon from '../../../assets/icons/coin.svg';
 import ChallengeHomeCard from '../components/ChallengeHomeCard';
 import NavBar from '../../../components/Shared/NavBar';
 
 function ChallengesHome() {
+  const navigate = useNavigate();
   const challenges = [
     {
       id: 1,
@@ -88,7 +90,10 @@ function ChallengesHome() {
               </div>
             </div>
 
-            <button className="bg-primary-green text-white px-6 py-3 rounded-lg hover:bg-green-600 transition-colors font-medium text-center">
+            <button
+              onClick={() => navigate('/challenges/add')}
+              className="bg-primary-green text-white px-6 py-3 rounded-lg hover:bg-green-600 transition-colors font-medium text-center"
+            >
               Add Challenge
             </button>
           </div>
