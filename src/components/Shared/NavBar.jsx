@@ -1,11 +1,24 @@
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Bell, Home, ShoppingBag, Swords, Trophy, Menu, X } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Bell,
+  Home,
+  ShoppingBag,
+  Swords,
+  Trophy,
+  Menu,
+  X,
+  User,
+  LogOut,
+} from 'lucide-react';
 import logo from '../../assets/icons/greenlogo.svg';
 
 const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActive = (path) => location.pathname.includes(path);
 
@@ -15,6 +28,24 @@ const NavBar = () => {
     { icon: Swords, path: '/challenges', label: 'Challenges' },
     { icon: Trophy, path: '/leaderboard', label: 'Leaderboard' },
   ];
+
+  const handleLogout = () => {
+    // Clear token from localStorage
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsProfileOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <nav className="bg-white shadow-sm sticky top-0 z-50">
@@ -52,12 +83,55 @@ const NavBar = () => {
               </span>
             </button>
 
-            <div className="hidden md:block">
-              <img
-                src="https://github.com/shadcn.png"
-                alt="Profile"
-                className="h-9 w-9 rounded-full border-2 border-primary-green"
-              />
+            {/* Profile Section with Dropdown */}
+            <div className="hidden md:block relative" ref={dropdownRef}>
+              <button
+                onClick={() => setIsProfileOpen(!isProfileOpen)}
+                className="flex items-center focus:outline-none transition-transform duration-200 ease-in-out hover:scale-105"
+              >
+                <img
+                  src="https://github.com/shadcn.png"
+                  alt="Profile"
+                  className="h-9 w-9 rounded-full border-2 border-primary-green"
+                />
+              </button>
+
+              {/* Profile Dropdown */}
+              <div
+                className={`absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg py-2 border border-gray-100 transform transition-all duration-200 ease-in-out ${
+                  isProfileOpen
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-2 pointer-events-none'
+                }`}
+              >
+                {/* User Info Section */}
+                <div className="px-4 py-3 border-b border-gray-100">
+                  <p className="text-sm font-semibold text-gray-800">Dizzpy</p>
+                  <p className="text-xs text-gray-500">dizzpy@mail.com</p>
+                </div>
+
+                {/* Menu Items */}
+                <div className="py-2">
+                  <Link
+                    to="/p"
+                    className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    onClick={() => setIsProfileOpen(false)}
+                  >
+                    <User size={16} className="mr-2" />
+                    <span>View Profile</span>
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsProfileOpen(false);
+                    }}
+                    className="flex items-center w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                  >
+                    <LogOut size={16} className="mr-2" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              </div>
             </div>
 
             {/* Mobile menu button */}
@@ -89,6 +163,25 @@ const NavBar = () => {
                   <span>{label}</span>
                 </Link>
               ))}
+            </div>
+
+            {/* Add Profile and Logout to mobile menu */}
+            <div className="border-t mt-4 pt-4">
+              <Link
+                to="/p"
+                className="flex items-center space-x-3 p-2 rounded-lg text-gray-600 hover:text-primary-green hover:bg-gray-50"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <User size={20} />
+                <span>Profile</span>
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="flex items-center space-x-3 p-2 rounded-lg text-gray-600 hover:text-primary-green hover:bg-gray-50 w-full"
+              >
+                <LogOut size={20} />
+                <span>Logout</span>
+              </button>
             </div>
           </div>
         )}
