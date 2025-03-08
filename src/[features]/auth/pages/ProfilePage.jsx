@@ -5,7 +5,7 @@ const ProfilePage = () => {
       <div className="bg-white shadow-md rounded-lg p-4">
         <div className="relative">
           <img
-            src="/src/assets/pakayo.jpeg"
+            src="/src/assets/ppp.jpeg"
             alt="Banner"
             className="w-full h-40 object-cover rounded-lg"
           />
