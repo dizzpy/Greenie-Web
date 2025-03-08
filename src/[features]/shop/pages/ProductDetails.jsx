@@ -8,6 +8,7 @@ import { LuArrowRight } from 'react-icons/lu';
 import ProductCard from '../components/ProductCard';
 import Breadcrumb from '../components/Breadcrumb';
 import { useCart } from '../../../context/CartContext';
+import NavBar from '../../../components/Shared/NavBar';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -101,10 +102,7 @@ const ProductDetails = () => {
 
   return (
     <div className="max-w-screen-xl container mx-auto px-4 md:px-0">
-      {/* Global nav */}
-      <div className="bg-green-300 py-4 mx-auto my-3 md:my-5 rounded-lg">
-        <p className="text-center">Global Nav</p>
-      </div>
+      <NavBar />
 
       {/* shop nav */}
       <ShopNav />

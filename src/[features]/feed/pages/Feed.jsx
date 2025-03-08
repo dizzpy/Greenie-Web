@@ -5,6 +5,7 @@ import SlideBar from '../components/SlideBar';
 import Poster from '../components/Poster';
 import CommentPopup from '../components/CommentPopup';
 import ChallengeList from '../components/ChallengeList';
+import NavBar from '../../../components/Shared/NavBar';
 
 function Feed() {
   const [posts, setPosts] = useState([
