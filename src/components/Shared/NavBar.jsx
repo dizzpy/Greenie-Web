@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   Bell,
   Home,
@@ -12,13 +12,14 @@ import {
   LogOut,
 } from 'lucide-react';
 import logo from '../../assets/icons/greenlogo.svg';
+import { useAuth } from '../../context/AuthContext';
 
 const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const dropdownRef = useRef(null);
   const location = useLocation();
-  const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const isActive = (path) => location.pathname.includes(path);
 
@@ -30,9 +31,8 @@ const NavBar = () => {
   ];
 
   const handleLogout = () => {
-    // Clear token from localStorage
-    localStorage.removeItem('token');
-    navigate('/login');
+    logout();
+    setIsProfileOpen(false);
   };
 
   // Close dropdown when clicking outside
@@ -90,7 +90,7 @@ const NavBar = () => {
                 className="flex items-center focus:outline-none transition-transform duration-200 ease-in-out hover:scale-105"
               >
                 <img
-                  src="https://github.com/shadcn.png"
+                  src={user?.avatar || 'https://github.com/shadcn.png'}
                   alt="Profile"
                   className="h-9 w-9 rounded-full border-2 border-primary-green"
                 />
@@ -106,8 +106,12 @@ const NavBar = () => {
               >
                 {/* User Info Section */}
                 <div className="px-4 py-3 border-b border-gray-100">
-                  <p className="text-sm font-semibold text-gray-800">Dizzpy</p>
-                  <p className="text-xs text-gray-500">dizzpy@mail.com</p>
+                  <p className="text-sm font-semibold text-gray-800">
+                    {user?.name || 'User'}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {user?.email || 'user@email.com'}
+                  </p>
                 </div>
 
                 {/* Menu Items */}

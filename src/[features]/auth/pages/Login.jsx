@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Button from '../Components/Button';
 import LoginImage from '../../../assets/LoginImage.svg';
 import { API_CONFIG } from '../../../config/api.config';
+import { useAuth } from '../../../context/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [err, setErr] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,9 +24,11 @@ const Login = () => {
       });
 
       if (response.data) {
-        // You might want to store the token in localStorage or context
-        localStorage.setItem('token', response.data.token);
-        navigate('/feed'); // Navigate to dashboard or home page after login
+        login(response.data.token, {
+          name: 'Dizzpy',
+          email: email,
+          avatar: 'https://github.com/shadcn.png',
+        });
       }
     } catch (error) {
       if (error.response?.status === 401) {
