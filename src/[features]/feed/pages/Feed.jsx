@@ -5,6 +5,7 @@ import SlideBar from '../components/SlideBar';
 import Poster from '../components/Poster';
 import CommentPopup from '../components/CommentPopup';
 import ChallengeList from '../components/ChallengeList';
+import NavBar from '../../../components/Shared/NavBar';
 
 function Feed() {
   const [posts, setPosts] = useState([
@@ -64,40 +65,35 @@ function Feed() {
   const [selectedPost, setSelectedPost] = useState(null);
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      {/* Left Sidebar */}
-      <div className="w-64">
-        {' '}
-        {/* Reduced width */}
-        <SlideBar />
-      </div>
-
-      {/* Main Content + Challenges */}
-      <div className="flex flex-1 justify-start px-6 py-4 ml-12">
-        {/* Main Feed Section (Shifted right) */}
-        <div className="w-full max-w-2xl ml-10">
-          {' '}
-          {/* Added margin-left */}
-          {/* Create Post Section */}
-          <CreatePost />
-          {/* Posts Section */}
-          <div className="mt-6 space-y-4">
-            {posts.map((post) => (
-              <Poster
-                key={post.id}
-                {...post}
-                onCommentClick={() => setSelectedPost(post)}
-              />
-            ))}
-          </div>
+    <div>
+      <NavBar />
+      <div className="flex min-h-screen bg-gray-100">
+        {/* Left Sidebar */}
+        <div className="fixed left-0 w-64 h-screen mt-[73px]">
+          <SlideBar />
         </div>
 
-        {/* Right Sidebar: Challenges (Slightly bigger & more visible) */}
-        <aside className="hidden lg:block w-96">
-          {' '}
-          {/* Increased width */}
-          <ChallengeList />
-        </aside>
+        {/* Main Content + Challenges */}
+        <div className="flex flex-1 justify-start px-6 py-4 ml-64 mt-[73px]">
+          {/* Main Feed Section */}
+          <div className="w-full max-w-2xl">
+            <CreatePost />
+            <div className="mt-6 space-y-4">
+              {posts.map((post) => (
+                <Poster
+                  key={post.id}
+                  {...post}
+                  onCommentClick={() => setSelectedPost(post)}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Right Sidebar: Challenges */}
+          <aside className="hidden lg:block w-96 ml-8">
+            <ChallengeList />
+          </aside>
+        </div>
       </div>
 
       {/* Comment Popup */}

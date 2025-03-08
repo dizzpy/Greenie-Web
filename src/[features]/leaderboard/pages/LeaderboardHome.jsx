@@ -2,6 +2,7 @@ import TopLeaderboardCard from '../components/TopLeaderboardCard';
 import UserScoreCard from '../components/UserScoreCard';
 import RisingMembersTable from '../components/RisingMembersTable';
 import UserBadgesCard from '../components/UserBadgesCard';
+import NavBar from '../../../components/Shared/NavBar';
 
 function LeaderboardHome() {
   const risingMembers = [
@@ -118,81 +119,78 @@ function LeaderboardHome() {
   ];
 
   return (
-    <div className="container mx-auto px-4 mb-10">
-      {/* Global nav */}
-      <div className="bg-green-300 py-4 mx-auto my-4 rounded-lg">
-        <p className="text-center">Global Nav</p>
-      </div>
-
-      {/* grid - adjusted for mobile */}
-      <div className="flex flex-col lg:flex-row gap-8 mt-10 lg:mt-20">
-        {/* leaderboard section */}
-        <div className="w-full lg:w-9/12">
-          <h2 className="text-xl font-normal text-text-gray mb-6 px-2 lg:px-5">
-            Current Leaderboard
-          </h2>
-
-          {/* 3 top card section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 px-2 lg:p-5">
-            <div className="order-2 lg:order-1">
-              <TopLeaderboardCard
-                fullName="Layla"
-                username="lay_la"
-                points={980}
-                challenges={12}
-                position={2}
-                avatar="https://static.wikia.nocookie.net/mobile-legends/images/2/2c/Hero184-icon.png"
-              />
-            </div>
-            <div className="order-1 lg:order-2 md:col-span-2 lg:col-span-1 -mt-4">
-              <TopLeaderboardCard
-                fullName="Melissa"
-                username="mell"
-                points={1234}
-                challenges={15}
-                position={1}
-                avatar="https://i.pinimg.com/736x/8f/ea/a6/8feaa6add5d1cd121fc0ea1325771b87.jpg"
-              />
-            </div>
-            <div className="order-3">
-              <TopLeaderboardCard
-                fullName="Zhuxin"
-                username="xin"
-                points={754}
-                challenges={8}
-                position={3}
-                avatar="https://static.wikia.nocookie.net/mobile-legends/images/0/05/Hero1251-icon.png"
-              />
-            </div>
-          </div>
-
-          {/* Rising Members section */}
-          <div className="mt-8 lg:mt-12">
+    <div>
+      <NavBar />
+      <div className="container mx-auto px-4 py-8 mt-6">
+        <div className="flex flex-col lg:flex-row gap-8 mt-10 lg:mt-20">
+          {/* leaderboard section */}
+          <div className="w-full lg:w-9/12">
             <h2 className="text-xl font-normal text-text-gray mb-6 px-2 lg:px-5">
-              Rising Members
+              Current Leaderboard
             </h2>
-            <div className="px-2 lg:px-5 overflow-x-auto">
-              <RisingMembersTable members={risingMembers} />
+
+            {/* 3 top card section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 px-2 lg:p-5">
+              <div className="order-2 lg:order-1">
+                <TopLeaderboardCard
+                  fullName="Layla"
+                  username="lay_la"
+                  points={980}
+                  challenges={12}
+                  position={2}
+                  avatar="https://static.wikia.nocookie.net/mobile-legends/images/2/2c/Hero184-icon.png"
+                />
+              </div>
+              <div className="order-1 lg:order-2 md:col-span-2 lg:col-span-1 -mt-4">
+                <TopLeaderboardCard
+                  fullName="Melissa"
+                  username="mell"
+                  points={1234}
+                  challenges={15}
+                  position={1}
+                  avatar="https://i.pinimg.com/736x/8f/ea/a6/8feaa6add5d1cd121fc0ea1325771b87.jpg"
+                />
+              </div>
+              <div className="order-3">
+                <TopLeaderboardCard
+                  fullName="Zhuxin"
+                  username="xin"
+                  points={754}
+                  challenges={8}
+                  position={3}
+                  avatar="https://static.wikia.nocookie.net/mobile-legends/images/0/05/Hero1251-icon.png"
+                />
+              </div>
+            </div>
+
+            {/* Rising Members section */}
+            <div className="mt-8 lg:mt-12">
+              <h2 className="text-xl font-normal text-text-gray mb-6 px-2 lg:px-5">
+                Rising Members
+              </h2>
+              <div className="px-2 lg:px-5 overflow-x-auto">
+                <RisingMembersTable members={risingMembers} />
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* score section */}
-        <div className="w-full lg:w-3/12 order-first lg:order-none">
-          <h2 className="text-xl font-normal text-text-gray mb-6">
-            Your Score
-          </h2>
-          <UserScoreCard
-            fullName="Anuja Rathnayaka"
-            username="dizzpy"
-            rank={5}
-            challenges={15}
-            points={1234}
-          />
-          <h2 className="text-xl font-normal text-text-gray mb-6 mt-8">
-            Achievements
-          </h2>
-          <UserBadgesCard badges={userBadges} />
+          {/* score section */}
+          <div className="w-full lg:w-3/12 order-first lg:order-none">
+            <h2 className="text-xl font-normal text-text-gray mb-6">
+              Your Score
+            </h2>
+            <UserScoreCard
+              fullName="Anuja Rathnayaka"
+              username="dizzpy"
+              rank={5}
+              challenges={15}
+              points={1234}
+            />
+            <h2 className="text-xl font-normal text-text-gray mb-6 mt-8">
+              Achievements
+            </h2>
+            <UserBadgesCard badges={userBadges} />
+          </div>
         </div>
       </div>
     </div>

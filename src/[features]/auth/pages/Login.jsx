@@ -1,25 +1,41 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Button from '../Components/Button';
-import LoginImage from '/src/assets/CCC.svg'; // Absolute path for Vite
+import LoginImage from '../../../assets/LoginImage.svg';
+import { API_CONFIG } from '../../../config/api.config';
+import { useAuth } from '../../../context/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [err, setErr] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErr('');
     setLoading(true);
+
     try {
-      await axios.post('/api/auth/login', { email, password });
-      navigate('/dashboard');
+      const response = await axios.post(API_CONFIG.ENDPOINTS.LOGIN, {
+        email,
+        password,
+      });
+
+      if (response.data) {
+        login(response.data.token, {
+          name: 'Dizzpy',
+          email: email,
+          avatar: 'https://github.com/shadcn.png',
+        });
+      }
     } catch (error) {
-      setErr(error.response?.data?.message || 'Something went wrong!');
+      if (error.response?.status === 401) {
+        setErr('Invalid email or password');
+      } else {
+        setErr('Something went wrong! Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -27,8 +43,8 @@ const Login = () => {
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
-      {/* Left Side - Image Section (Always Visible) */}
-      <div className="flex flex-1 items-center justify-center bg-green-100 p-4">
+      {/* Left Side - Image Section (Hidden on Mobile) */}
+      <div className="hidden md:flex w-1/2 items-center justify-center bg-green-100">
         <img
           src={LoginImage}
           alt="Login Illustration"
@@ -37,10 +53,10 @@ const Login = () => {
       </div>
 
       {/* Right Side - Form Section */}
-      <div className="flex flex-1 items-center justify-center p-6">
+      <div className="w-full md:w-1/2 flex items-center justify-center p-4">
         <div className="w-full max-w-sm md:max-w-md mx-auto">
           <h2 className="text-center text-3xl font-bold text-gray-800">
-            Log in to your Account
+            Welcome Back
           </h2>
           {err && <p className="text-red-500 text-center mt-4">{err}</p>}
 
@@ -54,7 +70,7 @@ const Login = () => {
                 type="email"
                 id="email"
                 className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-primary-green focus:border-primary-green"
-                placeholder="Enter your email"
+                placeholder="E-mail Here"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -69,19 +85,19 @@ const Login = () => {
                 type="password"
                 id="password"
                 className="mt-1 block w-full px-4 py-2 border rounded-md focus:ring-primary-green focus:border-primary-green"
-                placeholder="Enter your password"
+                placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
             <Button className="w-full" disabled={loading}>
-              {loading ? 'Logging in...' : 'Login to Account'}
+              {loading ? 'Logging in...' : 'Login'}
             </Button>
             <p className="text-center text-sm mt-4">
               Don&apos;t have an account?{' '}
               <a href="/register" className="text-primary-green font-semibold">
-                Sign Up
+                Create Account
               </a>
             </p>
           </form>

@@ -1,12 +1,9 @@
 import axios from 'axios';
-
-// Use environment variable with fallback
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || 'http://16.170.224.209:8080/api';
+import { API_CONFIG } from '../config/api.config';
 
 export const getAllProducts = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/products/all`);
+    const response = await axios.get(API_CONFIG.ENDPOINTS.PRODUCTS.ALL);
     return response.data;
   } catch (error) {
     console.error('Error fetching products:', error);

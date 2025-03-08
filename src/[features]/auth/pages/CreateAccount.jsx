@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Button from '../Components/Button';
 import RegisterImage from '../../../assets/LoginImage.svg';
+import { API_CONFIG } from '../../../config/api.config';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -18,10 +19,21 @@ const Register = () => {
     setLoading(true);
 
     try {
-      await axios.post('/api/auth/register', { name, email, password });
-      navigate('/login');
+      const response = await axios.post(API_CONFIG.ENDPOINTS.REGISTER, {
+        fullName: name,
+        email,
+        password,
+      });
+
+      if (response.data) {
+        navigate('/login');
+      }
     } catch (error) {
-      setErr(error.response?.data?.message || 'Something went wrong!');
+      if (error.response?.status === 400) {
+        setErr(error.response.data.message || 'Validation error occurred');
+      } else {
+        setErr('Something went wrong! Please try again.');
+      }
     } finally {
       setLoading(false);
     }

@@ -4,6 +4,7 @@ import ShopNav from '../components/ShopNav';
 import Breadcrumb from '../components/Breadcrumb';
 import { useCart } from '../../../context/CartContext';
 import { useNavigate } from 'react-router-dom';
+import NavBar from '../../../components/Shared/NavBar';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -27,10 +28,7 @@ const Checkout = () => {
 
   return (
     <div className="max-w-screen-xl container mx-auto px-4 md:px-0">
-      {/* Global nav */}
-      <div className="bg-green-300 py-4 mx-auto my-3 md:my-5 rounded-lg">
-        <p className="text-center">Global Nav</p>
-      </div>
+      <NavBar />
 
       <ShopNav />
 
