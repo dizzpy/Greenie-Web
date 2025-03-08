@@ -12,6 +12,7 @@ import Login from './[features]/auth/pages/Login';
 import Register from './[features]/auth/pages/CreateAccount';
 import ForgotPassword from './[features]/auth/pages/ForgotPassword';
 import SetNewPassword from './[features]/auth/pages/SetNewPassword';
+import ProfilePage from './[features]/auth/pages/ProfilePage';
 import LeaderboardHome from './[features]/leaderboard/pages/LeaderboardHome';
 import { CartProvider } from './context/CartContext';
 import Notification from './components/Notification';
@@ -47,6 +48,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/set-new-password" element={<SetNewPassword />} />
+            <Route path="/p" element={<ProfilePage />} />
 
             {/* 404 Error Page */}
             <Route path="*" element={<NotFound />} />
