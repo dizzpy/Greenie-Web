@@ -8,7 +8,7 @@ const Poster = ({ user, content, image, likes, comments }) => {
   const [showComments, setShowComments] = useState(false);
 
   return (
-    <div className="bg-white p-4 rounded-2xl shadow-md w-full max-w-2xl mx-auto mt-4">
+    <div className="bg-white p-4 rounded-2xl shadow-md w-full max-w-2xl mt-4 mx-auto">
       {/* User Info */}
       <div className="flex items-center gap-3">
         <img
