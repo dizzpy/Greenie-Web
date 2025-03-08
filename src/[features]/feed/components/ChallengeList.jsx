@@ -12,8 +12,10 @@ const ChallengeList = () => {
   ];
 
   return (
-    <div className="w-64 p-4 bg-white rounded-xl shadow-lg">
-      <h2 className="text-lg font-semibold mb-3">Popular Challenges</h2>
+    <div className="w-120 p-4 rounded-xl  ml-10">
+      <h2 className="text-lg font-semibold mb-3 text-text-gray font-sans ">
+        Popular Challenges
+      </h2>
       <div className="space-y-3">
         {challenges.map((challenge, index) => (
           <ChallengeCard key={index} {...challenge} />
