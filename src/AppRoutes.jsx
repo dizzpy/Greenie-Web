@@ -21,7 +21,7 @@ import SetNewPassword from './[features]/auth/pages/SetNewPassword';
 import ProfilePage from './[features]/auth/pages/ProfilePage';
 import LeaderboardHome from './[features]/leaderboard/pages/LeaderboardHome';
 import CartSidebar from './[features]/shop/components/CartSidebar';
-import Notification from './components/Notification';
+import Notification from './components/Shop/Notification';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();

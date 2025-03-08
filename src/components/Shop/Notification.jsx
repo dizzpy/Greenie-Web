@@ -1,4 +1,4 @@
-import { useCart } from '../context/CartContext';
+import { useCart } from '../../context/CartContext';
 
 const Notification = () => {
   const { showNotification, notificationMessage } = useCart();
