@@ -3,8 +3,11 @@ import UserScoreCard from '../components/UserScoreCard';
 import RisingMembersTable from '../components/RisingMembersTable';
 import UserBadgesCard from '../components/UserBadgesCard';
 import NavBar from '../../../components/Shared/NavBar';
+import { useAuth } from '../../../context/AuthContext';
 
 function LeaderboardHome() {
+  const { user } = useAuth();
+
   const risingMembers = [
     {
       id: '1',
@@ -121,7 +124,7 @@ function LeaderboardHome() {
   return (
     <div>
       <NavBar />
-      <div className="container mx-auto px-4 py-8 mt-6">
+      <div className="container mx-auto px-4 pb-8">
         <div className="flex flex-col lg:flex-row gap-8 mt-10 lg:mt-20">
           {/* leaderboard section */}
           <div className="w-full lg:w-9/12">
@@ -180,16 +183,17 @@ function LeaderboardHome() {
               Your Score
             </h2>
             <UserScoreCard
-              fullName="Anuja Rathnayaka"
-              username="dizzpy"
-              rank={5}
-              challenges={15}
-              points={1234}
+              fullName={user?.name || 'Guest User'}
+              username={user?.username?.replace('@', '') || 'guest'}
+              rank={5} // This could be fetched from an API
+              challenges={user?.joinedChallenges?.length || 0}
+              points={user?.points || 0}
+              avatar={user?.avatar || 'https://github.com/shadcn.png'}
             />
             <h2 className="text-xl font-normal text-text-gray mb-6 mt-8">
               Achievements
             </h2>
-            <UserBadgesCard badges={userBadges} />
+            <UserBadgesCard badges={user?.badgesList || userBadges} />
           </div>
         </div>
       </div>
