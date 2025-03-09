@@ -64,10 +64,24 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeFromCart = (productId) => {
-    setCartState((prevState) => ({
-      ...prevState,
-      items: prevState.items.filter((item) => item.productID !== productId),
-    }));
+    setCartState((prevState) => {
+      const newItems = prevState.items.filter(
+        (item) => item.productID !== productId,
+      );
+
+      // Reset points if cart becomes empty
+      if (newItems.length === 0) {
+        return {
+          items: [],
+          appliedPoints: 0,
+        };
+      }
+
+      return {
+        ...prevState,
+        items: newItems,
+      };
+    });
   };
 
   const applyPoints = (points) => {
@@ -84,6 +98,16 @@ export const CartProvider = ({ children }) => {
     }));
   };
 
+  const clearCart = () => {
+    setCartState({
+      items: [],
+      appliedPoints: 0,
+    });
+    setNotificationMessage('Cart cleared');
+    setShowNotification(true);
+    setTimeout(() => setShowNotification(false), 3000);
+  };
+
   const value = {
     cartItems: cartState.items,
     appliedPoints: cartState.appliedPoints,
@@ -95,6 +119,7 @@ export const CartProvider = ({ children }) => {
     removeFromCart,
     applyPoints,
     removePoints,
+    clearCart,
     getCartTotal: () => calculateCartTotal(cartState.items),
     getCartItemsCount: () => calculateItemsCount(cartState.items),
     getFinalTotal: () =>

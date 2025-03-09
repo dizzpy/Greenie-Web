@@ -16,6 +16,7 @@ const CartSidebar = () => {
     updateQuantity,
     appliedPoints,
     getFinalTotal,
+    clearCart,
   } = useCart();
 
   const handleViewCart = () => {
@@ -56,7 +57,19 @@ const CartSidebar = () => {
       >
         {/* Header */}
         <div className="flex justify-between items-center px-5 py-2 bg-white m-5 rounded-2xl">
-          <h2 className="text-lg text-text-gray">Cart ({cartItems.length})</h2>
+          <div className="flex items-center gap-4">
+            <h2 className="text-lg text-text-gray">
+              Cart ({cartItems.length})
+            </h2>
+            {cartItems.length > 0 && (
+              <button
+                onClick={clearCart}
+                className="text-lightred text-sm hover:text-red-600 transition-colors"
+              >
+                Clear All
+              </button>
+            )}
+          </div>
           <button
             onClick={() => setIsCartOpen(false)}
             className="p-2 hover:bg-gray-100 rounded-full"
