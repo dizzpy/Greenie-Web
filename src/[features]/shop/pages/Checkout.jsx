@@ -8,8 +8,9 @@ import NavBar from '../../../components/Shared/NavBar';
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { cartItems, getCartTotal } = useCart();
+  const { cartItems, appliedPoints, getCartTotal, getFinalTotal } = useCart();
   const total = getCartTotal();
+  const finalTotal = getFinalTotal();
 
   // Redirect to cart if cart is empty
   if (cartItems.length === 0) {
@@ -129,13 +130,15 @@ const Checkout = () => {
                   <span>Subtotal</span>
                   <span>Rs {total}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>Shipping</span>
-                  <span>Free</span>
-                </div>
-                <div className="flex justify-between font-medium pt-3 border-t">
+                {appliedPoints > 0 && (
+                  <div className="flex justify-between text-primary-green">
+                    <span>Points Applied</span>
+                    <span>-Rs {appliedPoints}</span>
+                  </div>
+                )}
+                <div className="flex justify-between font-medium">
                   <span>Total</span>
-                  <span>Rs {total}</span>
+                  <span>Rs {finalTotal}</span>
                 </div>
               </div>
 

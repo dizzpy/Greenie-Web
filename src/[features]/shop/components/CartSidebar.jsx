@@ -14,7 +14,8 @@ const CartSidebar = () => {
     cartItems,
     removeFromCart,
     updateQuantity,
-    getCartTotal,
+    appliedPoints,
+    getFinalTotal,
   } = useCart();
 
   const handleViewCart = () => {
@@ -35,7 +36,7 @@ const CartSidebar = () => {
     removeFromCart(itemId);
   };
 
-  const total = getCartTotal();
+  const finalTotal = getFinalTotal();
 
   return (
     <>
@@ -86,7 +87,14 @@ const CartSidebar = () => {
         <div className="p-5 border-t bg-bg-light">
           <div className="flex justify-between mb-4 px-5 py-4 bg-white rounded-2xl">
             <span>Total</span>
-            <span className="font-medium">Rs {total}</span>
+            <div className="flex flex-col items-end">
+              {appliedPoints > 0 && (
+                <span className="text-sm text-primary-green mb-1">
+                  -{appliedPoints} points applied
+                </span>
+              )}
+              <span className="font-medium">Rs {finalTotal}</span>
+            </div>
           </div>
 
           <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4">

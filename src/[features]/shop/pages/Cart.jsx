@@ -13,9 +13,16 @@ import coinIcon from '/src/assets/icons/coin.svg';
 const Cart = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { cartItems, removeFromCart, updateQuantity, getCartTotal } = useCart();
+  const {
+    cartItems,
+    removeFromCart,
+    updateQuantity,
+    getCartTotal,
+    appliedPoints,
+    applyPoints,
+    removePoints,
+  } = useCart();
   const total = getCartTotal(); // Move total calculation here
-  const [appliedPoints, setAppliedPoints] = useState(0);
   const [pointInput, setPointInput] = useState('');
   const [error, setError] = useState('');
   const maxPointsAllowed = Math.min(user?.points || 0, total);
@@ -57,12 +64,17 @@ const Cart = () => {
     }
 
     const validPoints = Math.min(points, maxPointsAllowed);
-    setAppliedPoints(validPoints);
+    applyPoints(validPoints);
   };
 
   const handleMaxPoints = () => {
     setPointInput(maxPointsAllowed.toString());
-    setAppliedPoints(maxPointsAllowed);
+    applyPoints(maxPointsAllowed);
+  };
+
+  const handleRemovePoints = () => {
+    removePoints();
+    setPointInput('');
   };
 
   const handleCheckout = () => {
@@ -157,7 +169,7 @@ const Cart = () => {
                       <button
                         onClick={() => {
                           setPointInput('');
-                          setAppliedPoints(0);
+                          removePoints();
                         }}
                         className="px-4 py-2 text-lightred hover:bg-red-50 rounded-xl transition-colors"
                       >
@@ -203,10 +215,7 @@ const Cart = () => {
                           {appliedPoints}
                         </span>
                         <button
-                          onClick={() => {
-                            setAppliedPoints(0);
-                            setPointInput('');
-                          }}
+                          onClick={handleRemovePoints}
                           className="text-lightred hover:text-red-600"
                         >
                           Remove

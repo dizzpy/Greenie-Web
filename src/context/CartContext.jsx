@@ -14,6 +14,7 @@ export const CartProvider = ({ children }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
+  const [appliedPoints, setAppliedPoints] = useState(0);
 
   // Load cart from localStorage
   useEffect(() => {
@@ -90,6 +91,19 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  const applyPoints = (points) => {
+    setAppliedPoints(points);
+  };
+
+  const removePoints = () => {
+    setAppliedPoints(0);
+  };
+
+  const getFinalTotal = () => {
+    const total = calculateCartTotal(cartItems);
+    return Math.max(0, total - appliedPoints);
+  };
+
   const getCartTotal = () => calculateCartTotal(cartItems);
   const getCartItemsCount = () => calculateItemsCount(cartItems);
 
@@ -104,6 +118,10 @@ export const CartProvider = ({ children }) => {
     updateQuantity,
     getCartTotal,
     getCartItemsCount,
+    appliedPoints,
+    applyPoints,
+    removePoints,
+    getFinalTotal,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
