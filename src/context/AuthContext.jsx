@@ -9,6 +9,7 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -32,6 +33,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Check authentication on mount
   useEffect(() => {
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId');
@@ -39,12 +41,17 @@ export const AuthProvider = ({ children }) => {
     if (token && userId) {
       setIsAuthenticated(true);
       fetchUserDetails(userId);
-
-      if (location.pathname === '/login') {
-        navigate('/feed');
-      }
     }
-  }, [navigate, location]);
+    setIsLoading(false);
+  }, []);
+
+  // Handle redirect only after initial load
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated && location.pathname !== '/login') {
+      localStorage.setItem('lastPath', location.pathname);
+      navigate('/login');
+    }
+  }, [isLoading, isAuthenticated, navigate, location]);
 
   const login = (response) => {
     const { token, userId } = response;
@@ -55,7 +62,8 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(true);
     fetchUserDetails(userId);
 
-    navigate('/feed');
+    const lastPath = localStorage.getItem('lastPath') || '/feed';
+    navigate(lastPath);
   };
 
   const logout = () => {
@@ -67,7 +75,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, user, login, logout, isLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );

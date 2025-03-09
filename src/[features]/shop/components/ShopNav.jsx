@@ -1,5 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCart } from '../../../context/CartContext';
+import { useAuth } from '../../../context/AuthContext';
+import axios from 'axios';
+import { API_CONFIG } from '../../../config/api.config';
 import searchIcon from '../../../assets/icons/search.svg';
 import coinIcon from '../../../assets/icons/coin.svg';
 import shoppingCart from '../../../assets/icons/shopping-cart.svg';
@@ -8,8 +11,27 @@ import SearchBar from './SearchBar';
 
 function ShopNav() {
   const { setIsCartOpen, getCartItemsCount } = useCart();
+  const { user } = useAuth();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [points, setPoints] = useState(0);
   const itemCount = getCartItemsCount();
+
+  useEffect(() => {
+    const fetchPoints = async () => {
+      if (user?.id) {
+        try {
+          const response = await axios.get(
+            API_CONFIG.ENDPOINTS.USER.GET_POINTS(user.id),
+          );
+          setPoints(response.data.points);
+        } catch (error) {
+          console.error('Error fetching points:', error);
+        }
+      }
+    };
+
+    fetchPoints();
+  }, [user?.id]);
 
   return (
     <>
@@ -17,7 +39,7 @@ function ShopNav() {
         {/* User Points Count - Updated with coin icon */}
         <div className="bg-bg-light p-4 rounded-full inline-flex items-center">
           <img src={coinIcon} alt="Points" className="w-6 h-6" />
-          <p className="text-primary-green font-medium ml-2">365 Points</p>
+          <p className="text-primary-green font-medium ml-2">{points} Points</p>
         </div>
 
         {/* search icon */}

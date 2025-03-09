@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Button from '../Components/Button';
 import LoginImage from '../../../assets/LoginImage.svg';
 import { API_CONFIG } from '../../../config/api.config';
@@ -11,8 +12,9 @@ const Login = () => {
   const [err, setErr] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setErr('');
     setLoading(true);
@@ -30,6 +32,9 @@ const Login = () => {
           email: email,
           avatar: 'https://github.com/shadcn.png',
         });
+
+        const lastPath = localStorage.getItem('lastPath') || '/feed';
+        navigate(lastPath);
       }
     } catch (error) {
       if (error.response?.status === 401) {
@@ -61,7 +66,7 @@ const Login = () => {
           </h2>
           {err && <p className="text-red-500 text-center mt-4">{err}</p>}
 
-          <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg">
+          <form onSubmit={handleLogin} className="bg-white p-6 rounded-lg">
             <div className="mb-4">
               <label
                 htmlFor="email"
