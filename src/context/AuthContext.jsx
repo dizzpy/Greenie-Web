@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import axios from 'axios';
+import { API_CONFIG } from '../config/api.config';
 
 const AuthContext = createContext(null);
 
@@ -10,19 +12,33 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const fetchUserDetails = async (userId) => {
+    try {
+      const response = await axios.get(
+        API_CONFIG.ENDPOINTS.USER.GET_BY_ID(userId),
+      );
+      if (response.data) {
+        setUser({
+          id: userId,
+          name: response.data.fullName,
+          email: response.data.email,
+          avatar: response.data.profileImgUrl,
+          points: response.data.pointsCount,
+          username: response.data.username || response.data.email.split('@')[0],
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
+  };
+
   useEffect(() => {
-    // Check for token and userId on mount
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId');
 
     if (token && userId) {
       setIsAuthenticated(true);
-      setUser({
-        id: userId,
-        name: 'Dizzpy',
-        email: 'dizzpy@mail.com',
-        avatar: 'https://github.com/shadcn.png',
-      });
+      fetchUserDetails(userId);
 
       if (location.pathname === '/login') {
         navigate('/feed');
@@ -30,18 +46,14 @@ export const AuthProvider = ({ children }) => {
     }
   }, [navigate, location]);
 
-  const login = (response, userData) => {
-    // Expecting response to contain both token and userId
+  const login = (response) => {
     const { token, userId } = response;
 
     localStorage.setItem('token', token);
     localStorage.setItem('userId', userId);
 
     setIsAuthenticated(true);
-    setUser({
-      id: userId,
-      ...userData,
-    });
+    fetchUserDetails(userId);
 
     navigate('/feed');
   };

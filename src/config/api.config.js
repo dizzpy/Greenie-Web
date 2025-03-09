@@ -10,6 +10,9 @@ export const API_CONFIG = {
       ALL: '/api/products/all',
       SINGLE: (id) => `/api/products/${id}`,
     },
+    USER: {
+      GET_BY_ID: (id) => `/api/users/${id}`,
+    },
   },
 };
 
