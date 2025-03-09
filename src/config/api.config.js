@@ -14,6 +14,9 @@ export const API_CONFIG = {
       GET_BY_ID: (id) => `/api/users/${id}`,
       GET_POINTS: (id) => `/api/users/${id}/points`,
     },
+    ORDER: {
+      PLACE: '/api/order/place',
+    },
   },
 };
 

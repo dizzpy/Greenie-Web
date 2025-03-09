@@ -7,7 +7,7 @@ import {
   calculateItemsCount,
 } from '../hooks/useCartUtils';
 
-const CartContext = createContext();
+export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartState, setCartState] = useState(() => getCartFromStorage());
@@ -103,7 +103,7 @@ export const CartProvider = ({ children }) => {
       items: [],
       appliedPoints: 0,
     });
-    setNotificationMessage('Cart cleared');
+    setNotificationMessage('Order placed successfully');
     setShowNotification(true);
     setTimeout(() => setShowNotification(false), 3000);
   };

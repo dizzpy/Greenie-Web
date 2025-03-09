@@ -14,11 +14,14 @@ import Breadcrumb from '../components/Breadcrumb';
 import { useCart } from '../../../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import NavBar from '../../../components/Shared/NavBar';
+import { placeOrder } from '../../../services/orderService';
+import { generateOrderId } from '../../../utils/orderUtils';
 
 const Checkout = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { cartItems, appliedPoints, getCartTotal, getFinalTotal } = useCart();
+  const { cartItems, appliedPoints, getCartTotal, getFinalTotal, clearCart } =
+    useCart();
   const [shippingDetails, setShippingDetails] = useState({
     fullName: user?.name || '',
     email: user?.email || '',
@@ -28,6 +31,7 @@ const Checkout = () => {
     phone: '',
   });
   const [errors, setErrors] = useState({});
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
   const total = getCartTotal();
   const finalTotal = getFinalTotal();
@@ -56,6 +60,55 @@ const Checkout = () => {
     // Clear error when user types
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!shippingDetails.address) newErrors.address = 'Address is required';
+    if (!shippingDetails.city) newErrors.city = 'City is required';
+    if (!shippingDetails.zipCode) newErrors.zipCode = 'ZIP code is required';
+    if (!shippingDetails.phone) newErrors.phone = 'Phone number is required';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handlePlaceOrder = async () => {
+    if (!validateForm()) return;
+
+    setIsPlacingOrder(true);
+    try {
+      const orderData = {
+        orderId: generateOrderId(),
+        userId: user.id,
+        cartItems: cartItems.map((item) => ({
+          productId: item.productID.toString(),
+          productName: item.productName,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+        subtotal: total,
+        pointsApplied: appliedPoints,
+        totalAmount: finalTotal,
+        shippingAddress: {
+          fullName: user.name,
+          phone: shippingDetails.phone,
+          addressLine1: shippingDetails.address,
+          city: shippingDetails.city,
+          postalCode: shippingDetails.zipCode,
+          country: 'Sri Lanka',
+        },
+      };
+
+      await placeOrder(orderData);
+      clearCart();
+      navigate('/shop/order-success');
+    } catch (errorResponse) {
+      setErrors({ submit: 'Failed to place order. Please try again.' });
+      console.error('Order placement failed:', errorResponse);
+    } finally {
+      setIsPlacingOrder(false);
     }
   };
 
@@ -140,9 +193,16 @@ const Checkout = () => {
                       value={shippingDetails.address}
                       onChange={handleInputChange}
                       placeholder="Street Address"
-                      className="w-full pl-12 pr-4 py-3 rounded-xl border border-outline focus:outline-none focus:border-primary-green"
+                      className={`w-full pl-12 pr-4 py-3 rounded-xl border ${
+                        errors.address ? 'border-lightred' : 'border-outline'
+                      } focus:outline-none focus:border-primary-green`}
                     />
                   </div>
+                  {errors.address && (
+                    <p className="text-lightred text-sm mt-1">
+                      {errors.address}
+                    </p>
+                  )}
                 </div>
 
                 <div className="relative">
@@ -153,8 +213,13 @@ const Checkout = () => {
                     value={shippingDetails.city}
                     onChange={handleInputChange}
                     placeholder="City"
-                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-outline focus:outline-none focus:border-primary-green"
+                    className={`w-full pl-12 pr-4 py-3 rounded-xl border ${
+                      errors.city ? 'border-lightred' : 'border-outline'
+                    } focus:outline-none focus:border-primary-green`}
                   />
+                  {errors.city && (
+                    <p className="text-lightred text-sm mt-1">{errors.city}</p>
+                  )}
                 </div>
 
                 <div className="relative">
@@ -164,8 +229,15 @@ const Checkout = () => {
                     value={shippingDetails.zipCode}
                     onChange={handleInputChange}
                     placeholder="ZIP Code"
-                    className="w-full px-4 py-3 rounded-xl border border-outline focus:outline-none focus:border-primary-green"
+                    className={`w-full px-4 py-3 rounded-xl border ${
+                      errors.zipCode ? 'border-lightred' : 'border-outline'
+                    } focus:outline-none focus:border-primary-green`}
                   />
+                  {errors.zipCode && (
+                    <p className="text-lightred text-sm mt-1">
+                      {errors.zipCode}
+                    </p>
+                  )}
                 </div>
 
                 <div className="md:col-span-2">
@@ -177,9 +249,14 @@ const Checkout = () => {
                       value={shippingDetails.phone}
                       onChange={handleInputChange}
                       placeholder="Phone Number"
-                      className="w-full pl-12 pr-4 py-3 rounded-xl border border-outline focus:outline-none focus:border-primary-green"
+                      className={`w-full pl-12 pr-4 py-3 rounded-xl border ${
+                        errors.phone ? 'border-lightred' : 'border-outline'
+                      } focus:outline-none focus:border-primary-green`}
                     />
                   </div>
+                  {errors.phone && (
+                    <p className="text-lightred text-sm mt-1">{errors.phone}</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -224,13 +301,21 @@ const Checkout = () => {
                 </div>
               </div>
 
-              <CartButton
-                icon={<LuArrowRight />}
-                text="Place Order"
-                className="bg-primary-green mt-6"
-                textColor="text-primary-green"
-                onClick={() => console.log('Place order')}
-              />
+              <div className="space-y-4">
+                {errors.submit && (
+                  <p className="text-lightred text-sm text-center">
+                    {errors.submit}
+                  </p>
+                )}
+                <CartButton
+                  icon={<LuArrowRight />}
+                  text={isPlacingOrder ? 'Processing...' : 'Place Order'}
+                  className="bg-primary-green mt-6"
+                  textColor="text-primary-green"
+                  onClick={handlePlaceOrder}
+                  disabled={isPlacingOrder}
+                />
+              </div>
             </div>
           </div>
         </div>
