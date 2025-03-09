@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import axios from 'axios';
+import { API_CONFIG } from '../config/api.config';
 
 const AuthContext = createContext(null);
 
@@ -10,33 +12,55 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
-    // Check for token on mount
-    const token = localStorage.getItem('token');
-    if (token) {
-      setIsAuthenticated(true);
-      setUser({
-        name: 'Dizzpy',
-        email: 'dizzpy@mail.com',
-        avatar: 'https://github.com/shadcn.png',
-      });
+  const fetchUserDetails = async (userId) => {
+    try {
+      const response = await axios.get(
+        API_CONFIG.ENDPOINTS.USER.GET_BY_ID(userId),
+      );
+      if (response.data) {
+        setUser({
+          id: userId,
+          name: response.data.fullName,
+          email: response.data.email,
+          avatar: response.data.profileImgUrl,
+          points: response.data.pointsCount,
+          username: response.data.username || response.data.email.split('@')[0],
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
+  };
 
-      // If on login page and authenticated, redirect to feed
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+
+    if (token && userId) {
+      setIsAuthenticated(true);
+      fetchUserDetails(userId);
+
       if (location.pathname === '/login') {
         navigate('/feed');
       }
     }
   }, [navigate, location]);
 
-  const login = (token, userData) => {
+  const login = (response) => {
+    const { token, userId } = response;
+
     localStorage.setItem('token', token);
+    localStorage.setItem('userId', userId);
+
     setIsAuthenticated(true);
-    setUser(userData);
+    fetchUserDetails(userId);
+
     navigate('/feed');
   };
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
     setIsAuthenticated(false);
     setUser(null);
     navigate('/login');

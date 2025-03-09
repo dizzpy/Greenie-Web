@@ -24,7 +24,8 @@ const Login = () => {
       });
 
       if (response.data) {
-        login(response.data.token, {
+        // Pass the entire response data containing token and userId
+        login(response.data, {
           name: 'Dizzpy',
           email: email,
           avatar: 'https://github.com/shadcn.png',

@@ -92,7 +92,7 @@ const NavBar = () => {
                 <img
                   src={user?.avatar || 'https://github.com/shadcn.png'}
                   alt="Profile"
-                  className="h-9 w-9 rounded-full border-2 border-primary-green"
+                  className="h-9 w-9 rounded-full border-1 border-primary-green"
                 />
               </button>
 
@@ -109,8 +109,9 @@ const NavBar = () => {
                   <p className="text-sm font-semibold text-gray-800">
                     {user?.name || 'User'}
                   </p>
-                  <p className="text-xs text-gray-500">
-                    {user?.email || 'user@email.com'}
+                  <p className="text-xs text-gray-500">{user?.email}</p>
+                  <p className="text-xs text-primary-green mt-1">
+                    {user?.points?.toLocaleString() || 0} Points
                   </p>
                 </div>
 
