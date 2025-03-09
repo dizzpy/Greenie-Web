@@ -1,8 +1,14 @@
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 import CoinIcon from '../../../assets/icons/coin.svg';
 
 function ViewChallengeCard(props) {
   const { challenge } = props;
+  const navigate = useNavigate();
+
+  const handleSubmit = () => {
+    navigate(`/challenges/submit/${challenge.id}`);
+  };
 
   return (
     <div className="max-w-md mx-auto bg-white h-100">
@@ -36,7 +42,10 @@ function ViewChallengeCard(props) {
       </p>
 
       {/* Submit Button */}
-      <button className="w-full mt-10 bg-primary-green text-white font-semibold py-2 rounded-lg hover:bg-green-600 transition">
+      <button
+        onClick={handleSubmit}
+        className="w-full mt-10 bg-primary-green text-white  py-2 rounded-lg hover:bg-green-600 transition"
+      >
         Submit
       </button>
     </div>
@@ -46,6 +55,7 @@ function ViewChallengeCard(props) {
 // PropTypes validation
 ViewChallengeCard.propTypes = {
   challenge: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     points: PropTypes.number.isRequired,

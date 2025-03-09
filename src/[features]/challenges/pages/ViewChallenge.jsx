@@ -1,7 +1,7 @@
+import NavBar from '../../../components/Shared/NavBar';
 import ViewChallengeCard from '../components/ViewChallengeCard';
 
 function ViewChallenge() {
-  // Example challenge data to pass as props
   const challengeData = {
     image:
       'https://www.movaglobes.com/blog/wp-content/uploads/2022/04/Eco-Friendly-Header-Image-1200x600.jpg',
@@ -13,8 +13,11 @@ function ViewChallenge() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-white">
-      <ViewChallengeCard challenge={challengeData} />
+    <div>
+      <NavBar />
+      <div className="flex justify-center items-center min-h-screen bg-white">
+        <ViewChallengeCard challenge={challengeData} />
+      </div>
     </div>
   );
 }
