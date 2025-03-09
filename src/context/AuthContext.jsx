@@ -11,32 +11,44 @@ export const AuthProvider = ({ children }) => {
   const location = useLocation();
 
   useEffect(() => {
-    // Check for token on mount
+    // Check for token and userId on mount
     const token = localStorage.getItem('token');
-    if (token) {
+    const userId = localStorage.getItem('userId');
+
+    if (token && userId) {
       setIsAuthenticated(true);
       setUser({
+        id: userId,
         name: 'Dizzpy',
         email: 'dizzpy@mail.com',
         avatar: 'https://github.com/shadcn.png',
       });
 
-      // If on login page and authenticated, redirect to feed
       if (location.pathname === '/login') {
         navigate('/feed');
       }
     }
   }, [navigate, location]);
 
-  const login = (token, userData) => {
+  const login = (response, userData) => {
+    // Expecting response to contain both token and userId
+    const { token, userId } = response;
+
     localStorage.setItem('token', token);
+    localStorage.setItem('userId', userId);
+
     setIsAuthenticated(true);
-    setUser(userData);
+    setUser({
+      id: userId,
+      ...userData,
+    });
+
     navigate('/feed');
   };
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
     setIsAuthenticated(false);
     setUser(null);
     navigate('/login');
