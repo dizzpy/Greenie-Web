@@ -47,6 +47,11 @@ const Login = () => {
     }
   };
 
+  const handleRegisterClick = (e) => {
+    e.preventDefault();
+    navigate('/register');
+  };
+
   return (
     <div className="flex flex-col md:flex-row h-screen">
       {/* Left Side - Image Section (Hidden on Mobile) */}
@@ -102,9 +107,13 @@ const Login = () => {
             </Button>
             <p className="text-center text-sm mt-4">
               Don&apos;t have an account?{' '}
-              <a href="/register" className="text-primary-green font-semibold">
+              <button
+                onClick={handleRegisterClick}
+                type="button"
+                className="text-primary-green font-semibold hover:underline"
+              >
                 Create Account
-              </a>
+              </button>
             </p>
           </form>
         </div>

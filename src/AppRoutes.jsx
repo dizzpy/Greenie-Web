@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -50,13 +50,41 @@ ProtectedRoute.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
+const PublicRoute = ({ children }) => {
+  const { isAuthenticated } = useAuth();
+
+  if (isAuthenticated) {
+    return <Navigate to="/feed" replace />;
+  }
+
+  return children;
+};
+
+PublicRoute.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
 function AppRoutes() {
   return (
     <div className="min-h-screen bg-white">
       <Routes>
         {/* Public Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
+        />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/set-new-password" element={<SetNewPassword />} />
 
