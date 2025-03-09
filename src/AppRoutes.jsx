@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 // Import all pages
@@ -26,14 +26,22 @@ import AddChallenge from './[features]/challenges/pages/AddChallenge';
 import ViewChallenge from './[features]/challenges/pages/ViewChallenge';
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    // Only redirect if we're done loading and not authenticated
+    if (!isLoading && !isAuthenticated) {
+      localStorage.setItem('lastPath', location.pathname);
       navigate('/login');
     }
-  }, [isAuthenticated, navigate]);
+  }, [isLoading, isAuthenticated, navigate, location]);
+
+  // Show loading state or children
+  if (isLoading) {
+    return <div>Loading...</div>; // You can replace this with a proper loading component
+  }
 
   return isAuthenticated ? children : null;
 };
@@ -62,7 +70,7 @@ function AppRoutes() {
           }
         />
         <Route
-          path="/shop"
+          path="/shop/*"
           element={
             <ProtectedRoute>
               <ShopHome />

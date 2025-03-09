@@ -1,10 +1,10 @@
 export const getCartFromStorage = () => {
   const savedCart = localStorage.getItem('cart');
-  return savedCart ? JSON.parse(savedCart) : [];
+  return savedCart ? JSON.parse(savedCart) : { items: [], appliedPoints: 0 };
 };
 
-export const saveCartToStorage = (cart) => {
-  localStorage.setItem('cart', JSON.stringify(cart));
+export const saveCartToStorage = (cart, appliedPoints) => {
+  localStorage.setItem('cart', JSON.stringify({ items: cart, appliedPoints }));
 };
 
 export const calculateCartTotal = (cartItems) => {

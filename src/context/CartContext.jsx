@@ -18,13 +18,15 @@ export const CartProvider = ({ children }) => {
 
   // Load cart from localStorage
   useEffect(() => {
-    setCartItems(getCartFromStorage());
+    const savedCart = getCartFromStorage();
+    setCartItems(savedCart.items);
+    setAppliedPoints(savedCart.appliedPoints);
   }, []);
 
   // Save cart to localStorage
   useEffect(() => {
-    saveCartToStorage(cartItems);
-  }, [cartItems]);
+    saveCartToStorage(cartItems, appliedPoints);
+  }, [cartItems, appliedPoints]);
 
   const addToCart = (product, quantity) => {
     setCartItems((prev) => {
