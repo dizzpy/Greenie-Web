@@ -8,7 +8,6 @@ function AddChallenge() {
     description: '',
     file: null,
   });
-  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
 
@@ -22,7 +21,6 @@ function AddChallenge() {
   }
 
   async function handleSubmit() {
-    setLoading(true);
     setMessage('');
     const formDataToSend = new FormData();
     formDataToSend.append('challengeName', formData.challengeName);
@@ -50,8 +48,6 @@ function AddChallenge() {
       setMessage("Error! Can't add challenge");
       setMessageType('error');
       console.error('Error:', error);
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -67,7 +63,7 @@ function AddChallenge() {
           </div>
         )}
 
-        <button className="text-text-gray  text-xl flex items-center mb-4">
+        <button className="text-text-gray text-xl flex items-center mb-4">
           ← Add Challenge
         </button>
         <div className="bg-white border border-gray-300 rounded-lg h-40 flex items-center justify-center cursor-pointer">
@@ -110,11 +106,10 @@ function AddChallenge() {
         </div>
         <div className="flex justify-end mt-6">
           <button
-            className="mt-4 bg-primary-green text-white px-4 py-2 rounded w-1/3"
+            className="mt-4 bg-primary-green text-white px-4 py-2 rounded w-1/3 hover:bg-green-600 transition"
             onClick={handleSubmit}
-            disabled={loading}
           >
-            {loading ? 'Submitting...' : 'Add Challenge'}
+            Add Challenge
           </button>
         </div>
       </div>
