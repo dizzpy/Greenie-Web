@@ -24,6 +24,7 @@ import CartSidebar from './[features]/shop/components/CartSidebar';
 import Notification from './components/Shop/Notification';
 import AddChallenge from './[features]/challenges/pages/AddChallenge';
 import ViewChallenge from './[features]/challenges/pages/ViewChallenge';
+import SubmitChallenge from './[features]/challenges/pages/SubmitChallenge';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -130,6 +131,14 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <ViewChallenge />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/challenges/submit/:id"
+          element={
+            <ProtectedRoute>
+              <SubmitChallenge />
             </ProtectedRoute>
           }
         />
