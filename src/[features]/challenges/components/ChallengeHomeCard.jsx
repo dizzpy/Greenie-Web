@@ -1,14 +1,21 @@
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import CoinIcon from '../../../assets/icons/coin.svg';
 
 function ChallengeHomeCard({ challenge }) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/challenges/view/${challenge.id}`);
+  };
+
   return (
-    <div className="flex flex-col md:flex-row bg-bg-light rounded-lg p-5 h-full">
+    <div
+      className="flex flex-col md:flex-row bg-bg-light rounded-lg p-5 h-full cursor-pointer hover:shadow-lg transition"
+      onClick={handleClick}
+    >
       {/* Image section */}
-      <a
-        href="#"
-        className="group w-full md:w-1/3 md:flex-shrink-0 mb-5 md:mb-0"
-      >
+      <div className="group w-full md:w-1/3 md:flex-shrink-0 mb-5 md:mb-0">
         <div className="h-48 md:h-full">
           <img
             src={challenge.image}
@@ -16,7 +23,7 @@ function ChallengeHomeCard({ challenge }) {
             className="object-cover shadow-lg rounded-lg group-hover:opacity-75 w-full h-full"
           />
         </div>
-      </a>
+      </div>
 
       {/* Content section */}
       <div className="flex-1 md:ml-6 flex flex-col">
@@ -49,7 +56,13 @@ function ChallengeHomeCard({ challenge }) {
 
           {/* Footer section */}
           <div className="md:text-end text-start pt-4">
-            <button className="text-primary-green hover:text-green-600">
+            <button
+              className="text-primary-green hover:text-green-600"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent parent div click
+                navigate(`/challenges/view/${challenge.id}`);
+              }}
+            >
               View Details →
             </button>
           </div>
