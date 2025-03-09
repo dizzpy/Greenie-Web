@@ -10,56 +10,51 @@ import {
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartState, setCartState] = useState(() => getCartFromStorage());
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
-  const [appliedPoints, setAppliedPoints] = useState(0);
 
-  // Load cart from localStorage
+  // Save cart whenever it changes
   useEffect(() => {
-    const savedCart = getCartFromStorage();
-    setCartItems(savedCart.items);
-    setAppliedPoints(savedCart.appliedPoints);
-  }, []);
-
-  // Save cart to localStorage
-  useEffect(() => {
-    saveCartToStorage(cartItems, appliedPoints);
-  }, [cartItems, appliedPoints]);
+    saveCartToStorage(cartState);
+  }, [cartState]);
 
   const addToCart = (product, quantity) => {
-    setCartItems((prev) => {
-      const existingItem = prev.find(
+    setCartState((prevState) => {
+      const existingItem = prevState.items.find(
         (item) => item.productID === product.productID,
       );
 
+      let newItems;
       if (existingItem) {
-        // Check if adding quantity exceeds available stock
         const newQuantity = existingItem.quantity + quantity;
         if (newQuantity > product.quantity) {
           setNotificationMessage(`Only ${product.quantity} items available`);
           setShowNotification(true);
           setTimeout(() => setShowNotification(false), 3000);
-          return prev;
+          return prevState;
         }
 
-        return prev.map((item) =>
+        newItems = prevState.items.map((item) =>
           item.productID === product.productID
             ? { ...item, quantity: newQuantity }
             : item,
         );
+      } else {
+        if (quantity > product.quantity) {
+          setNotificationMessage(`Only ${product.quantity} items available`);
+          setShowNotification(true);
+          setTimeout(() => setShowNotification(false), 3000);
+          return prevState;
+        }
+        newItems = [...prevState.items, { ...product, quantity }];
       }
 
-      // Check if initial quantity exceeds available stock
-      if (quantity > product.quantity) {
-        setNotificationMessage(`Only ${product.quantity} items available`);
-        setShowNotification(true);
-        setTimeout(() => setShowNotification(false), 3000);
-        return prev;
-      }
-
-      return [...prev, { ...product, quantity }];
+      return {
+        ...prevState,
+        items: newItems,
+      };
     });
 
     setNotificationMessage(`${product.productName} added to cart`);
@@ -69,61 +64,44 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeFromCart = (productId) => {
-    setCartItems((prev) => prev.filter((item) => item.productID !== productId));
-  };
-
-  const updateQuantity = (productId, newQuantity) => {
-    setCartItems((prev) => {
-      const item = prev.find((item) => item.productID === productId);
-      if (!item) return prev;
-
-      // Check if new quantity exceeds available stock
-      if (newQuantity > item.quantity) {
-        setNotificationMessage(`Only ${item.quantity} items available`);
-        setShowNotification(true);
-        setTimeout(() => setShowNotification(false), 3000);
-        return prev;
-      }
-
-      return prev.map((item) =>
-        item.productID === productId
-          ? { ...item, quantity: newQuantity }
-          : item,
-      );
-    });
+    setCartState((prevState) => ({
+      ...prevState,
+      items: prevState.items.filter((item) => item.productID !== productId),
+    }));
   };
 
   const applyPoints = (points) => {
-    setAppliedPoints(points);
+    setCartState((prevState) => ({
+      ...prevState,
+      appliedPoints: points,
+    }));
   };
 
   const removePoints = () => {
-    setAppliedPoints(0);
+    setCartState((prevState) => ({
+      ...prevState,
+      appliedPoints: 0,
+    }));
   };
-
-  const getFinalTotal = () => {
-    const total = calculateCartTotal(cartItems);
-    return Math.max(0, total - appliedPoints);
-  };
-
-  const getCartTotal = () => calculateCartTotal(cartItems);
-  const getCartItemsCount = () => calculateItemsCount(cartItems);
 
   const value = {
-    cartItems,
+    cartItems: cartState.items,
+    appliedPoints: cartState.appliedPoints,
     isCartOpen,
     showNotification,
     notificationMessage,
     setIsCartOpen,
     addToCart,
     removeFromCart,
-    updateQuantity,
-    getCartTotal,
-    getCartItemsCount,
-    appliedPoints,
     applyPoints,
     removePoints,
-    getFinalTotal,
+    getCartTotal: () => calculateCartTotal(cartState.items),
+    getCartItemsCount: () => calculateItemsCount(cartState.items),
+    getFinalTotal: () =>
+      Math.max(
+        0,
+        calculateCartTotal(cartState.items) - cartState.appliedPoints,
+      ),
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
