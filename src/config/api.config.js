@@ -17,6 +17,9 @@ export const API_CONFIG = {
     ORDER: {
       PLACE: '/api/order/place',
     },
+    LEADERBOARD: {
+      GET_ALL: '/api/leaderboard',
+    },
   },
 };
 
