@@ -17,19 +17,44 @@ const Cart = () => {
   const total = getCartTotal(); // Move total calculation here
   const [appliedPoints, setAppliedPoints] = useState(0);
   const [pointInput, setPointInput] = useState('');
+  const [error, setError] = useState('');
   const maxPointsAllowed = Math.min(user?.points || 0, total);
   const finalTotal = Math.max(0, total - appliedPoints);
 
   const handleInputChange = (e) => {
     const value = e.target.value;
+    setError('');
+
     if (value === '' || (/^\d+$/.test(value) && !value.startsWith('0'))) {
       setPointInput(value);
+
+      const numValue = Number(value);
+      if (numValue > user?.points) {
+        setError("You don't have enough points");
+      } else if (numValue > total) {
+        setError('Points cannot exceed total amount');
+      }
     }
   };
 
   const handleApplyPoints = () => {
     const points = Number(pointInput);
-    if (isNaN(points) || points < 0) return;
+    setError('');
+
+    if (isNaN(points) || points < 0) {
+      setError('Please enter a valid number');
+      return;
+    }
+
+    if (points > user?.points) {
+      setError("You don't have enough points");
+      return;
+    }
+
+    if (points > total) {
+      setError('Points cannot exceed total amount');
+      return;
+    }
 
     const validPoints = Math.min(points, maxPointsAllowed);
     setAppliedPoints(validPoints);
@@ -111,30 +136,37 @@ const Cart = () => {
 
                 <div className="space-y-4">
                   {/* Input Group */}
-                  <div className="flex gap-3">
-                    <div className="flex-1 relative">
-                      <input
-                        type="text"
-                        value={pointInput}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-3 rounded-xl border-2 border-outline focus:outline-none focus:border-primary-green transition-colors"
-                        placeholder="Enter points to redeem"
-                      />
-                      {pointInput && (
-                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
-                          = Rs {pointInput}
-                        </span>
-                      )}
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-3">
+                      <div className="flex-1 relative">
+                        <input
+                          type="text"
+                          value={pointInput}
+                          onChange={handleInputChange}
+                          className={`w-full px-4 py-3 rounded-xl border-2 ${
+                            error ? 'border-lightred' : 'border-outline'
+                          } focus:outline-none focus:border-primary-green transition-colors`}
+                          placeholder="Enter points to redeem"
+                        />
+                        {pointInput && (
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+                            = Rs {pointInput}
+                          </span>
+                        )}
+                      </div>
+                      <button
+                        onClick={() => {
+                          setPointInput('');
+                          setAppliedPoints(0);
+                        }}
+                        className="px-4 py-2 text-lightred hover:bg-red-50 rounded-xl transition-colors"
+                      >
+                        Clear
+                      </button>
                     </div>
-                    <button
-                      onClick={() => {
-                        setPointInput('');
-                        setAppliedPoints(0);
-                      }}
-                      className="px-4 py-2 text-lightred hover:bg-red-50 rounded-xl transition-colors"
-                    >
-                      Clear
-                    </button>
+                    {error && (
+                      <p className="text-lightred text-sm pl-1">{error}</p>
+                    )}
                   </div>
 
                   {/* Action Buttons */}
@@ -142,7 +174,9 @@ const Cart = () => {
                     <button
                       onClick={handleApplyPoints}
                       disabled={
-                        !pointInput || appliedPoints === Number(pointInput)
+                        !pointInput ||
+                        error ||
+                        appliedPoints === Number(pointInput)
                       }
                       className="flex-1 bg-primary-green text-white py-3 rounded-xl hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
