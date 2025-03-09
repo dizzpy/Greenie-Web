@@ -47,7 +47,11 @@ export const AuthProvider = ({ children }) => {
 
   // Handle redirect only after initial load
   useEffect(() => {
-    if (!isLoading && !isAuthenticated && location.pathname !== '/login') {
+    if (
+      !isLoading &&
+      !isAuthenticated &&
+      !['/login', '/register'].includes(location.pathname)
+    ) {
       localStorage.setItem('lastPath', location.pathname);
       navigate('/login');
     }
