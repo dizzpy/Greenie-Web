@@ -13,6 +13,7 @@ const CreatePost = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
+  // Handle image upload
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -22,15 +23,17 @@ const CreatePost = () => {
       }
       setImage(file); // Store the actual file for submission
       setImagePreview(URL.createObjectURL(file)); // Generate a preview
-      setErrorMessage('');
+      setErrorMessage(''); // Reset error message
     }
   };
 
+  // Remove uploaded image
   const handleRemoveImage = () => {
     setImage(null);
     setImagePreview(null);
   };
 
+  // Handle form submission
   const handleSubmit = async () => {
     if (!postContent.trim() && !image) {
       setErrorMessage('Please enter some text or upload an image.');
@@ -44,10 +47,9 @@ const CreatePost = () => {
     }
 
     try {
-      const token = localStorage.getItem('token'); // ✅ Get token from storage
+      const token = localStorage.getItem('token'); // Get token from storage
       if (!token) {
         setErrorMessage('No token found. Please log in.');
-        console.error('❌ No token found in localStorage.');
         return;
       }
 
@@ -59,26 +61,22 @@ const CreatePost = () => {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${token}`, // ✅ Send authentication token
+            Authorization: `Bearer ${token}`, // Send authentication token
           },
         },
       );
 
       if (response.status === 201) {
-        console.log('✅ Post created successfully:', response.data);
         setSuccessMessage('Post created successfully!');
         setErrorMessage('');
-        setPostContent('');
-        setImage(null);
-        setImagePreview(null);
+        setPostContent(''); // Reset content
+        setImage(null); // Reset image
+        setImagePreview(null); // Reset image preview
       } else {
-        console.warn('⚠️ Unexpected response status:', response.status);
+        setErrorMessage('Failed to create post. Please try again.');
       }
     } catch (error) {
-      console.error(
-        '❌ Error creating post:',
-        error.response ? error.response.data : error,
-      );
+      console.error('❌ Error creating post:', error.response?.data || error);
       setErrorMessage(error.response?.data?.message || 'Error creating post');
     }
   };
@@ -93,7 +91,7 @@ const CreatePost = () => {
         onChange={(e) => setPostContent(e.target.value)}
       ></textarea>
 
-      {/* Display Uploaded Image Preview */}
+      {/* Display uploaded image preview */}
       {imagePreview && (
         <div className="relative mt-2">
           <img
@@ -110,14 +108,14 @@ const CreatePost = () => {
         </div>
       )}
 
-      {/* Error Message */}
+      {/* Display error message */}
       {errorMessage && (
         <div className="mt-2 p-2 bg-red-100 text-red-700 rounded-md">
           {errorMessage}
         </div>
       )}
 
-      {/* Success Message */}
+      {/* Display success message */}
       {successMessage && (
         <div className="mt-2 p-2 bg-green-100 text-green-700 rounded-md">
           {successMessage}

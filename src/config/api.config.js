@@ -7,8 +7,8 @@ export const API_CONFIG = {
 
     // Feed Post endpoints
     POSTS: {
-      CREATE: '/api/posts', // ✅ New endpoint for creating posts
-      GET_ALL: '/api/posts/all', // Optional if you need to fetch all posts
+      CREATE: '/api/posts',
+      GET_ALL: '/api/posts/all',
     },
 
     // Shop endpoints
