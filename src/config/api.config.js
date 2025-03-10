@@ -26,6 +26,13 @@ export const API_CONFIG = {
     LEADERBOARD: {
       GET_ALL: '/api/leaderboard',
     },
+
+    //Challenge endpoints
+    CHALLENGES: {
+      CREATE: '/api/challenges/create',
+      GET_ALL: '/api/challenges/all',
+      GET_BY_ID: (id) => `/api/challenges/${id}`,
+    },
   },
 };
 
