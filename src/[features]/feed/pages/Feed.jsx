@@ -1,68 +1,41 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import CreatePost from '../components/CreatePost';
 import SlideBar from '../components/SlideBar';
 import Poster from '../components/Poster';
 import CommentPopup from '../components/CommentPopup';
 import ChallengeList from '../components/ChallengeList';
 import NavBar from '../../../components/Shared/NavBar';
+import { API_CONFIG } from '../../../config/api.config';
 
 function Feed() {
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      user: {
-        profileImage: 'profile1.jpg',
-        name: 'Januuu Hettige',
-        username: 'januu',
-      },
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      image: 'post1.jpg',
-      likes: 1700,
-      comments: [
-        {
-          user: 'Alice',
-          profileImage: 'user1.jpg',
-          text: 'Amazing post!',
-          time: '1h ago',
-        },
-        {
-          user: 'Bob',
-          profileImage: 'user2.jpg',
-          text: 'Great content, keep sharing!',
-          time: '2h ago',
-        },
-      ],
-    },
-
-    {
-      id: 2,
-      user: {
-        profileImage: 'profile2.jpg',
-        name: 'Alex Doe',
-        username: 'alex',
-      },
-      content: 'Just had a great day at the beach! 🌊',
-      image: 'post2.jpg',
-      likes: 2100,
-      comments: [
-        {
-          user: 'Chris',
-          profileImage: 'user3.jpg',
-          text: 'Looks like fun!',
-          time: '30m ago',
-        },
-        {
-          user: 'Diana',
-          profileImage: 'user4.jpg',
-          text: 'I miss the beach so much!',
-          time: '45m ago',
-        },
-      ],
-    },
-  ]);
-
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedPost, setSelectedPost] = useState(null);
+
+  // Fetch posts from the backend
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get(`${API_CONFIG.BASE_URL}/api/posts`);
+        setPosts(response.data);
+      } catch (err) {
+        console.error('Error fetching posts:', err);
+        setError('Failed to load posts.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+  // Handle new post addition dynamically
+  const handleNewPost = (newPost) => {
+    setPosts((prevPosts) => [newPost, ...prevPosts]);
+  };
 
   return (
     <div>
@@ -77,16 +50,29 @@ function Feed() {
         <div className="flex flex-1 justify-start px-6 py-4 ml-64 mt-[73px]">
           {/* Main Feed Section */}
           <div className="w-full max-w-2xl">
-            <CreatePost />
-            <div className="mt-6 space-y-4">
-              {posts.map((post) => (
-                <Poster
-                  key={post.id}
-                  {...post}
-                  onCommentClick={() => setSelectedPost(post)}
-                />
-              ))}
-            </div>
+            <CreatePost onPostCreated={handleNewPost} />
+
+            {loading ? (
+              <p className="text-center text-gray-500">Loading posts...</p>
+            ) : error ? (
+              <p className="text-center text-red-500">{error}</p>
+            ) : (
+              <div className="mt-6 space-y-4">
+                {posts.length > 0 ? (
+                  posts.map((post) => (
+                    <Poster
+                      key={post.postId}
+                      {...post}
+                      onCommentClick={() => setSelectedPost(post)}
+                    />
+                  ))
+                ) : (
+                  <p className="text-center text-gray-500">
+                    No posts available.
+                  </p>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Right Sidebar: Challenges */}

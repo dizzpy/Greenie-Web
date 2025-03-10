@@ -5,6 +5,12 @@ export const API_CONFIG = {
     LOGIN: '/api/auth/login',
     REGISTER: '/api/auth/register',
 
+    // Feed Post endpoints
+    POSTS: {
+      CREATE: '/api/posts',
+      GET_ALL: '/api/posts/all',
+    },
+
     // Shop endpoints
     PRODUCTS: {
       ALL: '/api/products/all',
