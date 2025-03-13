@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import NavBar from '../../../components/Shared/NavBar';
 import { ImageUp } from 'lucide-react';
+import { API_CONFIG } from '../../../config/api.config';
 
 function SubmitChallenge() {
   const [description, setDescription] = useState('');
@@ -43,7 +44,7 @@ function SubmitChallenge() {
       };
 
       try {
-        const response = await fetch('http://localhost:8080/api/proof/submit', {
+        const response = await fetch(API_CONFIG.ENDPOINTS.Submit, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
