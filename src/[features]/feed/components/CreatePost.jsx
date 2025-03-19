@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaImage } from 'react-icons/fa';
 import { IoMdSend } from 'react-icons/io';
 import { MdClose } from 'react-icons/md';
 import axios from 'axios';
-import { API_CONFIG } from '../../../config/api.config'; // ✅ Import API config
+import { API_CONFIG } from '../../../config/api.config';
 
 const CreatePost = () => {
   const [postContent, setPostContent] = useState('');
@@ -12,6 +12,17 @@ const CreatePost = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [loggedInUserId, setLoggedInUserId] = useState(null); // Store user ID
+
+  // Load logged-in user info
+  useEffect(() => {
+    const userId = localStorage.getItem('userId'); // Ensure 'userId' is stored
+    if (userId) {
+      setLoggedInUserId(userId);
+    } else {
+      setErrorMessage('User not authenticated. Please log in.');
+    }
+  }, []);
 
   // Handle image upload
   const handleImageUpload = (event) => {
@@ -21,9 +32,9 @@ const CreatePost = () => {
         setErrorMessage('Image size must be less than 5MB.');
         return;
       }
-      setImage(file); // Store the actual file for submission
-      setImagePreview(URL.createObjectURL(file)); // Generate a preview
-      setErrorMessage(''); // Reset error message
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file));
+      setErrorMessage('');
     }
   };
 
@@ -40,28 +51,38 @@ const CreatePost = () => {
       return;
     }
 
+    if (!loggedInUserId) {
+      setErrorMessage('User ID is missing. Please log in.');
+      return;
+    }
+
     const formData = new FormData();
-    formData.append('content', postContent);
+    formData.append('description', postContent);
+    formData.append('userId', loggedInUserId);
     if (image) {
       formData.append('image', image);
     }
 
     try {
-      const token = localStorage.getItem('token'); // Get token from storage
+      const token = localStorage.getItem('token'); // Ensure token is present
       if (!token) {
         setErrorMessage('No token found. Please log in.');
         return;
       }
 
-      console.log('📢 Sending request with token:', token); // Debug log
+      console.log('📢 Sending request:', {
+        userId: loggedInUserId,
+        description: postContent,
+        image: image ? image.name : 'No image',
+      });
 
       const response = await axios.post(
-        API_CONFIG.ENDPOINTS.POSTS.CREATE,
+        `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.POSTS.CREATE}`,
         formData,
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${token}`, // Send authentication token
+            Authorization: `Bearer ${token}`,
           },
         },
       );
@@ -69,9 +90,9 @@ const CreatePost = () => {
       if (response.status === 201) {
         setSuccessMessage('Post created successfully!');
         setErrorMessage('');
-        setPostContent(''); // Reset content
-        setImage(null); // Reset image
-        setImagePreview(null); // Reset image preview
+        setPostContent('');
+        setImage(null);
+        setImagePreview(null);
       } else {
         setErrorMessage('Failed to create post. Please try again.');
       }
