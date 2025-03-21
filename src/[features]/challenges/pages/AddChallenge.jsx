@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import axios from 'axios';
 import NavBar from '../../../components/Shared/NavBar';
+import { API_CONFIG } from '../../../config/api.config';
 
 function AddChallenge() {
   const [formData, setFormData] = useState({
@@ -22,6 +24,7 @@ function AddChallenge() {
 
   async function handleSubmit() {
     setMessage('');
+
     const formDataToSend = new FormData();
     formDataToSend.append('challengeName', formData.challengeName);
     formDataToSend.append('points', formData.points);
@@ -31,19 +34,22 @@ function AddChallenge() {
     }
 
     try {
-      const response = await fetch('https://api.example.com/challenges', {
-        method: 'POST',
-        body: formDataToSend,
-      });
-      const result = await response.json();
-      if (response.ok) {
+      const response = await axios.post(
+        API_CONFIG.ENDPOINTS.CHALLENGES.CREATE,
+        formDataToSend,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        },
+      );
+
+      if (response.status === 200 || response.status === 201) {
         setMessage('Challenge successfully added');
         setMessageType('success');
       } else {
         setMessage("Error! Can't add challenge");
         setMessageType('error');
       }
-      console.log('Success:', result);
+      console.log('Success:', response.data);
     } catch (error) {
       setMessage("Error! Can't add challenge");
       setMessageType('error');
