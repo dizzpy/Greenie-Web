@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { ImageUp } from 'lucide-react';
 import NavBar from '../../../components/Shared/NavBar';
 import { API_CONFIG } from '../../../config/api.config';
 
@@ -12,6 +13,7 @@ function AddChallenge() {
   });
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
+  const [preview, setPreview] = useState(null); // For image preview
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -19,7 +21,17 @@ function AddChallenge() {
   }
 
   function handleFileChange(e) {
-    setFormData((prev) => ({ ...prev, file: e.target.files[0] }));
+    const file = e.target.files[0];
+    setFormData((prev) => ({ ...prev, file }));
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreview(reader.result); // Set preview image
+    };
+    if (file) reader.readAsDataURL(file); // Preview the image
+  }
+
+  function handleUploadClick() {
+    document.querySelector('input[type="file"]').click(); // Trigger file input click
   }
 
   async function handleSubmit() {
@@ -72,9 +84,34 @@ function AddChallenge() {
         <button className="text-text-gray text-xl flex items-center mb-4">
           ← Add Challenge
         </button>
-        <div className="bg-white border border-gray-300 rounded-lg h-40 flex items-center justify-center cursor-pointer">
-          <input type="file" className="hidden" onChange={handleFileChange} />
-          <span className="text-text-gray">Upload Photos and Videos</span>
+        <div className="mb-4 mt-4 ">
+          <label className="block text-gray-700 font-medium mb-2">
+            Upload an image <span className="text-red-500">*</span>
+          </label>
+          <div
+            className="border-2 h-48 p-6 flex flex-col items-center justify-center rounded-lg cursor-pointer"
+            onClick={handleUploadClick}
+          >
+            {preview ? (
+              <img
+                src={preview}
+                alt="Uploaded"
+                className="w-full h-32 object-cover rounded-lg"
+              />
+            ) : (
+              <>
+                <input
+                  type="file"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+                <ImageUp className="text-gray-500 text-2xl" />
+                <p className="text-gray-500 text-sm">
+                  Upload Photos and Videos
+                </p>
+              </>
+            )}
+          </div>
         </div>
         <div className="mt-6">
           <label className="block text-text-gray mb-1">
