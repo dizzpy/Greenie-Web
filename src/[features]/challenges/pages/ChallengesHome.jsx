@@ -28,7 +28,7 @@ function ChallengesHome() {
     }
 
     fetchChallenges();
-  }, []);
+  }, [setLoading, setError]); // Add setLoading and setError to the dependency array
 
   return (
     <div>
