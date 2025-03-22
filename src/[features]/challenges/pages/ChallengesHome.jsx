@@ -1,71 +1,34 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import CoinIcon from '../../../assets/icons/coin.svg';
-import ChallengeHomeCard from '../components/ChallengeHomeCard';
+import ChallengeHomeCard from '../components/ChallengeHomeCard'; // Import default export
 import NavBar from '../../../components/Shared/NavBar';
+import { API_CONFIG } from '../../../config/api.config';
 
 function ChallengesHome() {
   const navigate = useNavigate();
-  const challenges = [
-    {
-      id: 1,
-      image:
-        'https://www.westonnurseries.com/wp-content/uploads/2018/04/AdobeStock_177461824.jpeg',
-      name: 'Zero Waste Week',
-      points: 500,
-      description:
-        'Reduce your waste footprint for one week and track your progress.',
-      enrolled: 234,
-    },
-    {
-      id: 2,
-      image:
-        'https://www.westonnurseries.com/wp-content/uploads/2018/04/AdobeStock_177461824.jpeg',
-      name: 'Plant a Tree',
-      points: 300,
-      description: 'Join our community tree planting initiative this weekend.',
-      enrolled: 156,
-    },
-    {
-      id: 3,
-      image:
-        'https://www.westonnurseries.com/wp-content/uploads/2018/04/AdobeStock_177461824.jpeg',
-      name: 'Energy Saver Challenge',
-      points: 400,
-      description:
-        'Reduce your energy consumption by 20% this month using smart techniques.',
-      enrolled: 342,
-    },
-    {
-      id: 4,
-      image:
-        'https://www.westonnurseries.com/wp-content/uploads/2018/04/AdobeStock_177461824.jpeg',
-      name: 'Plastic-Free Shopping',
-      points: 250,
-      description:
-        'Complete your weekly shopping without using any single-use plastics.',
-      enrolled: 189,
-    },
-    {
-      id: 5,
-      image:
-        'https://www.westonnurseries.com/wp-content/uploads/2018/04/AdobeStock_177461824.jpeg',
-      name: 'Eco-Transport Month',
-      points: 600,
-      description:
-        'Use only eco-friendly transportation methods for a whole month.',
-      enrolled: 423,
-    },
-    {
-      id: 6,
-      image:
-        'https://www.westonnurseries.com/wp-content/uploads/2018/04/AdobeStock_177461824.jpeg',
-      name: 'Water Conservation',
-      points: 350,
-      description:
-        'Implement water-saving practices and reduce your water consumption.',
-      enrolled: 267,
-    },
-  ];
+  const [challenges, setChallenges] = useState([]);
+  const [setLoading] = useState(true);
+  const [setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchChallenges() {
+      try {
+        const response = await axios.get(
+          API_CONFIG.ENDPOINTS.CHALLENGES.GET_ALL,
+        );
+        setChallenges(response.data);
+      } catch (err) {
+        console.error('Error fetching challenges:', err);
+        setError('Failed to load challenges.');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchChallenges();
+  }, []);
 
   return (
     <div>
@@ -101,7 +64,9 @@ function ChallengesHome() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {challenges.map((challenge) => (
-            <ChallengeHomeCard key={challenge.id} challenge={challenge} />
+            <div key={challenge.id} className="flex flex-col">
+              <ChallengeHomeCard challenge={challenge} />
+            </div>
           ))}
         </div>
       </div>
