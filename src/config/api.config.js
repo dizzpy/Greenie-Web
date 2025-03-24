@@ -7,7 +7,7 @@ export const API_CONFIG = {
 
     // Feed Post endpoints
     POSTS: {
-      CREATE: '/api/posts',
+      CREATE: '/api/posts/create', // ✅ Corrected route
       GET_ALL: '/api/posts/all',
     },
 
