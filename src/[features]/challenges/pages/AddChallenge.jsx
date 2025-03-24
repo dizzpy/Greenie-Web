@@ -1,4 +1,4 @@
-import { useState } from 'react'; // Removed useRef
+import { useState } from 'react';
 import axios from 'axios';
 import NavBar from '../../../components/Shared/NavBar';
 import { API_CONFIG } from '../../../config/api.config';
@@ -8,7 +8,7 @@ function AddChallenge() {
     challengeName: '',
     points: '',
     description: '',
-    imageUrl: '',
+    photoUrl: '',
   });
 
   const [message, setMessage] = useState('');
@@ -24,7 +24,7 @@ function AddChallenge() {
       !formData.challengeName ||
       !formData.points ||
       !formData.description ||
-      !formData.imageUrl
+      !formData.photoUrl
     ) {
       alert('Please fill in all fields');
       return;
@@ -39,7 +39,7 @@ function AddChallenge() {
           challengeName: formData.challengeName,
           points: formData.points,
           description: formData.description,
-          imageUrl: formData.imageUrl, // Sending image URL
+          photoUrl: formData.photoUrl,
         },
         {
           headers: { 'Content-Type': 'application/json' },
@@ -53,7 +53,7 @@ function AddChallenge() {
           challengeName: '',
           points: '',
           description: '',
-          imageUrl: '',
+          photoUrl: '',
         });
       } else {
         throw new Error("Error! Can't add challenge");
@@ -61,7 +61,7 @@ function AddChallenge() {
     } catch (err) {
       setMessage("Error! Can't add challenge");
       setMessageType('error');
-      console.error('Error:', err); // Log error to console
+      console.error('Error:', err);
     }
   }
 
@@ -71,9 +71,7 @@ function AddChallenge() {
       <div className="max-w-2xl mx-auto p-6">
         {message && (
           <div
-            className={`p-3 mb-4 text-white rounded ${
-              messageType === 'success' ? 'bg-primary-green' : 'bg-lightred'
-            }`}
+            className={`p-3 mb-4 text-white rounded ${messageType === 'success' ? 'bg-primary-green' : 'bg-lightred'}`}
           >
             {message}
           </div>
@@ -90,18 +88,18 @@ function AddChallenge() {
           </label>
           <input
             type="text"
-            name="imageUrl"
+            name="photoUrl"
             className="w-full border border-gray-300 p-2 text-center h-32 rounded"
             placeholder="Upload Photos and Videos"
-            value={formData.imageUrl}
+            value={formData.photoUrl}
             onChange={handleChange}
           />
 
           {/* Image Preview */}
-          {formData.imageUrl && (
+          {formData.photoUrl && (
             <div className="mt-4">
               <img
-                src={formData.imageUrl}
+                src={formData.photoUrl}
                 alt="Preview"
                 className="w-full h-32 object-cover rounded-lg"
               />
