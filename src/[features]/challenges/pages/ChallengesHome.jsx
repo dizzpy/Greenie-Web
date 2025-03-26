@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import CoinIcon from '../../../assets/icons/coin.svg';
-import ChallengeHomeCard from '../components/ChallengeHomeCard'; // Import default export
+import ChallengeHomeCard from '../components/ChallengeHomeCard';
 import NavBar from '../../../components/Shared/NavBar';
 import { API_CONFIG } from '../../../config/api.config';
 
@@ -28,7 +28,7 @@ function ChallengesHome() {
     }
 
     fetchChallenges();
-  }, [setLoading, setError]); // Add setLoading and setError to the dependency array
+  }, [setLoading, setError]);
 
   return (
     <div>
@@ -64,7 +64,7 @@ function ChallengesHome() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {challenges.map((challenge) => (
-            <div key={challenge.id} className="flex flex-col">
+            <div key={challenge.challengeId} className="flex flex-col">
               <ChallengeHomeCard challenge={challenge} />
             </div>
           ))}
