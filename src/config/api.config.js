@@ -31,7 +31,7 @@ export const API_CONFIG = {
     CHALLENGES: {
       CREATE: '/api/challenges/create',
       GET_ALL: '/api/challenges/all',
-      GET_BY_ID: (id) => `/api/challenges/${id}`,
+      GET_BY_ID: (challengeId) => `/api/challenges/${challengeId}`,
     },
 
     //ProofSubmission endpoints

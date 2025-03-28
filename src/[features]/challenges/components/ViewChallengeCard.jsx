@@ -2,49 +2,50 @@ import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import CoinIcon from '../../../assets/icons/coin.svg';
 
-function ViewChallengeCard(props) {
-  const { challenge } = props;
+function ViewChallengeCard({ challenge }) {
   const navigate = useNavigate();
 
   const handleSubmit = () => {
-    navigate(`/challenges/submit/${challenge.id}`);
+    navigate(`/challenges/submit/${challenge.challengeId}`);
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white h-100">
+    <div className="w-auto h-auto max-w-3xl max-h-screen flex flex-col bg-white rounded-lg p-6 shadow-lg">
       {/* Image Placeholder */}
-      <div className="w-full h-48 bg-gray-300 rounded-lg">
+      <div className="w-full h-64 bg-gray-300 rounded-lg overflow-hidden">
         <img
           src={challenge.image}
-          alt={challenge.name}
-          className="w-full h-full object-cover rounded-lg"
+          alt={challenge.challengeName}
+          className="w-full h-full object-cover"
         />
       </div>
 
       {/* Challenge Name & Points */}
-      <div className="mt-7 text-text-gray flex justify-between items-center">
-        <h2 className="text-xl font-semibold">{challenge.name}</h2>
+      <div className="mt-6 flex justify-between items-center">
+        <h2 className="text-xl font-semibold text-gray-800">
+          {challenge.challengeName}
+        </h2>
         <div className="flex items-center">
-          <img src={CoinIcon} alt="coin" className="w-4 h-4 ml-2" />
-          <span className="ml-1 font-semibold text-text-gray">
+          <img src={CoinIcon} alt="coin" className="w-5 h-5 ml-2" />
+          <span className="ml-1 font-semibold text-gray-700">
             {challenge.points}
           </span>
         </div>
       </div>
 
       {/* Creator Information */}
-      <p className="text-gray-500 text-sm mt-5">Created by</p>
-      <p className="text-text-gray font-medium">{challenge.creator}</p>
+      <p className="text-gray-500 text-sm mt-3">Created by</p>
+      <p className="text-gray-700 font-medium">{challenge.creator}</p>
 
       {/* Description */}
-      <p className="text-text-gray mt-5 w-full text-sm">
+      <p className="text-gray-600 mt-4 text-sm leading-relaxed flex-grow">
         {challenge.description}
       </p>
 
       {/* Submit Button */}
       <button
         onClick={handleSubmit}
-        className="w-full mt-10 bg-primary-green text-white  py-2 rounded-lg hover:bg-green-600 transition"
+        className="w-full mt-6 bg-primary-green text-white py-3 rounded-lg hover:bg-green-600 transition"
       >
         Submit
       </button>
@@ -55,9 +56,9 @@ function ViewChallengeCard(props) {
 // PropTypes validation
 ViewChallengeCard.propTypes = {
   challenge: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    challengeId: PropTypes.number.isRequired,
     image: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
+    challengeName: PropTypes.string.isRequired,
     points: PropTypes.number.isRequired,
     creator: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,

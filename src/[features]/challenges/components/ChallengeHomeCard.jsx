@@ -7,16 +7,16 @@ export function ChallengeHomeCard({ challenge }) {
 
   return (
     <div
-      className="flex flex-col md:flex-row bg-bg-light rounded-lg p-5 h-full cursor-pointer hover:shadow-lg transition"
-      onClick={() => navigate(`/challenges/view/${challenge.id}`)}
+      className="flex flex-col md:flex-row bg-bg-light rounded-lg p-5 h-full cursor-pointer transition"
+      onClick={() => navigate(`/challenges/view/${challenge.challengeId}`)}
     >
       {/* Image section */}
       <div className="group w-full md:w-1/3 md:flex-shrink-0 mb-5 md:mb-0">
         <div className="h-48 md:h-full">
           <img
             src={challenge.image}
-            alt={challenge.name}
-            className="object-cover shadow-lg rounded-lg group-hover:opacity-75 w-full h-full"
+            alt={challenge.challengeName}
+            className="object-cover rounded-lg group-hover:opacity-75 w-full h-full"
           />
         </div>
       </div>
@@ -45,7 +45,7 @@ export function ChallengeHomeCard({ challenge }) {
           {/* Title and description */}
           <div className="mt-4">
             <h4 className="text-lg leading-6 font-medium text-text-gray group-hover:text-primary-green mb-2">
-              {challenge.name}
+              {challenge.challengeName}
             </h4>
             <p className="text-sm font-normal text-gray-600 leading-relaxed">
               {challenge.description}
@@ -59,7 +59,7 @@ export function ChallengeHomeCard({ challenge }) {
             className="text-primary-green hover:text-green-600"
             onClick={(e) => {
               e.stopPropagation(); // Prevent parent div click
-              navigate(`/challenges/view/${challenge.id}`);
+              navigate(`/challenges/view/${challenge.challengeId}`);
             }}
           >
             View Details →
@@ -72,9 +72,9 @@ export function ChallengeHomeCard({ challenge }) {
 
 ChallengeHomeCard.propTypes = {
   challenge: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    challengeId: PropTypes.number.isRequired,
     image: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
+    challengeName: PropTypes.string.isRequired,
     points: PropTypes.number.isRequired,
     description: PropTypes.string.isRequired,
     enrolled: PropTypes.number.isRequired,

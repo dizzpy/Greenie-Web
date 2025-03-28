@@ -155,7 +155,7 @@ function AppRoutes() {
           }
         />
         <Route
-          path="/challenges/view/:id"
+          path="/challenges/view/:challengeId"
           element={
             <ProtectedRoute>
               <ViewChallenge />
