@@ -15,7 +15,6 @@ function Feed() {
   const [error, setError] = useState(null);
   const [selectedPost, setSelectedPost] = useState(null);
 
-  // Fetch posts from the backend
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -32,7 +31,6 @@ function Feed() {
     fetchPosts();
   }, []);
 
-  // Handle new post addition dynamically
   const handleNewPost = (newPost) => {
     setPosts((prevPosts) => [newPost, ...prevPosts]);
   };
@@ -40,16 +38,16 @@ function Feed() {
   return (
     <div>
       <NavBar />
-      <div className="flex min-h-screen bg-gray-100">
+      <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100">
         {/* Left Sidebar */}
-        <div className="fixed left-0 w-64 h-screen mt-[73px]">
+        <div className="hidden lg:block lg:fixed lg:left-0 lg:w-64 lg:h-screen mt-[73px]">
           <SlideBar />
         </div>
 
-        {/* Main Content + Challenges */}
-        <div className="flex flex-1 justify-start px-6 py-4 ml-64 mt-[73px]">
-          {/* Main Feed Section */}
-          <div className="w-full max-w-2xl">
+        {/* Main Content */}
+        <div className="flex flex-col lg:flex-row flex-1 w-full lg:ml-[320px] mt-[73px] px-4 py-4">
+          {/* Feed Section */}
+          <div className="w-full lg:max-w-2xl mx-auto">
             <CreatePost onPostCreated={handleNewPost} />
 
             {loading ? (
@@ -75,8 +73,8 @@ function Feed() {
             )}
           </div>
 
-          {/* Right Sidebar: Challenges */}
-          <aside className="hidden lg:block w-96 ml-8">
+          {/* Right Sidebar */}
+          <aside className="hidden xl:block w-full xl:w-96 xl:ml-8 mt-8 xl:mt-0">
             <ChallengeList />
           </aside>
         </div>
