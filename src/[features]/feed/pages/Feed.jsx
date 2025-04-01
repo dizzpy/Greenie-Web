@@ -18,7 +18,7 @@ function Feed() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(`${API_CONFIG.BASE_URL}/api/posts`);
+        const response = await axios.get(API_CONFIG.ENDPOINTS.POSTS.GET_ALL);
         setPosts(response.data);
       } catch (err) {
         console.error('Error fetching posts:', err);
@@ -56,19 +56,24 @@ function Feed() {
               <p className="text-center text-red-500">{error}</p>
             ) : (
               <div className="mt-6 space-y-4">
-                {posts.length > 0 ? (
-                  posts.map((post) => (
-                    <Poster
-                      key={post.postId}
-                      {...post}
-                      onCommentClick={() => setSelectedPost(post)}
-                    />
-                  ))
-                ) : (
-                  <p className="text-center text-gray-500">
-                    No posts available.
-                  </p>
-                )}
+                {posts.map((post) => (
+                  <Poster
+                    key={post.postId}
+                    user={{
+                      name: post.userName || 'Unknown',
+                      username: post.username || 'anonymous',
+                      profileImage:
+                        post.userImage || 'https://via.placeholder.com/150', // fallback
+                    }}
+                    content={post.content}
+                    image={
+                      post.image ? `data:image/jpeg;base64,${post.image}` : null
+                    }
+                    likes={post.likes}
+                    comments={post.comments || []}
+                    onCommentClick={() => setSelectedPost(post)}
+                  />
+                ))}
               </div>
             )}
           </div>
