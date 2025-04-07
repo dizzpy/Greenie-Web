@@ -57,7 +57,7 @@ const CreatePost = () => {
     }
 
     const formData = new FormData();
-    formData.append('description', postContent);
+    formData.append('content', postContent);
     formData.append('userId', loggedInUserId);
     if (image) {
       formData.append('image', image);
@@ -87,7 +87,7 @@ const CreatePost = () => {
         },
       );
 
-      if (response.status === 201) {
+      if (response.status === 200 || response.status === 201) {
         setSuccessMessage('Post created successfully!');
         setErrorMessage('');
         setPostContent('');
