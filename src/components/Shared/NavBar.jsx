@@ -14,7 +14,8 @@ import {
 import logo from '../../assets/icons/greenlogo.svg';
 import { useAuth } from '../../context/AuthContext';
 
-const NavBar = () => {
+// eslint-disable-next-line react/prop-types
+const NavBar = ({ miditem = true }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -35,7 +36,6 @@ const NavBar = () => {
     setIsProfileOpen(false);
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -57,22 +57,24 @@ const NavBar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map(({ icon: Icon, path, label }) => (
-              <Link
-                key={path}
-                to={path}
-                className={`flex items-center space-x-2 transition-colors ${
-                  isActive(path)
-                    ? 'text-primary-green'
-                    : 'text-gray-600 hover:text-primary-green'
-                }`}
-              >
-                <Icon size={24} />
-                <span className="font-medium">{label}</span>
-              </Link>
-            ))}
-          </div>
+          {miditem && (
+            <div className="hidden md:flex items-center space-x-8">
+              {navItems.map(({ icon: Icon, path, label }) => (
+                <Link
+                  key={path}
+                  to={path}
+                  className={`flex items-center space-x-2 transition-colors ${
+                    isActive(path)
+                      ? 'text-primary-green'
+                      : 'text-gray-600 hover:text-primary-green'
+                  }`}
+                >
+                  <Icon size={24} />
+                  <span className="font-medium">{label}</span>
+                </Link>
+              ))}
+            </div>
+          )}
 
           {/* Right Section */}
           <div className="flex items-center space-x-6">
@@ -83,7 +85,7 @@ const NavBar = () => {
               </span>
             </button>
 
-            {/* Profile Section with Dropdown */}
+            {/* Profile Section */}
             <div className="hidden md:block relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
@@ -104,7 +106,6 @@ const NavBar = () => {
                     : 'opacity-0 translate-y-2 pointer-events-none'
                 }`}
               >
-                {/* User Info Section */}
                 <div className="px-4 py-3 border-b border-gray-100">
                   <p className="text-sm font-semibold text-gray-800">
                     {user?.name || 'User'}
@@ -115,7 +116,6 @@ const NavBar = () => {
                   </p>
                 </div>
 
-                {/* Menu Items */}
                 <div className="py-2">
                   <Link
                     to="/p"
@@ -126,10 +126,7 @@ const NavBar = () => {
                     <span>View Profile</span>
                   </Link>
                   <button
-                    onClick={() => {
-                      handleLogout();
-                      setIsProfileOpen(false);
-                    }}
+                    onClick={handleLogout}
                     className="flex items-center w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
                   >
                     <LogOut size={16} className="mr-2" />
@@ -152,25 +149,27 @@ const NavBar = () => {
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
           <div className="md:hidden pt-4 pb-3 border-t mt-3">
-            <div className="flex flex-col space-y-4">
-              {navItems.map(({ icon: Icon, path, label }) => (
-                <Link
-                  key={path}
-                  to={path}
-                  className={`flex items-center space-x-3 p-2 rounded-lg ${
-                    isActive(path)
-                      ? 'text-primary-green bg-green-50'
-                      : 'text-gray-600 hover:text-primary-green hover:bg-gray-50'
-                  }`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <Icon size={20} />
-                  <span>{label}</span>
-                </Link>
-              ))}
-            </div>
+            {miditem && (
+              <div className="flex flex-col space-y-4">
+                {navItems.map(({ icon: Icon, path, label }) => (
+                  <Link
+                    key={path}
+                    to={path}
+                    className={`flex items-center space-x-3 p-2 rounded-lg ${
+                      isActive(path)
+                        ? 'text-primary-green bg-green-50'
+                        : 'text-gray-600 hover:text-primary-green hover:bg-gray-50'
+                    }`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Icon size={20} />
+                    <span>{label}</span>
+                  </Link>
+                ))}
+              </div>
+            )}
 
-            {/* Add Profile and Logout to mobile menu */}
+            {/* Profile and Logout in Mobile */}
             <div className="border-t mt-4 pt-4">
               <Link
                 to="/p"
