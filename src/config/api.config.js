@@ -7,7 +7,7 @@ export const API_CONFIG = {
 
     // Feed Post endpoints
     POSTS: {
-      CREATE: '/api/posts/create', // ✅ Corrected route
+      CREATE: '/api/posts/create',
       GET_ALL: '/api/posts/all',
     },
 
@@ -34,8 +34,12 @@ export const API_CONFIG = {
       GET_BY_ID: (challengeId) => `/api/challenges/${challengeId}`,
     },
 
-    //ProofSubmission endpoints
-    Submit: '/api/proof/submit',
+    // Proof Submission endpoint
+    PROOF: {
+      SUBMIT: '/api/proof/submit',
+      GET_ALL: '/api/proof/all',
+      GET_BY_ID: (id) => `/api/proof/${id}`,
+    },
   },
 };
 
