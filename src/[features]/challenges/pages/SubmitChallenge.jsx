@@ -44,13 +44,16 @@ function SubmitChallenge() {
       };
 
       try {
-        const response = await fetch(API_CONFIG.ENDPOINTS.Submit, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+        const response = await fetch(
+          `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROOF.SUBMIT}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
           },
-          body: JSON.stringify(formData),
-        });
+        );
 
         if (!response.ok) {
           throw new Error('Failed to submit proof');
