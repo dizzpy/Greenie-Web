@@ -163,7 +163,7 @@ function AppRoutes() {
           }
         />
         <Route
-          path="/challenges/submit/:id"
+          path="/challenges/submit/:challengeId"
           element={
             <ProtectedRoute>
               <SubmitChallenge />
