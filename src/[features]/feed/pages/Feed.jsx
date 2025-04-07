@@ -37,7 +37,7 @@ function Feed() {
 
   return (
     <div>
-      <NavBar />
+      <NavBar miditem={false} />
       <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100">
         {/* Left Sidebar */}
         <div className="hidden lg:block lg:fixed lg:left-0 lg:w-64 lg:h-screen mt-[73px]">
