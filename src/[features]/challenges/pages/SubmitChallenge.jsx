@@ -1,15 +1,40 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import NavBar from '../../../components/Shared/NavBar';
 import { ImageUp } from 'lucide-react';
 import { API_CONFIG } from '../../../config/api.config';
+import { useAuth } from '../../../context/AuthContext';
 
 function SubmitChallenge() {
+  const { challengeId } = useParams();
+  const { user } = useAuth();
+
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [challengeName, setChallengeName] = useState('');
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState('');
+  const [aiMessage, setAiMessage] = useState('');
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    if (!challengeId) return;
+
+    async function fetchChallengeName() {
+      try {
+        const res = await fetch(
+          `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CHALLENGES.GET_BY_ID(challengeId)}`,
+        );
+        const data = await res.json();
+        setChallengeName(data.challengeName || '');
+      } catch (err) {
+        console.error('Failed to fetch challenge name:', err);
+      }
+    }
+
+    fetchChallengeName();
+  }, [challengeId]);
 
   function handleImageUpload(event) {
     const file = event.target.files[0];
@@ -24,50 +49,72 @@ function SubmitChallenge() {
   }
 
   async function handleSubmit() {
-    if (!description || !image) {
+    if (
+      !description ||
+      !image ||
+      !challengeId ||
+      !challengeName ||
+      !user?.id ||
+      !user?.username
+    ) {
       alert('Please fill in all fields');
       return;
     }
 
     setLoading(true);
-    setMessage('');
+    setStatus('');
+    setAiMessage('');
 
-    // Convert image to Base64
     const reader = new FileReader();
     reader.readAsDataURL(image);
     reader.onload = async () => {
       const base64Image = reader.result;
 
       const formData = {
+        challengeID: challengeId,
+        challengeName,
+        userId: user.id,
+        username: user.username,
         description,
-        imageUrl: base64Image, // Sending image as Base64 URL
+        imageUrl: base64Image,
       };
 
       try {
-        const response = await fetch(API_CONFIG.ENDPOINTS.Submit, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+        const response = await fetch(
+          `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROOF.SUBMIT}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
           },
-          body: JSON.stringify(formData),
-        });
+        );
 
-        if (!response.ok) {
-          throw new Error('Failed to submit proof');
-        }
+        if (!response.ok) throw new Error('Failed to submit proof');
 
         const data = await response.json();
-        setMessage(`Submission Successful! Status: ${data.status}`);
+        setStatus(data.status);
+        setAiMessage(data.aiResponse);
+
         setDescription('');
         setImage(null);
         setPreview(null);
       } catch (error) {
-        setMessage('Error: ' + error.message);
+        setStatus('Error');
+        setAiMessage(error.message);
       } finally {
         setLoading(false);
       }
     };
   }
+
+  const messageColor =
+    status === 'Verified'
+      ? 'bg-green-100 text-green-700 border-green-400'
+      : status === 'Issue'
+        ? 'bg-red-100 text-red-700 border-red-400'
+        : '';
 
   return (
     <div>
@@ -77,11 +124,16 @@ function SubmitChallenge() {
           <button className="text-gray-600 flex text-lg items-center mb-4">
             <span className="mr-2">&larr;</span> Submit Challenge
           </button>
-          {message && (
-            <div className="p-3 mb-4 text-center bg-green-100 text-green-700 border border-green-400 rounded-lg">
-              {message}
+
+          {status && (
+            <div
+              className={`p-3 mb-4 text-center border rounded-lg ${messageColor}`}
+            >
+              <p className="font-semibold">Status: {status}</p>
+              <p>{aiMessage}</p>
             </div>
           )}
+
           <div className="mb-4 mt-4">
             <label className="block text-gray-700 font-medium mb-2">
               Description <span className="text-red-500">*</span>
@@ -94,6 +146,7 @@ function SubmitChallenge() {
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           </div>
+
           <div className="mb-4 mt-4">
             <label className="block text-gray-700 font-medium mb-2">
               Upload an image <span className="text-red-500">*</span>
@@ -124,11 +177,12 @@ function SubmitChallenge() {
               />
             </div>
           </div>
+
           <div className="flex justify-end">
             <button
               className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition disabled:bg-gray-400"
               onClick={handleSubmit}
-              disabled={loading}
+              disabled={loading || !challengeName}
             >
               {loading ? 'Submitting...' : 'Submit'}
             </button>
