@@ -163,13 +163,24 @@ function AppRoutes() {
           }
         />
         <Route
-          path="/challenges/submit/:id"
+          path="/challenges/submit/:challengeId"
           element={
             <ProtectedRoute>
               <SubmitChallenge />
             </ProtectedRoute>
           }
         />
+
+        {/* Matheesha part try to fix */}
+        <Route
+          path="/challenges/add"
+          element={
+            <ProtectedRoute>
+              <AddChallenge />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/leaderboard"
           element={
