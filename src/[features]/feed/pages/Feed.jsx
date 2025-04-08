@@ -37,7 +37,7 @@ function Feed() {
 
   return (
     <div>
-      <NavBar />
+      <NavBar miditem={false} />
       <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100">
         {/* Left Sidebar */}
         <div className="hidden lg:block lg:fixed lg:left-0 lg:w-64 lg:h-screen mt-[73px]">
@@ -59,12 +59,8 @@ function Feed() {
                 {posts.map((post) => (
                   <Poster
                     key={post.postId}
-                    user={{
-                      name: post.userName || 'Unknown',
-                      username: post.username || 'anonymous',
-                      profileImage:
-                        post.userImage || 'https://via.placeholder.com/150', // fallback
-                    }}
+                    postId={post.postId} // ✅ FIXED: pass postId for like/unlike
+                    userId={post.userId}
                     content={post.content}
                     image={
                       post.image ? `data:image/jpeg;base64,${post.image}` : null
