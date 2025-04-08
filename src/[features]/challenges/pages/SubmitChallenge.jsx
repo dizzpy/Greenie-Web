@@ -4,6 +4,7 @@ import NavBar from '../../../components/Shared/NavBar';
 import { ImageUp } from 'lucide-react';
 import { API_CONFIG } from '../../../config/api.config';
 import { useAuth } from '../../../context/AuthContext';
+import { toast } from 'react-toastify';
 
 function SubmitChallenge() {
   const { challengeId } = useParams();
@@ -36,19 +37,19 @@ function SubmitChallenge() {
     fetchChallengeName();
   }, [challengeId]);
 
-  function handleImageUpload(event) {
+  const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
       setImage(file);
       setPreview(URL.createObjectURL(file));
     }
-  }
+  };
 
-  function handleUploadClick() {
+  const handleUploadClick = () => {
     fileInputRef.current.click();
-  }
+  };
 
-  async function handleSubmit() {
+  const handleSubmit = () => {
     if (
       !description ||
       !image ||
@@ -57,7 +58,7 @@ function SubmitChallenge() {
       !user?.id ||
       !user?.username
     ) {
-      alert('Please fill in all fields');
+      toast.error('❌ Please fill in all fields');
       return;
     }
 
@@ -84,9 +85,7 @@ function SubmitChallenge() {
           `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROOF.SUBMIT}`,
           {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData),
           },
         );
@@ -97,17 +96,24 @@ function SubmitChallenge() {
         setStatus(data.status);
         setAiMessage(data.aiResponse);
 
+        if (data.status === 'Verified') {
+          toast.success('✅ Proof Verified! Your post has been published.');
+        } else {
+          toast.warning('⚠️ Issue detected. Please review AI feedback.');
+        }
+
         setDescription('');
         setImage(null);
         setPreview(null);
       } catch (error) {
         setStatus('Error');
         setAiMessage(error.message);
+        toast.error('❌ Submission failed. Try again.');
       } finally {
         setLoading(false);
       }
     };
-  }
+  };
 
   const messageColor =
     status === 'Verified'
