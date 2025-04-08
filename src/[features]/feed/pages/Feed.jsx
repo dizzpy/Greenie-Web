@@ -59,13 +59,21 @@ function Feed() {
                 {posts.map((post) => (
                   <Poster
                     key={post.postId}
-                    postId={post.postId} // ✅ FIXED: pass postId for like/unlike
-                    userId={post.userId}
-                    content={post.content}
+                    user={{
+                      name: post.fullName || post.username || 'Unknown',
+                      username: post.username || 'anonymous',
+                      profileImage:
+                        post.profileImage || 'https://via.placeholder.com/150', // ✅ fixed typo
+                    }}
+                    content={post.description || post.content || ''}
                     image={
-                      post.image ? `data:image/jpeg;base64,${post.image}` : null
+                      post.image?.startsWith('data:image') // avoid double data:image prefix
+                        ? post.image
+                        : post.image
+                          ? `data:image/jpeg;base64,${post.image}`
+                          : null
                     }
-                    likes={post.likes}
+                    likes={post.likes || 0}
                     comments={post.comments || []}
                     onCommentClick={() => setSelectedPost(post)}
                   />
