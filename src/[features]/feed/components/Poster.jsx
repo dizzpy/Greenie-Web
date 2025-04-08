@@ -1,3 +1,4 @@
+// ✅ Poster.jsx
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
@@ -24,7 +25,6 @@ const Poster = ({
     profileImage: 'https://via.placeholder.com/150',
   });
 
-  // ✅ Load like status from localStorage
   useEffect(() => {
     const likedPosts = JSON.parse(localStorage.getItem('likedPosts')) || [];
     if (likedPosts.includes(postId)) {
@@ -32,7 +32,6 @@ const Poster = ({
     }
   }, [postId]);
 
-  // ✅ Fetch user
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -53,25 +52,19 @@ const Poster = ({
     fetchUser();
   }, [userId]);
 
-  // ✅ Handle Like/Unlike Toggle
   const handleLike = async () => {
     const likedPosts = JSON.parse(localStorage.getItem('likedPosts')) || [];
-
     try {
       if (liked) {
-        // UNLIKE
         await axios.put(`${API_CONFIG.BASE_URL}/api/posts/${postId}/unlike`);
         setLikes((prev) => Math.max(prev - 1, 0));
         setLiked(false);
-
         const updated = likedPosts.filter((id) => id !== postId);
         localStorage.setItem('likedPosts', JSON.stringify(updated));
       } else {
-        // LIKE
         await axios.put(`${API_CONFIG.BASE_URL}/api/posts/${postId}/like`);
         setLikes((prev) => prev + 1);
         setLiked(true);
-
         localStorage.setItem(
           'likedPosts',
           JSON.stringify([...likedPosts, postId]),
@@ -87,7 +80,6 @@ const Poster = ({
 
   return (
     <div className="bg-white p-4 rounded-2xl shadow-md w-full max-w-2xl mt-4 mx-auto">
-      {/* User Info */}
       <div className="flex items-center gap-3">
         <img
           src={user.profileImage}
@@ -100,10 +92,8 @@ const Poster = ({
         </div>
       </div>
 
-      {/* Content */}
       <p className="mt-3 text-text-gray font-sans">{content}</p>
 
-      {/* Image */}
       {image && (
         <div className="mt-3">
           <img
@@ -114,12 +104,9 @@ const Poster = ({
         </div>
       )}
 
-      {/* Likes & Comments */}
       <div className="flex justify-between items-center mt-3 text-sm">
         <div
-          className={`flex items-center gap-1 cursor-pointer ${
-            liked ? 'text-red-600' : 'text-lightred'
-          }`}
+          className={`flex items-center gap-1 cursor-pointer ${liked ? 'text-red-600' : 'text-lightred'}`}
           onClick={handleLike}
         >
           <Heart
@@ -141,9 +128,10 @@ const Poster = ({
         </div>
       </div>
 
-      {/* Comment Popup */}
       {showComments && (
         <CommentPopup
+          postId={postId}
+          userId={userId}
           comments={comments}
           onClose={() => setShowComments(false)}
         />
