@@ -170,6 +170,19 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
+
+        {/* Matheesha part try to fix */}
+        <Route
+          path="/challenges/add"
+          element={
+            <ProtectedRoute>
+              <AddChallenge />
+            </ProtectedRoute>
+          }
+        />
+
+
+
         <Route
           path="/leaderboard"
           element={
