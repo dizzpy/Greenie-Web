@@ -9,6 +9,19 @@ export const API_CONFIG = {
     POSTS: {
       CREATE: '/api/posts/create',
       GET_ALL: '/api/posts/all',
+      USER_DETAILS: '/api/posts/user-details', // getting user details
+      LIKE: (postId) => `/api/posts/${postId}/like`, // ✅ like post
+      UNLIKE: (postId) => `/api/posts/${postId}/unlike`, // ✅ unlike post
+      GET_LIKES: (postId) => `/api/posts/${postId}/likes/all`, // ✅ get like count
+
+      // 👇 Comment-related endpoints
+      COMMENTS: {
+        CREATE: (postId) => `/api/posts/${postId}/comments/create`,
+        GET_ALL: (postId) => `/api/posts/${postId}/comments/all`,
+        DELETE: (postId, commentId) =>
+          `/api/posts/${postId}/${commentId}/comments/delete`,
+        COUNT: (postId) => `/api/posts/${postId}/comments/count`,
+      },
     },
 
     // Shop endpoints

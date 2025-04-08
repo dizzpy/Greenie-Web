@@ -59,12 +59,8 @@ function Feed() {
                 {posts.map((post) => (
                   <Poster
                     key={post.postId}
-                    user={{
-                      name: post.userName || 'Unknown',
-                      username: post.username || 'anonymous',
-                      profileImage:
-                        post.userImage || 'https://via.placeholder.com/150', // fallback
-                    }}
+                    postId={post.postId} // ✅ FIXED: pass postId for like/unlike
+                    userId={post.userId}
                     content={post.content}
                     image={
                       post.image ? `data:image/jpeg;base64,${post.image}` : null

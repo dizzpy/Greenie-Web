@@ -48,7 +48,7 @@ function AddChallenge() {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`, // ✅ Attach token
           },
-        }
+        },
       );
 
       if (response.status === 200 || response.status === 201) {
@@ -69,7 +69,6 @@ function AddChallenge() {
       console.error('Error:', err);
     }
   }
-
 
   return (
     <div>

@@ -181,8 +181,6 @@ function AppRoutes() {
           }
         />
 
-
-
         <Route
           path="/leaderboard"
           element={
