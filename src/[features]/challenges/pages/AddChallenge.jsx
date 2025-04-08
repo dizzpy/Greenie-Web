@@ -33,6 +33,8 @@ function AddChallenge() {
     setMessage('');
 
     try {
+      const token = localStorage.getItem('token'); // ✅ Get JWT token from localStorage
+
       const response = await axios.post(
         API_CONFIG.ENDPOINTS.CHALLENGES.CREATE,
         {
@@ -42,8 +44,11 @@ function AddChallenge() {
           photoUrl: formData.photoUrl,
         },
         {
-          headers: { 'Content-Type': 'application/json' },
-        },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`, // ✅ Attach token
+          },
+        }
       );
 
       if (response.status === 200 || response.status === 201) {
@@ -64,6 +69,7 @@ function AddChallenge() {
       console.error('Error:', err);
     }
   }
+
 
   return (
     <div>
