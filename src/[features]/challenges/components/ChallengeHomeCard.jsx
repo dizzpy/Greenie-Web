@@ -14,7 +14,7 @@ export function ChallengeHomeCard({ challenge }) {
       <div className="group w-full md:w-1/3 md:flex-shrink-0 mb-5 md:mb-0">
         <div className="h-48 md:h-full">
           <img
-            src={challenge.image}
+            src={challenge.photoUrl}
             alt={challenge.challengeName}
             className="object-cover rounded-lg group-hover:opacity-75 w-full h-full"
           />
@@ -73,7 +73,7 @@ export function ChallengeHomeCard({ challenge }) {
 ChallengeHomeCard.propTypes = {
   challenge: PropTypes.shape({
     challengeId: PropTypes.number.isRequired,
-    image: PropTypes.string.isRequired,
+    photoUrl: PropTypes.string.isRequired,
     challengeName: PropTypes.string.isRequired,
     points: PropTypes.number.isRequired,
     description: PropTypes.string.isRequired,

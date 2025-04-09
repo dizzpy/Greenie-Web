@@ -14,7 +14,7 @@ function ViewChallengeCard({ challenge }) {
       {/* Image Placeholder */}
       <div className="w-full h-64 bg-gray-300 rounded-lg overflow-hidden">
         <img
-          src={challenge.image}
+          src={challenge.photoUrl}
           alt={challenge.challengeName}
           className="w-full h-full object-cover"
         />
@@ -57,7 +57,7 @@ function ViewChallengeCard({ challenge }) {
 ViewChallengeCard.propTypes = {
   challenge: PropTypes.shape({
     challengeId: PropTypes.number.isRequired,
-    image: PropTypes.string.isRequired,
+    photoUrl: PropTypes.string.isRequired,
     challengeName: PropTypes.string.isRequired,
     points: PropTypes.number.isRequired,
     creator: PropTypes.string.isRequired,
