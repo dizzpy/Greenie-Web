@@ -19,6 +19,7 @@ import Register from './[features]/auth/pages/CreateAccount';
 import ForgotPassword from './[features]/auth/pages/ForgotPassword';
 import SetNewPassword from './[features]/auth/pages/SetNewPassword';
 import ProfilePage from './[features]/auth/pages/ProfilePage';
+import EditProfile from './[features]/auth/pages/EditProfile';
 import LeaderboardHome from './[features]/leaderboard/pages/LeaderboardHome';
 import CartSidebar from './[features]/shop/components/CartSidebar';
 import Notification from './components/Shop/Notification';
@@ -198,10 +199,18 @@ function AppRoutes() {
           }
         />
         <Route
-          path="/p"
+          path="/profile"
           element={
             <ProtectedRoute>
               <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-profile"
+          element={
+            <ProtectedRoute>
+              <EditProfile />
             </ProtectedRoute>
           }
         />
