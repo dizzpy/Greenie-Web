@@ -5,10 +5,14 @@ import CoinIcon from '../../../assets/icons/coin.svg';
 import ChallengeHomeCard from '../components/ChallengeHomeCard';
 import NavBar from '../../../components/Shared/NavBar';
 import { API_CONFIG } from '../../../config/api.config';
+import { useAuth } from '../../../context/AuthContext';
 
 function ChallengesHome() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
   const [challenges, setChallenges] = useState([]);
+  const [userPoints, setUserPoints] = useState(0);
   const [setLoading] = useState(true);
   const [setError] = useState(null);
 
@@ -27,8 +31,21 @@ function ChallengesHome() {
       }
     }
 
+    async function fetchUserPoints() {
+      if (!user?.id) return;
+      try {
+        const response = await axios.get(
+          `${API_CONFIG.BASE_URL}/api/users/${user.id}/points`,
+        );
+        setUserPoints(response.data?.points || 0);
+      } catch (err) {
+        console.error('Error fetching user points:', err);
+      }
+    }
+
     fetchChallenges();
-  }, [setLoading, setError]);
+    fetchUserPoints();
+  }, [user]);
 
   return (
     <div>
@@ -49,7 +66,9 @@ function ChallengesHome() {
               <span className="text-gray-600">Current Points</span>
               <div className="flex items-center gap-1.5 ml-3">
                 <img src={CoinIcon} alt="coin" className="w-5 h-5" />
-                <span className="font-bold text-base tabular-nums">1,234</span>
+                <span className="font-bold text-base tabular-nums">
+                  {userPoints}
+                </span>
               </div>
             </div>
 
