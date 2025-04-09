@@ -19,7 +19,13 @@ function Feed() {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(API_CONFIG.ENDPOINTS.POSTS.GET_ALL);
-        setPosts(response.data);
+
+        // ✅ Sort posts newest to oldest by timestamp
+        const sortedPosts = [...response.data].sort(
+          (a, b) => new Date(b.timestamp) - new Date(a.timestamp),
+        );
+
+        setPosts(sortedPosts);
       } catch (err) {
         console.error('Error fetching posts:', err);
         setError('Failed to load posts.');
@@ -32,7 +38,7 @@ function Feed() {
   }, []);
 
   const handleNewPost = (newPost) => {
-    setPosts((prevPosts) => [newPost, ...prevPosts]);
+    setPosts((prevPosts) => [newPost, ...prevPosts]); // new on top
   };
 
   return (
@@ -60,7 +66,7 @@ function Feed() {
                   <Poster
                     key={post.postId}
                     postId={post.postId}
-                    userId={post.userId} // ✅ Pass userId instead of entire user object
+                    userId={post.userId}
                     content={post.description || post.content || ''}
                     image={
                       post.image?.startsWith('data:image')
