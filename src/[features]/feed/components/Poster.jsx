@@ -1,3 +1,4 @@
+// ✅ Poster.jsx
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
@@ -11,14 +12,14 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(initialLikes || 0);
   const [comments, setComments] = useState([]);
+  const [commentCount, setCommentCount] = useState(0);
+  const [commentsLoading, setCommentsLoading] = useState(false);
 
   const [user, setUser] = useState({
     name: 'Unknown',
     username: 'anonymous',
     profileImage: 'https://via.placeholder.com/150',
   });
-
-  const [commentsLoading, setCommentsLoading] = useState(false);
 
   // Scroll lock for modal
   useEffect(() => {
@@ -27,7 +28,6 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
     } else {
       document.body.classList.remove('modal-open');
     }
-
     return () => {
       document.body.classList.remove('modal-open');
     };
@@ -51,7 +51,7 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
         const userData = response.data;
         setUser({
           name: userData.fullName?.trim() || 'Unknown',
-          username: userData.username?.trim() || 'anonymous',
+          username: userData.username?.trim() || 'username',
           profileImage:
             userData.profileImage || 'https://via.placeholder.com/150',
         });
@@ -108,9 +108,24 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
     }
   };
 
+  // Fetch comment count
+  useEffect(() => {
+    const fetchCommentCount = async () => {
+      try {
+        const response = await axios.get(
+          `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.POSTS.COMMENTS.COUNT(postId)}`,
+        );
+        setCommentCount(response.data);
+      } catch (err) {
+        console.error('Failed to fetch comment count:', err);
+      }
+    };
+
+    fetchCommentCount();
+  }, [postId]);
+
   return (
     <div className="bg-white p-4 rounded-2xl shadow-md w-full max-w-2xl mt-4 mx-auto">
-      {/* User Info */}
       <div className="flex items-center gap-3">
         <img
           src={user.profileImage}
@@ -123,10 +138,8 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
         </div>
       </div>
 
-      {/* Content */}
       <p className="mt-3 text-text-gray font-sans">{content}</p>
 
-      {/* Image */}
       {image && (
         <div className="mt-3">
           <img
@@ -137,7 +150,6 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
         </div>
       )}
 
-      {/* Likes & Comments */}
       <div className="flex justify-between items-center mt-3 text-sm">
         <div
           className={`flex items-center gap-1 cursor-pointer ${liked ? 'text-red-600' : 'text-lightred'}`}
@@ -154,20 +166,22 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
           onClick={handleOpenComments}
         >
           <MessageCircle className="text-primary-green" size={18} />
-          <span className="text-text-gray">{comments.length} Comments</span>
+          <span className="text-text-gray">
+            {commentCount} {commentCount === 1 ? 'Comment' : 'Comments'}
+          </span>
         </div>
       </div>
 
-      {/* Comment Popup */}
       {showComments && (
         <CommentPopup
           postId={postId}
           userId={userId}
           comments={comments}
           onClose={() => setShowComments(false)}
-          onCommentAdded={(newComment) =>
-            setComments((prev) => [...prev, newComment])
-          }
+          onCommentAdded={(newComment) => {
+            setComments((prev) => [...prev, newComment]);
+            setCommentCount((prev) => prev + 1);
+          }}
         />
       )}
     </div>
