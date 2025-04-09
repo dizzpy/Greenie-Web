@@ -20,11 +20,11 @@ const CommentPopup = ({
     try {
       const response = await axios.post(
         API_CONFIG.POSTS.COMMENTS.CREATE(postId),
-        newComment, // comment as plain text
+        newComment,
         {
           headers: {
             'Content-Type': 'text/plain',
-            userId, // must match the header expected by Spring Boot
+            userId: userId,
           },
         },
       );
@@ -40,7 +40,7 @@ const CommentPopup = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white rounded-2xl p-4 w-full max-w-lg shadow-lg relative">
+      <div className="bg-white rounded-2xl p-4 w-full max-w-lg shadow-lg relative max-h-[90vh] overflow-hidden">
         <button
           className="absolute top-2 right-2 text-gray-500 hover:text-red-500"
           onClick={onClose}
@@ -55,21 +55,32 @@ const CommentPopup = ({
             comments.map((comment, index) => (
               <div key={index} className="p-3 border-b flex items-start gap-3">
                 <img
-                  src={comment.profileImage}
+                  src={
+                    comment.user?.profileImage ||
+                    'https://via.placeholder.com/150'
+                  }
                   alt="User Profile"
                   className="w-10 h-10 rounded-full object-cover"
                 />
-                <div>
+                <div className="flex-1">
                   <div className="flex items-center justify-between">
-                    <p className="font-medium">{comment.user}</p>
-                    <p className="text-xs text-gray-400">{comment.time}</p>
+                    <p className="font-medium">
+                      {comment.user?.fullName || 'Unknown'}
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      {comment.timestamp
+                        ? new Date(comment.timestamp).toLocaleString()
+                        : ''}
+                    </p>
                   </div>
-                  <p className="text-sm text-gray-600">{comment.text}</p>
+                  <p className="text-sm text-gray-600">{comment.comment}</p>
                 </div>
               </div>
             ))
           ) : (
-            <p className="text-gray-500">No comments yet.</p>
+            <p className="text-gray-500 text-sm text-center py-4">
+              No comments yet.
+            </p>
           )}
         </div>
 
