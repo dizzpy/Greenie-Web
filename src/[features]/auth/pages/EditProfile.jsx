@@ -7,9 +7,9 @@ const EditProfile = () => {
   const initialUser = {
     firstName: 'Anuja',
     lastName: 'Rathnayake',
-    username: '@Dizzpy',
+    username: '@dizzpy',
     email: 'admin@dizzpy.dev',
-    bio: 'I code bugs for living :).',
+    bio: 'No bio provided..',
     profileImage: 'https://avatars.githubusercontent.com/u/28524634?v=4',
   };
 
