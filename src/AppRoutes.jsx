@@ -199,7 +199,7 @@ function AppRoutes() {
           }
         />
         <Route
-          path="/p"
+          path="/profile"
           element={
             <ProtectedRoute>
               <ProfilePage />
@@ -207,7 +207,7 @@ function AppRoutes() {
           }
         />
         <Route
-          path="/ep"
+          path="/edit-profile"
           element={
             <ProtectedRoute>
               <EditProfile />
