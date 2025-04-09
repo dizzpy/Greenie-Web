@@ -1,3 +1,4 @@
+// SubmitChallenge.jsx
 import { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import NavBar from '../../../components/Shared/NavBar';
@@ -14,6 +15,7 @@ function SubmitChallenge() {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [challengeName, setChallengeName] = useState('');
+  const [challengePoints, setChallengePoints] = useState(null);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState('');
   const [aiMessage, setAiMessage] = useState('');
@@ -29,6 +31,7 @@ function SubmitChallenge() {
         );
         const data = await res.json();
         setChallengeName(data.challengeName || '');
+        setChallengePoints(data.points || 0);
       } catch (err) {
         console.error('Failed to fetch challenge name:', err);
       }
@@ -97,9 +100,18 @@ function SubmitChallenge() {
         setAiMessage(data.aiResponse);
 
         if (data.status === 'Verified') {
-          toast.success('✅ Proof Verified! Your post has been published.');
+          toast.success(
+            <div className="flex flex-col">
+              <span className="text-green-700 font-semibold text-sm">
+                Challenge Verified!
+              </span>
+              <span className="text-gray-700 text-sm">
+                You&apos;ve earned <strong>+{challengePoints} XP</strong> 🎉
+              </span>
+            </div>,
+          );
         } else {
-          toast.warning('⚠️ Issue detected. Please review AI feedback.');
+          toast.warning('Issue detected. Please review AI feedback.');
         }
 
         setDescription('');
@@ -137,6 +149,11 @@ function SubmitChallenge() {
             >
               <p className="font-semibold">Status: {status}</p>
               <p>{aiMessage}</p>
+              {status === 'Verified' && challengePoints !== null && (
+                <p className="text-green-600 mt-2">
+                  🎉 You earned <strong>+{challengePoints} points</strong>!
+                </p>
+              )}
             </div>
           )}
 
