@@ -59,15 +59,11 @@ function Feed() {
                 {posts.map((post) => (
                   <Poster
                     key={post.postId}
-                    user={{
-                      name: post.fullName || post.username || 'Unknown',
-                      username: post.username || 'anonymous',
-                      profileImage:
-                        post.profileImage || 'https://via.placeholder.com/150', // ✅ fixed typo
-                    }}
+                    postId={post.postId}
+                    userId={post.userId} // ✅ Pass userId instead of entire user object
                     content={post.description || post.content || ''}
                     image={
-                      post.image?.startsWith('data:image') // avoid double data:image prefix
+                      post.image?.startsWith('data:image')
                         ? post.image
                         : post.image
                           ? `data:image/jpeg;base64,${post.image}`
