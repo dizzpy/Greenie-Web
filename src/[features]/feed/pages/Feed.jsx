@@ -8,6 +8,7 @@ import CommentPopup from '../components/CommentPopup';
 import ChallengeList from '../components/ChallengeList';
 import NavBar from '../../../components/Shared/NavBar';
 import { API_CONFIG } from '../../../config/api.config';
+import { useFeedSocket } from '../components/useFeedSocket'; // adjust path if needed
 
 function Feed() {
   const [posts, setPosts] = useState([]);
@@ -38,8 +39,10 @@ function Feed() {
   }, []);
 
   const handleNewPost = (newPost) => {
-    setPosts((prevPosts) => [newPost, ...prevPosts]); // new on top
+    setPosts((prevPosts) => [newPost, ...prevPosts]);
   };
+
+  useFeedSocket(handleNewPost); // real-time updates
 
   return (
     <div>

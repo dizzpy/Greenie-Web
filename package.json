@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@icons-pack/react-simple-icons": "^12.0.0",
+    "@stomp/stompjs": "^7.1.1",
     "@tailwindcss/vite": "^4.0.8",
     "axios": "^1.8.4",
     "greenie-frontend": "file:",
@@ -21,7 +22,8 @@
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",
     "react-router-dom": "^7.1.5",
-    "react-toastify": "^11.0.5"
+    "react-toastify": "^11.0.5",
+    "sockjs-client": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
