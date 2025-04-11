@@ -39,7 +39,11 @@ function Feed() {
   }, []);
 
   const handleNewPost = (newPost) => {
-    setPosts((prevPosts) => [newPost, ...prevPosts]);
+    setPosts((prevPosts) => {
+      const alreadyExists = prevPosts.some((p) => p.postId === newPost.postId);
+      if (alreadyExists) return prevPosts;
+      return [newPost, ...prevPosts];
+    });
   };
 
   useFeedSocket(handleNewPost); // real-time updates
