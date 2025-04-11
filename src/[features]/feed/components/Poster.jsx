@@ -1,9 +1,8 @@
-// ✅ Poster.jsx
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Heart, MessageCircle } from 'lucide-react';
+import { Heart, MessageCircle, Share2 } from 'lucide-react';
 import CommentPopup from './CommentPopup';
 import { API_CONFIG } from '../../../config/api.config';
 
@@ -14,6 +13,8 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
   const [comments, setComments] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
   const [commentsLoading, setCommentsLoading] = useState(false);
+  const [showSharePopup, setShowSharePopup] = useState(false);
+  const [copySuccess, setCopySuccess] = useState('');
 
   const [user, setUser] = useState({
     name: 'Unknown',
@@ -21,7 +22,6 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
     profileImage: 'https://via.placeholder.com/150',
   });
 
-  // Scroll lock for modal
   useEffect(() => {
     if (showComments) {
       document.body.classList.add('modal-open');
@@ -33,7 +33,6 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
     };
   }, [showComments]);
 
-  // Load like state
   useEffect(() => {
     const likedPosts = JSON.parse(localStorage.getItem('likedPosts')) || [];
     if (likedPosts.includes(postId)) {
@@ -41,7 +40,6 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
     }
   }, [postId]);
 
-  // Fetch user details
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -62,7 +60,6 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
     fetchUser();
   }, [userId]);
 
-  // Like/Unlike
   const handleLike = async () => {
     const likedPosts = JSON.parse(localStorage.getItem('likedPosts')) || [];
     try {
@@ -91,7 +88,6 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
     }
   };
 
-  // Fetch comments when opening popup
   const handleOpenComments = async () => {
     setShowComments(true);
     setCommentsLoading(true);
@@ -108,7 +104,6 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
     }
   };
 
-  // Fetch comment count
   useEffect(() => {
     const fetchCommentCount = async () => {
       try {
@@ -123,6 +118,18 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
 
     fetchCommentCount();
   }, [postId]);
+
+  const shareLink = `${window.location.origin}/posts/${postId}`;
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(shareLink);
+      setCopySuccess('Link copied to clipboard!');
+      setTimeout(() => setShowSharePopup(false), 1500);
+    } catch (err) {
+      setCopySuccess('Failed to copy link');
+    }
+  };
 
   return (
     <div className="bg-white p-4 rounded-2xl shadow-md w-full max-w-2xl mt-4 mx-auto">
@@ -161,14 +168,24 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
           </span>
         </div>
 
-        <div
-          className="flex items-center gap-1 text-primary-green cursor-pointer"
-          onClick={handleOpenComments}
-        >
-          <MessageCircle className="text-primary-green" size={18} />
-          <span className="text-text-gray">
-            {commentCount} {commentCount === 1 ? 'Comment' : 'Comments'}
-          </span>
+        <div className="flex items-center gap-3">
+          <div
+            className="flex items-center gap-1 text-primary-green cursor-pointer"
+            onClick={handleOpenComments}
+          >
+            <MessageCircle className="text-primary-green" size={18} />
+            <span className="text-text-gray">
+              {commentCount} {commentCount === 1 ? 'Comment' : 'Comments'}
+            </span>
+          </div>
+
+          <div
+            className="flex items-center gap-1 text-primary-green cursor-pointer"
+            onClick={() => setShowSharePopup((prev) => !prev)}
+          >
+            <Share2 size={18} />
+            <span className="text-sm text-text-gray">Share</span>
+          </div>
         </div>
       </div>
 
@@ -183,6 +200,31 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
             setCommentCount((prev) => prev + 1);
           }}
         />
+      )}
+
+      {showSharePopup && (
+        <div className="mt-4 p-4 bg-gray-100 rounded-xl border border-gray-300">
+          <p className="mb-2 font-semibold text-sm text-gray-800">
+            Share this post:
+          </p>
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              readOnly
+              value={shareLink}
+              className="flex-1 px-3 py-1 border rounded-md text-sm"
+            />
+            <button
+              onClick={handleCopy}
+              className="bg-primary-green text-white px-3 py-1 rounded-md hover:bg-green-700 text-sm"
+            >
+              Copy
+            </button>
+          </div>
+          {copySuccess && (
+            <p className="text-green-600 mt-2 text-xs">{copySuccess}</p>
+          )}
+        </div>
       )}
     </div>
   );

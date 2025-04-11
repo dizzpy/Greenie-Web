@@ -1,5 +1,7 @@
 export const API_CONFIG = {
   BASE_URL: 'http://localhost:8080',
+  SOCKET_URL: 'http://localhost:8080/ws-feed', // ✅ Add this
+
   ENDPOINTS: {
     // Auth endpoints
     LOGIN: '/api/auth/login',
