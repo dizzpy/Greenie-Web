@@ -15,6 +15,9 @@ export const API_CONFIG = {
       LIKE: (postId) => `/api/posts/${postId}/like`, // ✅ like post
       UNLIKE: (postId) => `/api/posts/${postId}/unlike`, // ✅ unlike post
       GET_LIKES: (postId) => `/api/posts/${postId}/likes/all`, // ✅ get like count
+      REACT: (postId) => `/api/posts/${postId}/react`,
+      GET_REACTIONS: (postId) => `/api/posts/${postId}/reactions`,
+      GET_LIKE_COUNT: (postId) => `/api/posts/${postId}/likes/count`,
 
       // 👇 Comment-related endpoints
       COMMENTS: {
