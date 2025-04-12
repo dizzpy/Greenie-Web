@@ -19,13 +19,20 @@ export const API_CONFIG = {
       GET_REACTIONS: (postId) => `/api/posts/${postId}/reactions`,
       GET_LIKE_COUNT: (postId) => `/api/posts/${postId}/likes/count`,
 
-      // 👇 Comment-related endpoints
+      //  Comment-related endpoints
       COMMENTS: {
         CREATE: (postId) => `/api/posts/${postId}/comments/create`,
         GET_ALL: (postId) => `/api/posts/${postId}/comments/all`,
         DELETE: (postId, commentId) =>
           `/api/posts/${postId}/${commentId}/comments/delete`,
         COUNT: (postId) => `/api/posts/${postId}/comments/count`,
+      },
+
+      // save post related endpoints
+      SAVED_POSTS: {
+        SAVE: '/api/saved-posts/save',
+        UNSAVE: '/api/saved-posts/unsave',
+        GET_USER_SAVED: (userId) => `/api/saved-posts/${userId}`,
       },
     },
 

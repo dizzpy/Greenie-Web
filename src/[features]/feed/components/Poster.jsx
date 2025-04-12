@@ -2,7 +2,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Heart, MessageCircle, Share2 } from 'lucide-react';
+import {
+  Heart,
+  MessageCircle,
+  Share2,
+  Bookmark,
+  BookmarkCheck,
+} from 'lucide-react';
 import CommentPopup from './CommentPopup';
 import { API_CONFIG } from '../../../config/api.config';
 
@@ -12,6 +18,7 @@ const Poster = ({ postId, userId, content, image }) => {
   const [likes, setLikes] = useState(0);
   const [reactions, setReactions] = useState({});
   const [myReaction, setMyReaction] = useState(null);
+  const [isSaved, setIsSaved] = useState(false);
   const [comments, setComments] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
   const [commentsLoading, setCommentsLoading] = useState(false);
@@ -121,6 +128,46 @@ const Poster = ({ postId, userId, content, image }) => {
     }
   };
 
+  // Save post end
+
+  const toggleSavePost = async () => {
+    const userId = localStorage.getItem('userId');
+    try {
+      if (isSaved) {
+        await axios.delete(API_CONFIG.ENDPOINTS.SAVED_POSTS.UNSAVE, {
+          data: { postId, userId },
+        });
+      } else {
+        await axios.post(API_CONFIG.ENDPOINTS.SAVED_POSTS.SAVE, {
+          postId,
+          userId,
+        });
+      }
+      setIsSaved(!isSaved);
+    } catch (error) {
+      console.error('Error toggling save post:', error);
+    }
+  };
+
+  useEffect(() => {
+    const checkIfSaved = async () => {
+      const userId = localStorage.getItem('userId');
+      try {
+        const response = await axios.get(
+          API_CONFIG.ENDPOINTS.SAVED_POSTS.GET_BY_USER(userId),
+        );
+        const savedIds = response.data;
+        setIsSaved(savedIds.includes(postId));
+      } catch (error) {
+        console.error('Error checking saved status:', error);
+      }
+    };
+
+    checkIfSaved();
+  }, [postId]);
+
+  // End save post
+
   const handleOpenComments = async () => {
     setShowComments(true);
     setCommentsLoading(true);
@@ -206,11 +253,7 @@ const Poster = ({ postId, userId, content, image }) => {
                 <button
                   key={emoji}
                   onClick={() => handleReact(emoji)}
-                  className={`text-xl transition-transform duration-200 ${
-                    myReaction === emoji
-                      ? 'scale-125 border border-primary-green rounded-full'
-                      : 'hover:scale-125'
-                  }`}
+                  className={`text-xl transition-transform duration-200 ${myReaction === emoji ? 'scale-125 border border-primary-green rounded-full' : 'hover:scale-125'}`}
                 >
                   {emoji}
                 </button>
@@ -236,6 +279,16 @@ const Poster = ({ postId, userId, content, image }) => {
           >
             <Share2 size={18} />
             <span className="text-sm text-text-gray">Share</span>
+          </div>
+
+          <div
+            className="flex items-center gap-1 text-primary-green cursor-pointer"
+            onClick={toggleSavePost}
+          >
+            {isSaved ? <BookmarkCheck size={18} /> : <Bookmark size={18} />}
+            <span className="text-sm text-text-gray">
+              {isSaved ? 'Saved' : 'Save'}
+            </span>
           </div>
         </div>
       </div>
