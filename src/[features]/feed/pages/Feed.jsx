@@ -8,7 +8,6 @@ import CommentPopup from '../components/CommentPopup';
 import ChallengeList from '../components/ChallengeList';
 import NavBar from '../../../components/Shared/NavBar';
 import { API_CONFIG } from '../../../config/api.config';
-import { useFeedSocket } from '../components/useFeedSocket'; // adjust path if needed
 
 function Feed() {
   const [posts, setPosts] = useState([]);
@@ -17,16 +16,21 @@ function Feed() {
   const [selectedPost, setSelectedPost] = useState(null);
 
   useEffect(() => {
+    let intervalId;
+
     const fetchPosts = async () => {
       try {
         const response = await axios.get(API_CONFIG.ENDPOINTS.POSTS.GET_ALL);
-
-        // ✅ Sort posts newest to oldest by timestamp
         const sortedPosts = [...response.data].sort(
           (a, b) => new Date(b.timestamp) - new Date(a.timestamp),
         );
-
-        setPosts(sortedPosts);
+        setPosts((prevPosts) => {
+          const latestPostId = prevPosts[0]?.postId;
+          const newPosts = sortedPosts.filter(
+            (post) => post.postId !== latestPostId,
+          );
+          return newPosts.length > 0 ? sortedPosts : prevPosts;
+        });
       } catch (err) {
         console.error('Error fetching posts:', err);
         setError('Failed to load posts.');
@@ -35,7 +39,10 @@ function Feed() {
       }
     };
 
-    fetchPosts();
+    fetchPosts(); // Initial fetch
+    intervalId = setInterval(fetchPosts, 2000); // Poll every 10 seconds
+
+    return () => clearInterval(intervalId); // Cleanup on unmount
   }, []);
 
   const handleNewPost = (newPost) => {
@@ -45,8 +52,6 @@ function Feed() {
       return [newPost, ...prevPosts];
     });
   };
-
-  useFeedSocket(handleNewPost); // real-time updates
 
   return (
     <div>
