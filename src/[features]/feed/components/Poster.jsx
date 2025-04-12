@@ -1,44 +1,32 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Heart, MessageCircle, Share2 } from 'lucide-react';
 import CommentPopup from './CommentPopup';
 import { API_CONFIG } from '../../../config/api.config';
 
-const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
+const Poster = ({ postId, userId, content, image }) => {
   const [showComments, setShowComments] = useState(false);
   const [liked, setLiked] = useState(false);
-  const [likes, setLikes] = useState(initialLikes || 0);
+  const [likes, setLikes] = useState(0);
+  const [reactions, setReactions] = useState({});
+  const [myReaction, setMyReaction] = useState(null);
   const [comments, setComments] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
   const [commentsLoading, setCommentsLoading] = useState(false);
   const [showSharePopup, setShowSharePopup] = useState(false);
   const [copySuccess, setCopySuccess] = useState('');
+  const [showReactionsPopup, setShowReactionsPopup] = useState(false);
+
+  const reactionRef = useRef(null);
+  const emojis = ['👍', '❤️', '😂', '😯', '😢', '😡'];
 
   const [user, setUser] = useState({
     name: 'Unknown',
     username: 'anonymous',
     profileImage: 'https://via.placeholder.com/150',
   });
-
-  useEffect(() => {
-    if (showComments) {
-      document.body.classList.add('modal-open');
-    } else {
-      document.body.classList.remove('modal-open');
-    }
-    return () => {
-      document.body.classList.remove('modal-open');
-    };
-  }, [showComments]);
-
-  useEffect(() => {
-    const likedPosts = JSON.parse(localStorage.getItem('likedPosts')) || [];
-    if (likedPosts.includes(postId)) {
-      setLiked(true);
-    }
-  }, [postId]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -60,31 +48,76 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
     fetchUser();
   }, [userId]);
 
-  const handleLike = async () => {
-    const likedPosts = JSON.parse(localStorage.getItem('likedPosts')) || [];
-    try {
-      if (liked) {
-        await axios.put(`${API_CONFIG.BASE_URL}/api/posts/${postId}/unlike`);
-        setLikes((prev) => Math.max(prev - 1, 0));
-        setLiked(false);
-        localStorage.setItem(
-          'likedPosts',
-          JSON.stringify(likedPosts.filter((id) => id !== postId)),
+  useEffect(() => {
+    const fetchReactions = async () => {
+      try {
+        const response = await axios.get(
+          API_CONFIG.ENDPOINTS.POSTS.GET_REACTIONS(postId),
         );
-      } else {
-        await axios.put(`${API_CONFIG.BASE_URL}/api/posts/${postId}/like`);
-        setLikes((prev) => prev + 1);
-        setLiked(true);
-        localStorage.setItem(
-          'likedPosts',
-          JSON.stringify([...likedPosts, postId]),
+        const allReactions = response.data || {};
+        setReactions(allReactions);
+
+        const totalLikes = Object.values(allReactions).reduce(
+          (sum, list) => sum + list.length,
+          0,
         );
+        setLikes(totalLikes);
+
+        const currentUserId = localStorage.getItem('userId');
+        for (const [emoji, list] of Object.entries(allReactions)) {
+          if (list.includes(currentUserId)) {
+            setLiked(true);
+            setMyReaction(emoji);
+            break;
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch reactions:', err);
       }
-    } catch (error) {
-      console.error(
-        'Like/unlike failed:',
-        error.response?.data || error.message,
+    };
+
+    fetchReactions();
+  }, [postId]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (reactionRef.current && !reactionRef.current.contains(event.target)) {
+        setShowReactionsPopup(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleReact = async (emoji) => {
+    const currentUserId = localStorage.getItem('userId');
+    try {
+      await axios.put(API_CONFIG.ENDPOINTS.POSTS.REACT(postId), {
+        emoji,
+        userId: currentUserId,
+      });
+
+      setReactions((prev) => {
+        const updated = { ...prev };
+        for (const key in updated) {
+          updated[key] = updated[key].filter((id) => id !== currentUserId);
+        }
+        if (!updated[emoji]) updated[emoji] = [];
+        updated[emoji].push(currentUserId);
+        return updated;
+      });
+
+      setMyReaction(emoji);
+      setLiked(true);
+      setShowReactionsPopup(false);
+
+      const total = Object.values(reactions).reduce(
+        (sum, list) => sum + list.length,
+        0,
       );
+      setLikes(total);
+    } catch (error) {
+      console.error('Reaction failed:', error);
     }
   };
 
@@ -108,19 +141,17 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
     const fetchCommentCount = async () => {
       try {
         const response = await axios.get(
-          `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.POSTS.COMMENTS.COUNT(postId)}`,
+          API_CONFIG.ENDPOINTS.POSTS.COMMENTS.COUNT(postId),
         );
         setCommentCount(response.data);
       } catch (err) {
         console.error('Failed to fetch comment count:', err);
       }
     };
-
     fetchCommentCount();
   }, [postId]);
 
   const shareLink = `${window.location.origin}/posts/${postId}`;
-
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(shareLink);
@@ -158,14 +189,34 @@ const Poster = ({ postId, userId, content, image, likes: initialLikes }) => {
       )}
 
       <div className="flex justify-between items-center mt-3 text-sm">
-        <div
-          className={`flex items-center gap-1 cursor-pointer ${liked ? 'text-red-600' : 'text-lightred'}`}
-          onClick={handleLike}
-        >
-          <Heart size={18} fill={liked ? 'red' : 'none'} />
-          <span className="text-text-gray">
-            {likes} {likes === 1 ? 'Like' : 'Likes'}
-          </span>
+        <div className="relative inline-block" ref={reactionRef}>
+          <div
+            className="flex items-center gap-1 cursor-pointer"
+            onClick={() => setShowReactionsPopup((prev) => !prev)}
+          >
+            <span className="text-xl">
+              {myReaction ? myReaction : <Heart size={18} />}
+            </span>
+            <span className="text-text-gray">{likes} Like</span>
+          </div>
+
+          {showReactionsPopup && (
+            <div className="absolute bottom-8 left-0 z-10 bg-white shadow-lg px-2 py-1 rounded-xl flex gap-2">
+              {emojis.map((emoji) => (
+                <button
+                  key={emoji}
+                  onClick={() => handleReact(emoji)}
+                  className={`text-xl transition-transform duration-200 ${
+                    myReaction === emoji
+                      ? 'scale-125 border border-primary-green rounded-full'
+                      : 'hover:scale-125'
+                  }`}
+                >
+                  {emoji}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="flex items-center gap-3">
@@ -235,7 +286,6 @@ Poster.propTypes = {
   userId: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
   image: PropTypes.string,
-  likes: PropTypes.number.isRequired,
 };
 
 export default Poster;
