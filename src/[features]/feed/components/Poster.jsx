@@ -134,11 +134,11 @@ const Poster = ({ postId, userId, content, image }) => {
     const userId = localStorage.getItem('userId');
     try {
       if (isSaved) {
-        await axios.delete(API_CONFIG.ENDPOINTS.SAVED_POSTS.UNSAVE, {
+        await axios.delete(API_CONFIG.ENDPOINTS.POSTS.SAVED_POSTS.UNSAVE, {
           data: { postId, userId },
         });
       } else {
-        await axios.post(API_CONFIG.ENDPOINTS.SAVED_POSTS.SAVE, {
+        await axios.post(API_CONFIG.ENDPOINTS.POSTS.SAVED_POSTS.SAVE, {
           postId,
           userId,
         });
@@ -154,7 +154,7 @@ const Poster = ({ postId, userId, content, image }) => {
       const userId = localStorage.getItem('userId');
       try {
         const response = await axios.get(
-          API_CONFIG.ENDPOINTS.SAVED_POSTS.GET_BY_USER(userId),
+          API_CONFIG.ENDPOINTS.SAVED_POSTS.GET_USER_SAVED(userId),
         );
         const savedIds = response.data;
         setIsSaved(savedIds.includes(postId));
