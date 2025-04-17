@@ -10,6 +10,16 @@ import {
   BookmarkCheck,
 } from 'lucide-react';
 import CommentPopup from './CommentPopup';
+import { MoreVertical } from 'lucide-react';
+import { Menu, MenuItem } from '@mui/material';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+} from '@mui/material';
+import { toast } from 'react-toastify';
 import { API_CONFIG } from '../../../config/api.config';
 
 const Poster = ({ postId, userId, content, image }) => {
@@ -26,6 +36,19 @@ const Poster = ({ postId, userId, content, image }) => {
   const [copySuccess, setCopySuccess] = useState('');
   const [showReactionsPopup, setShowReactionsPopup] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [openReportModal, setOpenReportModal] = useState(false);
+  const [reportReason, setReportReason] = useState('');
+  const [alreadyReported, setAlreadyReported] = useState(false);
+
+  const reportReasons = [
+    'Spam',
+    'Inappropriate content',
+    'Harassment',
+    'Misinformation',
+    'Other',
+  ];
 
   const reactionRef = useRef(null);
   const emojis = ['👍', '❤️', '😂', '😯', '😢', '😡'];
@@ -155,6 +178,31 @@ const Poster = ({ postId, userId, content, image }) => {
     }
   };
 
+  const handleConfirmReport = async () => {
+    try {
+      await axios.post(API_CONFIG.ENDPOINTS.POSTS.REPORT, {
+        postId,
+        reportedBy: currentUserId,
+        reason: reportReason,
+      });
+
+      // Save reported post in localStorage to avoid duplicate reports
+      const reported = JSON.parse(localStorage.getItem('reportedPosts')) || [];
+      localStorage.setItem(
+        'reportedPosts',
+        JSON.stringify([...reported, postId]),
+      );
+
+      // Reset UI
+      setOpenReportModal(false);
+      setReportReason('');
+      toast.success('Post reported successfully.');
+    } catch (error) {
+      toast.error('Failed to report post.');
+      console.error('Report error:', error);
+    }
+  };
+
   useEffect(() => {
     const id = localStorage.getItem('userId');
     if (id) setCurrentUserId(id);
@@ -226,7 +274,7 @@ const Poster = ({ postId, userId, content, image }) => {
 
   return (
     <div className="bg-white p-4 rounded-2xl shadow-md w-full max-w-2xl mt-4 mx-auto">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 w-full">
         <img
           src={user.profileImage}
           alt="Profile"
@@ -235,6 +283,43 @@ const Poster = ({ postId, userId, content, image }) => {
         <div>
           <p className="font-semibold text-text-gray font-sans">{user.name}</p>
           <p className="text-sm text-text-gray font-sans">@{user.username}</p>
+        </div>
+        <div className="ml-auto">
+          <MoreVertical
+            className="cursor-pointer"
+            onClick={(e) => setAnchorEl(e.currentTarget)}
+          />
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={() => setAnchorEl(null)}
+            PaperProps={{
+              sx: {
+                borderRadius: 2,
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                minWidth: 150,
+                paddingY: 0.5,
+              },
+            }}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+          >
+            <MenuItem
+              onClick={() => {
+                setAnchorEl(null);
+                setTimeout(() => setOpenReportModal(true), 100);
+              }}
+              disabled={alreadyReported}
+            >
+              {alreadyReported ? 'Already Reported' : 'Report Post'}
+            </MenuItem>
+          </Menu>
         </div>
       </div>
 
@@ -345,6 +430,73 @@ const Poster = ({ postId, userId, content, image }) => {
           )}
         </div>
       )}
+
+      <Dialog
+        open={openReportModal}
+        onClose={() => setOpenReportModal(false)}
+        PaperProps={{
+          sx: {
+            borderRadius: 3,
+            padding: 2,
+            minWidth: 360,
+          },
+        }}
+      >
+        <DialogTitle sx={{ fontWeight: 'bold', fontSize: 20 }}>
+          Report This Post
+        </DialogTitle>
+
+        <DialogContent sx={{ pt: 1 }}>
+          <label className="block mb-2 text-sm font-medium text-gray-700">
+            Why are you reporting this post?
+          </label>
+          <select
+            value={reportReason}
+            onChange={(e) => setReportReason(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-red-400 transition-all"
+          >
+            <option value="" disabled>
+              Select a reason
+            </option>
+            {reportReasons.map((reason) => (
+              <option key={reason} value={reason}>
+                {reason}
+              </option>
+            ))}
+          </select>
+        </DialogContent>
+
+        <DialogActions sx={{ justifyContent: 'space-between', px: 3 }}>
+          <Button
+            onClick={() => setOpenReportModal(false)}
+            sx={{
+              textTransform: 'none',
+              fontWeight: 500,
+              color: '#6B7280',
+              '&:hover': {
+                color: '#000',
+              },
+            }}
+          >
+            Cancel
+          </Button>
+
+          <Button
+            onClick={handleConfirmReport}
+            variant="contained"
+            color="error"
+            disabled={!reportReason}
+            sx={{
+              textTransform: 'none',
+              fontWeight: 600,
+              px: 3,
+              borderRadius: '8px',
+            }}
+          >
+            Report
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
