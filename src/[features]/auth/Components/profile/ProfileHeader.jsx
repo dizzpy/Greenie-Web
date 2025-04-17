@@ -28,7 +28,7 @@ const ProfileHeader = () => {
             <div>
               <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2 mt-10">
                 Alpha online
-                <span className="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+                <span className="w-3 h-3 rounded-full bg-primary-green inline-block"></span>
               </h2>
               <p className="text-gray-500 text-sm">@dulen12312</p>
             </div>
@@ -36,7 +36,7 @@ const ProfileHeader = () => {
 
           {/* Edit Profile Button */}
           <div className="mt-4 sm:mt-0">
-            <button className="text-sm bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md">
+            <button className="text-sm bg-gray-200 hover:bg-primary-green hover:text-bg-light px-4 py-2 rounded-md">
               ✎ Edit Profile
             </button>
           </div>
