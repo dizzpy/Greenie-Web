@@ -118,7 +118,7 @@ const NavBar = ({ miditem = true }) => {
 
                 <div className="py-2">
                   <Link
-                    to="/p"
+                    to="/profile"
                     className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                     onClick={() => setIsProfileOpen(false)}
                   >
@@ -172,7 +172,7 @@ const NavBar = ({ miditem = true }) => {
             {/* Profile and Logout in Mobile */}
             <div className="border-t mt-4 pt-4">
               <Link
-                to="/p"
+                to="/profile"
                 className="flex items-center space-x-3 p-2 rounded-lg text-gray-600 hover:text-primary-green hover:bg-gray-50"
                 onClick={() => setIsMobileMenuOpen(false)}
               >

@@ -2,6 +2,7 @@
 import React from 'react';
 import profileImg from '..//..//..//..//assets/profile/profile.jpeg';
 import coverImg from '..//..//..//..//assets/profile/coverImg.jpg';
+import { Link } from 'react-router-dom';
 
 const ProfileHeader = () => {
   return (
@@ -36,9 +37,11 @@ const ProfileHeader = () => {
 
           {/* Edit Profile Button */}
           <div className="mt-4 sm:mt-0">
-            <button className="text-sm bg-gray-200 hover:bg-primary-green hover:text-bg-light px-4 py-2 rounded-md">
-              ✎ Edit Profile
-            </button>
+            <Link to="/profile/edit">
+              <button className="text-sm bg-gray-200 hover:bg-primary-green hover:text-bg-light px-4 py-2 rounded-md">
+                ✎ Edit Profile
+              </button>
+            </Link>
           </div>
         </div>
       </div>
