@@ -36,7 +36,7 @@ const ProfileSidebar = () => {
   }, [user]);
 
   return (
-    <div className="bg-bg-light shadow-s rounded-lg p-4 sticky top-24 h-fit w-full sm:w-64 mt-10 pt-6 pr-6">
+    <div className="bg-bg-light shadow-s rounded-xl p-4 sticky top-24 h-fit w-full sm:w-64 mt-10 pt-6 pr-6">
       {/* Badges */}
       <div className="flex items-center justify-start gap-2 mb-4">
         {badgeImages.map((badge, idx) => (
