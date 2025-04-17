@@ -25,6 +25,7 @@ const Poster = ({ postId, userId, content, image }) => {
   const [showSharePopup, setShowSharePopup] = useState(false);
   const [copySuccess, setCopySuccess] = useState('');
   const [showReactionsPopup, setShowReactionsPopup] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState(null);
 
   const reactionRef = useRef(null);
   const emojis = ['👍', '❤️', '😂', '😯', '😢', '😡'];
@@ -128,19 +129,24 @@ const Poster = ({ postId, userId, content, image }) => {
     }
   };
 
-  // Save post end
+  // Save post
+  useEffect(() => {
+    const id = localStorage.getItem('userId');
+    if (id) setCurrentUserId(id);
+  }, []);
 
   const toggleSavePost = async () => {
-    const userId = localStorage.getItem('userId');
+    if (!currentUserId) return;
+
     try {
       if (isSaved) {
-        await axios.delete(API_CONFIG.ENDPOINTS.SAVED_POSTS.UNSAVE, {
-          data: { postId, userId },
+        await axios.delete(API_CONFIG.ENDPOINTS.POSTS.SAVED_POSTS.UNSAVE, {
+          data: { postId, userId: currentUserId },
         });
       } else {
-        await axios.post(API_CONFIG.ENDPOINTS.SAVED_POSTS.SAVE, {
+        await axios.post(API_CONFIG.ENDPOINTS.POSTS.SAVED_POSTS.SAVE, {
           postId,
-          userId,
+          userId: currentUserId,
         });
       }
       setIsSaved(!isSaved);
@@ -150,21 +156,30 @@ const Poster = ({ postId, userId, content, image }) => {
   };
 
   useEffect(() => {
+    const id = localStorage.getItem('userId');
+    if (id) setCurrentUserId(id);
+  }, []);
+
+  useEffect(() => {
     const checkIfSaved = async () => {
-      const userId = localStorage.getItem('userId');
+      if (!postId || !currentUserId) return;
+
       try {
         const response = await axios.get(
-          API_CONFIG.ENDPOINTS.SAVED_POSTS.GET_BY_USER(userId),
+          API_CONFIG.ENDPOINTS.POSTS.SAVED_POSTS.GET_USER_SAVED(currentUserId),
         );
+
         const savedIds = response.data;
+        console.log('✅ Saved posts:', savedIds); // debug
+
         setIsSaved(savedIds.includes(postId));
       } catch (error) {
-        console.error('Error checking saved status:', error);
+        console.error('❌ Error checking saved status:', error);
       }
     };
 
     checkIfSaved();
-  }, [postId]);
+  }, [postId, currentUserId]);
 
   // End save post
 

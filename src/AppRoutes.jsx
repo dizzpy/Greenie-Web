@@ -11,7 +11,7 @@ import Cart from './[features]/shop/pages/Cart';
 import Checkout from './[features]/shop/pages/Checkout';
 import RedeemStore from './[features]/shop/pages/RedeemStore';
 import NotFound from './pages/NotFound';
-import HomePage from './pages/HomePage';
+// import HomePage from './pages/HomePage';
 import Feed from './[features]/feed/pages/Feed';
 import ChallengesHome from './[features]/challenges/pages/ChallengesHome';
 import Login from './[features]/auth/pages/Login';
@@ -25,6 +25,7 @@ import Notification from './components/Shop/Notification';
 import AddChallenge from './[features]/challenges/pages/AddChallenge';
 import ViewChallenge from './[features]/challenges/pages/ViewChallenge';
 import SubmitChallenge from './[features]/challenges/pages/SubmitChallenge';
+import EditProfilePage from './[features]/auth/pages/EditProfilePage';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -94,7 +95,7 @@ function AppRoutes() {
           path="/"
           element={
             <ProtectedRoute>
-              <HomePage />
+              <Feed />
             </ProtectedRoute>
           }
         />
@@ -198,10 +199,19 @@ function AppRoutes() {
           }
         />
         <Route
-          path="/p"
+          path="/profile"
           element={
             <ProtectedRoute>
               <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile/edit"
+          element={
+            <ProtectedRoute>
+              <EditProfilePage />
             </ProtectedRoute>
           }
         />

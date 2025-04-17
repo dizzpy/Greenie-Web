@@ -15,6 +15,8 @@ function Feed() {
   const [error, setError] = useState(null);
   const [selectedPost, setSelectedPost] = useState(null);
 
+  const currentUserId = localStorage.getItem('userId'); // ✅ Extract userId
+
   useEffect(() => {
     let intervalId;
 
@@ -40,7 +42,7 @@ function Feed() {
     };
 
     fetchPosts(); // Initial fetch
-    intervalId = setInterval(fetchPosts, 2000); // Poll every 10 seconds
+    intervalId = setInterval(fetchPosts, 2000); // Poll every 2 seconds
 
     return () => clearInterval(intervalId); // Cleanup on unmount
   }, []);
@@ -79,6 +81,7 @@ function Feed() {
                     key={post.postId}
                     postId={post.postId}
                     userId={post.userId}
+                    viewerUserId={currentUserId} // ✅ Pass logged-in userId
                     content={post.description || post.content || ''}
                     image={
                       post.image?.startsWith('data:image')
