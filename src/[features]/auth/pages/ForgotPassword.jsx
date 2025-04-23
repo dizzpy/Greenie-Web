@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const ResetPassword = () => {
+const ForgotPassword = () => {
   const [email, setEmail] = useState('');
 
   const handleSubmit = (e) => {
@@ -37,4 +37,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default ForgotPassword;
