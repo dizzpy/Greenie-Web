@@ -51,6 +51,10 @@ const Login = () => {
     e.preventDefault();
     navigate('/register');
   };
+  const handleForgotPW = () => {
+    console.log('Forgot Password clicked');
+    navigate('/forgot-password');
+  };
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
@@ -113,6 +117,16 @@ const Login = () => {
                 className="text-primary-green font-semibold hover:underline"
               >
                 Create Account
+              </button>
+            </p>
+            <p className="text-center text-sm mt-4">
+              Can&apos;t Remember your Password?{' '}
+              <button
+                onClick={handleForgotPW}
+                type="button"
+                className="text-primary-green font-semibold hover:underline"
+              >
+                Forget Password
               </button>
             </p>
           </form>

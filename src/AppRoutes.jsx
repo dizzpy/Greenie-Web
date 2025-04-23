@@ -87,8 +87,23 @@ function AppRoutes() {
             </PublicRoute>
           }
         />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/set-new-password" element={<SetNewPassword />} />
+        <Route
+          path="/forgot-password"
+          element={
+            <PublicRoute>
+              <ForgotPassword />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/set-new-password"
+          element={
+            <PublicRoute>
+              <SetNewPassword />
+            </PublicRoute>
+          }
+        />
 
         {/* Protected Routes */}
         <Route
