@@ -34,8 +34,8 @@ function ViewChallengeCard({ challenge }) {
       </div>
 
       {/* Creator Information */}
-      <p className="text-gray-500 text-sm mt-3">Created by</p>
-      <p className="text-gray-700 font-medium">{challenge.creator}</p>
+      {/* <p className="text-gray-500 text-sm mt-3">Created by</p>
+      <p className="text-gray-700 font-medium">{challenge.creator}</p> */}
 
       {/* Description */}
       <p className="text-gray-600 mt-4 text-sm leading-relaxed flex-grow">
