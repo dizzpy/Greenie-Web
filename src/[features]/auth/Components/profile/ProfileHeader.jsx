@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import React from 'react';
+//import React from 'react';
 import profileImg from '..//..//..//..//assets/profile/profile.jpeg';
 import coverImg from '..//..//..//..//assets/profile/coverImg.jpg';
 import { Link } from 'react-router-dom';

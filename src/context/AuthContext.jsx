@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
     if (
       !isLoading &&
       !isAuthenticated &&
-      !['/login', '/register'].includes(location.pathname)
+      !['/login', '/register', '/forgot-password'].includes(location.pathname)
     ) {
       localStorage.setItem('lastPath', location.pathname);
       navigate('/login');
