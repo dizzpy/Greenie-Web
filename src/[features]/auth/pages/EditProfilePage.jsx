@@ -4,16 +4,16 @@ import { ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import axios from 'axios';
 import defaultProfileImg from '../../../assets/profile/profile.jpeg';
-import coverImg from '../../../assets/profile/coverImg.jpg';
+// import coverImg from '../../../assets/profile/coverImg.jpg';
 
 const EditProfilePage = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
-  const coverInputRef = useRef(null);
+  // const coverInputRef = useRef(null);
   const { user, updateUser } = useAuth();
 
   const [selectedImageFile, setSelectedImageFile] = useState(null);
-  const [selectedCoverFile, setSelectedCoverFile] = useState(null);
+  // const [selectedCoverFile, setSelectedCoverFile] = useState(null);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -25,7 +25,7 @@ const EditProfilePage = () => {
   });
 
   const [profileImage, setProfileImage] = useState(defaultProfileImg);
-  const [coverImage, setCoverImage] = useState(coverImg);
+  // const [coverImage, setCoverImage] = useState(coverImg);
 
   useEffect(() => {
     if (user) {
@@ -36,7 +36,7 @@ const EditProfilePage = () => {
         bio: user.bio || '',
       });
       setProfileImage(user.profileImgUrl || defaultProfileImg);
-      setCoverImage(user.coverImgUrl || coverImg);
+      // setCoverImage(user.coverImgUrl || coverImg);
     }
   }, [user]);
 
@@ -61,21 +61,21 @@ const EditProfilePage = () => {
     reader.readAsDataURL(file);
   };
 
-  const handleCoverChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (!file.type.startsWith('image/'))
-      return setError('Please select a valid cover image');
-    if (file.size > 5 * 1024 * 1024)
-      return setError('Cover image must be less than 5MB');
+  // const handleCoverChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
+  //   if (!file.type.startsWith('image/'))
+  //     return setError('Please select a valid cover image');
+  //   if (file.size > 5 * 1024 * 1024)
+  //     return setError('Cover image must be less than 5MB');
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setCoverImage(reader.result);
-      setSelectedCoverFile(file);
-    };
-    reader.readAsDataURL(file);
-  };
+  //   const reader = new FileReader();
+  //   reader.onloadend = () => {
+  //     setCoverImage(reader.result);
+  //     setSelectedCoverFile(file);
+  //   };
+  //   reader.readAsDataURL(file);
+  // };
 
   const handleSave = async () => {
     setError('');
@@ -98,8 +98,8 @@ const EditProfilePage = () => {
       formPayload.append('userData', JSON.stringify(userData));
       if (selectedImageFile)
         formPayload.append('profileImage', selectedImageFile);
-      if (selectedCoverFile)
-        formPayload.append('coverImage', selectedCoverFile);
+      // if (selectedCoverFile)
+      //   formPayload.append('coverImage', selectedCoverFile);
 
       const response = await axios.put('/api/users/update', formPayload, {
         headers: {
@@ -146,8 +146,7 @@ const EditProfilePage = () => {
         <h2 className="text-xl font-semibold">Edit Profile</h2>
       </div>
 
-      {/* Cover Image */}
-      <div className="relative mb-6 rounded-lg overflow-hidden">
+      {/* <div className="relative mb-6 rounded-lg overflow-hidden">
         <img
           src={coverImage}
           alt="Cover"
@@ -168,7 +167,7 @@ const EditProfilePage = () => {
         >
           ✎ Edit Cover
         </button>
-      </div>
+      </div> */}
 
       {/* Profile Image */}
       <div className="flex justify-center mb-6 relative group">
