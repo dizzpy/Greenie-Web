@@ -6,16 +6,13 @@ import defaultProfileImg from '../../../assets/profile/profile.jpeg';
 const ProfileHeader = () => {
   const { user } = useAuth();
 
-  const profileImage = user?.profileImgUrl
-    ? user.profileImgUrl.startsWith('http') ||
-      user.profileImgUrl.startsWith('/uploads/')
+  const profileImage =
+    user?.profileImgUrl && user.profileImgUrl.includes('base64')
       ? user.profileImgUrl
-      : defaultProfileImg
-    : defaultProfileImg;
+      : defaultProfileImg;
 
   return (
     <div className="bg-white shadow-s pb-2 rounded-lg overflow-hidden">
-      {/* Banner */}
       <div className="relative">
         <img
           src={coverImg}
@@ -23,10 +20,8 @@ const ProfileHeader = () => {
           className="w-full h-48 object-cover rounded-t-lg"
         />
 
-        {/* Profile and Info */}
         <div className="flex flex-col sm:flex-row items-center sm:items-end justify-between px-6 pt-4 pb-2 bg-white">
           <div className="flex items-center gap-4 -mt-12 sm:-mt-14">
-            {/* Profile Image */}
             <img
               src={profileImage}
               alt="Profile"
@@ -35,8 +30,6 @@ const ProfileHeader = () => {
                 e.target.src = defaultProfileImg;
               }}
             />
-
-            {/* Name and Status */}
             <div>
               <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2 mt-10">
                 {user?.fullName || 'Anonymous'}
@@ -48,7 +41,6 @@ const ProfileHeader = () => {
             </div>
           </div>
 
-          {/* Edit Profile Button */}
           <div className="mt-4 sm:mt-0">
             <Link to="/profile/edit">
               <button className="text-sm bg-gray-200 hover:bg-primary-green hover:text-bg-light px-4 py-2 rounded-md">
