@@ -1,9 +1,18 @@
-//import React from 'react';
-import profileImg from '..//..//..//..//assets/profile/profile.jpeg';
-import coverImg from '..//..//..//..//assets/profile/coverImg.jpg';
+import { useAuth } from '@/context/AuthContext';
+import coverImg from '../../../assets/profile/coverImg.jpg';
 import { Link } from 'react-router-dom';
+import defaultProfileImg from '../../../assets/profile/profile.jpeg';
 
 const ProfileHeader = () => {
+  const { user } = useAuth();
+
+  const profileImage = user?.profileImgUrl
+    ? user.profileImgUrl.startsWith('http') ||
+      user.profileImgUrl.startsWith('/uploads/')
+      ? user.profileImgUrl
+      : defaultProfileImg
+    : defaultProfileImg;
+
   return (
     <div className="bg-white shadow-s pb-2 rounded-lg overflow-hidden">
       {/* Banner */}
@@ -19,18 +28,23 @@ const ProfileHeader = () => {
           <div className="flex items-center gap-4 -mt-12 sm:-mt-14">
             {/* Profile Image */}
             <img
-              src={profileImg}
+              src={profileImage}
               alt="Profile"
-              className="w-32 h-32 rounded-full border-4 border-white shadow-md"
+              className="w-32 h-32 rounded-full border-4 border-white shadow-md object-cover"
+              onError={(e) => {
+                e.target.src = defaultProfileImg;
+              }}
             />
 
             {/* Name and Status */}
             <div>
               <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2 mt-10">
-                Alpha online
+                {user?.fullName || 'Anonymous'}
                 <span className="w-3 h-3 rounded-full bg-primary-green inline-block"></span>
               </h2>
-              <p className="text-gray-500 text-sm">@dulen12312</p>
+              <p className="text-gray-500 text-sm">
+                @{user?.username || 'unknown'}
+              </p>
             </div>
           </div>
 
