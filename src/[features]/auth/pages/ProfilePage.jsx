@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import coverImg from '@/assets/profile/cccc.png';
+import coverImg from '../../../assets/profile/coverImg.jpg';
 import coin from '@/assets/icons/coin.svg';
 import NavBar from '../../../components/Shared/NavBar';
 import { API_CONFIG } from '../../../config/api.config';
@@ -648,11 +648,16 @@ const ProfilePage = () => {
         <div className="bg-white rounded-lg shadow-md overflow-hidden mb-6">
           <div className="relative">
             <img
-              src={coverImg}
+              src={
+                user.coverImgUrl && user.coverImgUrl.includes('base64')
+                  ? user.coverImgUrl
+                  : coverImg
+              }
               alt="Cover"
               className="w-full h-40 object-cover"
               onError={(e) => (e.target.src = coverImg)}
             />
+
             <div className="absolute -bottom-10 left-6 flex items-center">
               <img
                 src={user.avatar || defaultProfileImage}
