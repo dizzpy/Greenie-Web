@@ -1,7 +1,7 @@
 import { useAuth } from '@/context/AuthContext';
-import coverImg from '../../../assets/profile/coverImg.jpg';
+import coverImg from '../../../../assets/profile/Cover.png';
 import { Link } from 'react-router-dom';
-import defaultProfileImg from '../../../assets/profile/profile.jpeg';
+import defaultProfileImg from '../../../../assets/profile/profileImg.png';
 
 const ProfileHeader = () => {
   const { user } = useAuth();
