@@ -34,6 +34,8 @@ export const API_CONFIG = {
         UNSAVE: '/api/saved-posts/unsave',
         GET_USER_SAVED: (userId) => `/api/saved-posts/${userId}`,
       },
+
+      REPORT: '/api/reported-posts/report',
     },
 
     // Shop endpoints
