@@ -21,6 +21,7 @@ import {
 } from '@mui/material';
 import { toast } from 'react-toastify';
 import { API_CONFIG } from '../../../config/api.config';
+import defaultProfileImg from '../../../assets/profile/profileImg.png';
 
 const Poster = ({ postId, userId, content, image }) => {
   const [showComments, setShowComments] = useState(false);
@@ -58,6 +59,12 @@ const Poster = ({ postId, userId, content, image }) => {
     username: 'anonymous',
     profileImage: 'https://via.placeholder.com/150',
   });
+
+  // Fallback to default cover image if not present or not base64
+  const profileImage =
+    user?.profileImgUrl && user.profileImgUrl.startsWith('data:image/')
+      ? user.profileImgUrl
+      : defaultProfileImg;
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -276,9 +283,12 @@ const Poster = ({ postId, userId, content, image }) => {
     <div className="bg-white p-4 rounded-2xl shadow-md w-full max-w-2xl mt-4 mx-auto">
       <div className="flex items-center gap-3 w-full">
         <img
-          src={user.profileImage}
+          src={profileImage}
           alt="Profile"
           className="w-10 h-10 rounded-full object-cover"
+          onError={(e) => {
+            e.target.src = defaultProfileImg;
+          }}
         />
         <div>
           <p className="font-semibold text-text-gray font-sans">{user.name}</p>
