@@ -1,25 +1,56 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ChallengeCard from './ChallengeCard';
+import ChallengeCardSkeleton from './ChallengeCardSkeleton'; // ✅ Adjust path if needed
+import axios from 'axios';
 
 const ChallengeList = () => {
-  // Sample challenge data
-  const challenges = [
-    { title: 'Water Conservation', enrolled: 25, points: 200 },
-    { title: 'Energy Saving', enrolled: 30, points: 150 },
-    { title: 'Plastic Reduction', enrolled: 20, points: 180 },
-    { title: 'Tree Plantation', enrolled: 15, points: 220 },
-  ];
+  const [challenges, setChallenges] = useState([]);
+  const [loading, setLoading] = useState(true); // ✅ Loading state
+  const [error, setError] = useState(null); // Optional error handling
+
+  useEffect(() => {
+    const fetchChallenges = async () => {
+      try {
+        const response = await axios.get('/api/challenges/all');
+        const limited = response.data.slice(0, 5);
+        setChallenges(limited);
+      } catch (error) {
+        console.error('Error fetching challenges:', error);
+        setError('Failed to load challenges.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchChallenges();
+  }, []);
 
   return (
-    <div className="w-120 p-4 rounded-xl  ml-10">
-      <h2 className="text-lg font-semibold mb-3 text-text-gray font-sans ">
+    <div className="w-120 p-4 rounded-xl ml-10">
+      <h2 className="text-lg font-semibold mb-3 text-text-gray font-sans">
         Popular Challenges
       </h2>
+
       <div className="space-y-3">
-        {challenges.map((challenge, index) => (
-          <ChallengeCard key={index} {...challenge} />
-        ))}
+        {loading ? (
+          // ✅ Show 5 shimmer cards
+          [...Array(5)].map((_, index) => <ChallengeCardSkeleton key={index} />)
+        ) : error ? (
+          // Optional: Show an error message
+          <p className="text-red-500 text-sm">{error}</p>
+        ) : (
+          // ✅ Actual challenge data
+          challenges.map((challenge, index) => (
+            <ChallengeCard
+              key={index}
+              title={challenge.challengeName}
+              enrolled={challenge.enrolled || 0}
+              points={challenge.points}
+              photoUrl={challenge.photoUrl}
+            />
+          ))
+        )}
       </div>
     </div>
   );
