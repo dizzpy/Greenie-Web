@@ -1,13 +1,16 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import ChallengeCard from './ChallengeCard';
-import ChallengeCardSkeleton from './ChallengeCardSkeleton'; // ✅ Adjust path if needed
+import ChallengeCardSkeleton from './ChallengeCardSkeleton';
+import ChallengePreviewModal from './ChallengePreviewModal';
 import axios from 'axios';
 
 const ChallengeList = () => {
   const [challenges, setChallenges] = useState([]);
-  const [loading, setLoading] = useState(true); // ✅ Loading state
-  const [error, setError] = useState(null); // Optional error handling
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [selectedChallenge, setSelectedChallenge] = useState(null);
 
   useEffect(() => {
     const fetchChallenges = async () => {
@@ -34,24 +37,34 @@ const ChallengeList = () => {
 
       <div className="space-y-3">
         {loading ? (
-          // ✅ Show 5 shimmer cards
           [...Array(5)].map((_, index) => <ChallengeCardSkeleton key={index} />)
         ) : error ? (
-          // Optional: Show an error message
           <p className="text-red-500 text-sm">{error}</p>
         ) : (
-          // ✅ Actual challenge data
           challenges.map((challenge, index) => (
-            <ChallengeCard
+            <div
               key={index}
-              title={challenge.challengeName}
-              enrolled={challenge.enrolled || 0}
-              points={challenge.points}
-              photoUrl={challenge.photoUrl}
-            />
+              onClick={() => setSelectedChallenge(challenge)}
+              className="cursor-pointer hover:shadow-md transition"
+            >
+              <ChallengeCard
+                title={challenge.challengeName}
+                enrolled={challenge.enrolled || 0}
+                points={challenge.points}
+                photoUrl={challenge.photoUrl}
+              />
+            </div>
           ))
         )}
       </div>
+
+      {/* 👇 Modal */}
+      {selectedChallenge && (
+        <ChallengePreviewModal
+          challenge={selectedChallenge}
+          onClose={() => setSelectedChallenge(null)}
+        />
+      )}
     </div>
   );
 };
