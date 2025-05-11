@@ -53,9 +53,7 @@ const ProfileSidebar = () => {
       <div className="bg-gray-50 rounded-xl p-4 mb-3">
         <h3 className="text-sm font-semibold text-gray-700 mb-2">About</h3>
         <p className="text-sm text-gray-500 leading-relaxed">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc at
-          suscipit nulla, sed ultricies augue. Donec vitae eros aliquet,
-          malesuada augue non, vestibulum velit.
+          {user?.bio || 'No bio set yet.'}
         </p>
       </div>
 

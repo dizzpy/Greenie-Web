@@ -768,7 +768,7 @@ const ProfilePage = () => {
                   About
                 </h3>
                 <p className="text-sm text-gray-600">
-                  {user.bio ? user.bio : 'No bio set yet.'}
+                  {user?.bio || 'No bio set yet.'}
                 </p>
               </div>
 
