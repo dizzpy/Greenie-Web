@@ -8,6 +8,7 @@ import CommentPopup from '../components/CommentPopup';
 import ChallengeList from '../components/ChallengeList';
 import NavBar from '../../../components/Shared/NavBar';
 import { API_CONFIG } from '../../../config/api.config';
+import PostSkeleton from '../components/PostSkeleton'; // Adjust the path if needed
 
 function Feed() {
   const [posts, setPosts] = useState([]);
@@ -71,7 +72,11 @@ function Feed() {
             <CreatePost onPostCreated={handleNewPost} />
 
             {loading ? (
-              <p className="text-center text-gray-500">Loading posts...</p>
+              <div className="mt-6 space-y-4">
+                {[...Array(3)].map((_, idx) => (
+                  <PostSkeleton key={idx} />
+                ))}
+              </div>
             ) : error ? (
               <p className="text-center text-red-500">{error}</p>
             ) : (
@@ -101,7 +106,9 @@ function Feed() {
 
           {/* Right Sidebar */}
           <aside className="hidden xl:block w-full xl:w-96 xl:ml-8 mt-8 xl:mt-0">
-            <ChallengeList />
+            <div className="sticky top-20">
+              <ChallengeList />
+            </div>
           </aside>
         </div>
       </div>
