@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
           id: userId,
           name: response.data.fullName,
           email: response.data.email,
+          bio: response.data.bio,
           avatar: response.data.profileImgUrl,
           points: response.data.pointsCount,
           username: response.data.username || response.data.email.split('@')[0],

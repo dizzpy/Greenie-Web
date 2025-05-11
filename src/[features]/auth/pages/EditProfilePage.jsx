@@ -30,7 +30,7 @@ const EditProfilePage = () => {
   useEffect(() => {
     if (user) {
       setFormData({
-        fullName: user.fullName || '',
+        fullName: user.name || '',
         username: user.username || '',
         email: user.email || '',
         bio: user.bio || '',
