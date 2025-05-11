@@ -52,7 +52,7 @@ const Poster = ({ postId, userId, content, image }) => {
   ];
 
   const reactionRef = useRef(null);
-  const emojis = ['👍', '❤️', '😂', '😯', '😢', '😡'];
+  const emojis = ['👍', '❤️', '👏', '☺️', '😯', '💡'];
 
   const [user, setUser] = useState({
     name: 'Unknown',

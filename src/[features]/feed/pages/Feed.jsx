@@ -101,7 +101,9 @@ function Feed() {
 
           {/* Right Sidebar */}
           <aside className="hidden xl:block w-full xl:w-96 xl:ml-8 mt-8 xl:mt-0">
-            <ChallengeList />
+            <div className="sticky top-20">
+              <ChallengeList />
+            </div>
           </aside>
         </div>
       </div>
