@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar from '../../../components/Shared/NavBar';
 import { API_CONFIG } from '../../../config/api.config';
+import { ImageUp } from 'lucide-react'; // Optional: any icon library
 
 function AddChallenge() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     challengeName: '',
     points: '',
@@ -13,11 +17,29 @@ function AddChallenge() {
 
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
+  const [preview, setPreview] = useState(null);
+  const fileInputRef = useRef();
 
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
+
+  const handleUploadClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+        setFormData((prev) => ({ ...prev, photoUrl: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   async function handleSubmit() {
     if (
@@ -33,7 +55,7 @@ function AddChallenge() {
     setMessage('');
 
     try {
-      const token = localStorage.getItem('token'); // ✅ Get JWT token from localStorage
+      const token = localStorage.getItem('token');
 
       const response = await axios.post(
         API_CONFIG.ENDPOINTS.CHALLENGES.CREATE,
@@ -46,7 +68,7 @@ function AddChallenge() {
         {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`, // ✅ Attach token
+            Authorization: `Bearer ${token}`,
           },
         },
       );
@@ -60,6 +82,7 @@ function AddChallenge() {
           description: '',
           photoUrl: '',
         });
+        setPreview(null);
       } else {
         throw new Error("Error! Can't add challenge");
       }
@@ -76,40 +99,53 @@ function AddChallenge() {
       <div className="max-w-2xl mx-auto p-6">
         {message && (
           <div
-            className={`p-3 mb-4 text-white rounded ${messageType === 'success' ? 'bg-primary-green' : 'bg-lightred'}`}
+            className={`p-3 mb-4 text-white rounded ${
+              messageType === 'success' ? 'bg-primary-green' : 'bg-lightred'
+            }`}
           >
             {message}
           </div>
         )}
 
-        <button className="text-text-gray text-xl flex items-center mb-4">
+        {/* ← Back Button to /challenges */}
+        <button
+          className="text-gray-700 text-xl flex items-center mb-4"
+          onClick={() => navigate('/challenges')}
+        >
           ← Add Challenge
         </button>
 
-        {/* Image URL Input Section */}
+        {/* Image Upload Section */}
         <div className="mb-4 mt-4">
           <label className="block text-gray-700 font-medium mb-2">
             Upload an Image <span className="text-red-500">*</span>
           </label>
-          <input
-            type="text"
-            name="photoUrl"
-            className="w-full border border-gray-300 p-2 text-center h-32 rounded"
-            placeholder="Upload Photos and Videos"
-            value={formData.photoUrl}
-            onChange={handleChange}
-          />
-
-          {/* Image Preview */}
-          {formData.photoUrl && (
-            <div className="mt-4">
+          <div
+            className="border-2 h-full p-6 flex flex-col items-center justify-center rounded-lg cursor-pointer"
+            onClick={handleUploadClick}
+          >
+            {preview ? (
               <img
-                src={formData.photoUrl}
-                alt="Preview"
-                className="w-full h-32 object-cover rounded-lg"
+                src={preview}
+                alt="Uploaded"
+                className="w-full h-full object-cover rounded-lg"
               />
-            </div>
-          )}
+            ) : (
+              <>
+                <ImageUp className="text-gray-500 text-2xl" />
+                <p className="text-gray-500 text-sm">
+                  Upload Photos and Videos
+                </p>
+              </>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              ref={fileInputRef}
+              onChange={handleImageUpload}
+            />
+          </div>
         </div>
 
         {/* Form Fields */}
