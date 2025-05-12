@@ -577,7 +577,7 @@ const ProfilePage = () => {
           <p className="mt-2 text-gray-500">No posts available yet.</p>
           <button
             className="mt-4 px-4 py-2 bg-primary-green text-white rounded-md hover:bg-green-600"
-            onClick={() => navigate('/create-post')}
+            onClick={() => navigate('/feed')}
           >
             Create Your First Post
           </button>

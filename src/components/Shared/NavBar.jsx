@@ -10,6 +10,7 @@ import {
   X,
   User,
   LogOut,
+  Check,
 } from 'lucide-react';
 import logo from '../../assets/icons/greenlogo.svg';
 import { useAuth } from '../../context/AuthContext';
@@ -18,9 +19,29 @@ import { useAuth } from '../../context/AuthContext';
 const NavBar = ({ miditem = true }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const notificationRef = useRef(null);
   const location = useLocation();
   const { user, logout } = useAuth();
+
+  // Sample notifications data - you would fetch this from your API
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      text: "You've earned 50 points for completing a challenge!",
+      time: '10 minutes ago',
+      read: false,
+    },
+    {
+      id: 2,
+      text: 'New eco-friendly products available in the shop',
+      time: '2 hours ago',
+      read: false,
+    },
+  ]);
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   const isActive = (path) => location.pathname.includes(path);
 
@@ -36,10 +57,30 @@ const NavBar = ({ miditem = true }) => {
     setIsProfileOpen(false);
   };
 
+  const markAsRead = (id) => {
+    setNotifications(
+      notifications.map((notification) =>
+        notification.id === id ? { ...notification, read: true } : notification,
+      ),
+    );
+  };
+
+  const markAllAsRead = () => {
+    setNotifications(
+      notifications.map((notification) => ({ ...notification, read: true })),
+    );
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsProfileOpen(false);
+      }
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target)
+      ) {
+        setIsNotificationOpen(false);
       }
     };
 
@@ -78,17 +119,102 @@ const NavBar = ({ miditem = true }) => {
 
           {/* Right Section */}
           <div className="flex items-center space-x-6">
-            <button className="text-gray-600 hover:text-primary-green relative">
-              <Bell size={24} />
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                2
-              </span>
-            </button>
+            {/* Notification Bell */}
+            <div className="relative" ref={notificationRef}>
+              <button
+                className="text-gray-600 hover:text-primary-green relative"
+                onClick={() => {
+                  setIsNotificationOpen(!isNotificationOpen);
+                  setIsProfileOpen(false);
+                }}
+              >
+                <Bell size={24} />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Notification Dropdown */}
+              <div
+                className={`absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg py-2 border border-gray-100 transform transition-all duration-200 ease-in-out ${
+                  isNotificationOpen
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-2 pointer-events-none'
+                }`}
+              >
+                <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100">
+                  <h3 className="text-sm font-semibold text-gray-800">
+                    Notifications
+                  </h3>
+                  {unreadCount > 0 && (
+                    <button
+                      className="text-xs text-primary-green hover:text-primary-green/80"
+                      onClick={markAllAsRead}
+                    >
+                      Mark all as read
+                    </button>
+                  )}
+                </div>
+
+                <div className="max-h-80 overflow-y-auto">
+                  {notifications.length === 0 ? (
+                    <div className="px-4 py-6 text-center text-gray-500 text-sm">
+                      No notifications yet
+                    </div>
+                  ) : (
+                    notifications.map((notification) => (
+                      <div
+                        key={notification.id}
+                        className={`px-4 py-3 border-b border-gray-50 last:border-b-0 hover:bg-gray-50 cursor-pointer ${
+                          notification.read ? 'bg-white' : 'bg-green-50/40'
+                        }`}
+                        onClick={() => markAsRead(notification.id)}
+                      >
+                        <div className="flex justify-between items-start">
+                          <p className="text-sm text-gray-800 flex-1 pr-2">
+                            {notification.text}
+                          </p>
+                          {!notification.read && (
+                            <button
+                              className="text-primary-green hover:bg-green-100 p-1 rounded-full"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                markAsRead(notification.id);
+                              }}
+                            >
+                              <Check size={14} />
+                            </button>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">
+                          {notification.time}
+                        </p>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                <div className="px-4 py-2 border-t border-gray-100 text-center">
+                  <Link
+                    to="/notifications"
+                    className="text-xs text-primary-green hover:underline"
+                    onClick={() => setIsNotificationOpen(false)}
+                  >
+                    View all notifications
+                  </Link>
+                </div>
+              </div>
+            </div>
 
             {/* Profile Section */}
             <div className="hidden md:block relative" ref={dropdownRef}>
               <button
-                onClick={() => setIsProfileOpen(!isProfileOpen)}
+                onClick={() => {
+                  setIsProfileOpen(!isProfileOpen);
+                  setIsNotificationOpen(false);
+                }}
                 className="flex items-center focus:outline-none transition-transform duration-200 ease-in-out hover:scale-105"
               >
                 <img
