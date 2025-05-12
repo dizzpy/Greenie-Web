@@ -35,7 +35,7 @@ function ViewChallengeCard({ challenge }) {
 
       {/* Creator Information */}
       {/* <p className="text-gray-500 text-sm mt-3">Created by</p>
-      <p className="text-gray-700 font-medium">{challenge.creator}</p> */}
+      <p className="text-gray-700 font-medium">{challenge.username}</p> */}
 
       {/* Description */}
       <p className="text-gray-600 mt-4 text-sm leading-relaxed flex-grow">
@@ -60,7 +60,7 @@ ViewChallengeCard.propTypes = {
     photoUrl: PropTypes.string.isRequired,
     challengeName: PropTypes.string.isRequired,
     points: PropTypes.number.isRequired,
-    creator: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
   }).isRequired,
 };
