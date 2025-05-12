@@ -6,10 +6,12 @@ import { ImageUp } from 'lucide-react';
 import { API_CONFIG } from '../../../config/api.config';
 import { useAuth } from '../../../context/AuthContext';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 function SubmitChallenge() {
   const { challengeId } = useParams();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
@@ -139,7 +141,10 @@ function SubmitChallenge() {
       <NavBar />
       <div className="min-h-screen flex items-center justify-center bg-white p-4">
         <div className="bg-white w-full max-w-2xl md:max-w-md sm:max-w-sm p-6 border rounded-lg shadow-lg">
-          <button className="text-gray-600 flex text-lg items-center mb-4">
+          <button
+            className="text-gray-600 flex text-lg items-center mb-4"
+            onClick={() => navigate(-1)} // This goes back to the previous page
+          >
             <span className="mr-2">&larr;</span> Submit Challenge
           </button>
 
