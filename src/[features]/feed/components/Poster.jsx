@@ -64,7 +64,7 @@ const Poster = ({ postId, userId, content, image }) => {
     const fetchUser = async () => {
       try {
         const response = await axios.get(
-          API_CONFIG.ENDPOINTS.USER.GET_BY_ID(userId),
+          API_CONFIG.ENDPOINTS.POSTS.USER_DETAILS(userId),
         );
         const userData = response.data;
         setUser({
@@ -73,10 +73,13 @@ const Poster = ({ postId, userId, content, image }) => {
           avatar: userData.profileImgUrl || defaultProfileImg,
         });
       } catch (error) {
-        console.error('Failed to fetch user:', error);
+        console.error('Failed to fetch user details from posts:', error);
       }
     };
-    fetchUser();
+
+    if (userId) {
+      fetchUser();
+    }
   }, [userId]);
 
   useEffect(() => {
@@ -276,7 +279,7 @@ const Poster = ({ postId, userId, content, image }) => {
     <div className="bg-white p-4 rounded-2xl shadow-md w-full max-w-2xl mt-4 mx-auto">
       <div className="flex items-center gap-3 w-full">
         <img
-          src={user.avatar}
+          src={user.profileImage}
           alt="Profile"
           className="w-10 h-10 rounded-full object-cover"
           onError={(e) => {
@@ -284,7 +287,9 @@ const Poster = ({ postId, userId, content, image }) => {
           }}
         />
         <div>
-          <p className="font-semibold text-text-gray font-sans">{user.name}</p>
+          <p className="font-semibold text-text-gray font-sans">
+            {user.fullName}
+          </p>
           <p className="text-sm text-text-gray font-sans">@{user.username}</p>
         </div>
         <div className="ml-auto">

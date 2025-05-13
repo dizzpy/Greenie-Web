@@ -9,33 +9,27 @@ const CommentPopup = ({ postId, comments, onClose, onCommentAdded }) => {
   const [newComment, setNewComment] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const loggedInUser = JSON.parse(localStorage.getItem('user')); // Get from localStorage
-
   const handleSubmit = async () => {
-    if (!newComment.trim()) return;
-
     const user = JSON.parse(localStorage.getItem('user'));
 
-    if (!user || !user.id) {
-      console.error('❌ User not found in localStorage or missing ID.');
-      return;
-    }
+    if (!newComment.trim() || !user || !user.id) return;
 
-    console.log('Submitting comment:', newComment);
+    setLoading(true);
 
     try {
       const response = await axios.post(
         `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.POSTS.COMMENTS.CREATE(postId)}`,
-        newComment,
+        { comment: newComment }, // ✅ JSON object, not plain string
         {
           headers: {
-            'Content-Type': 'text/plain',
+            'Content-Type': 'application/json',
             userId: user.id,
           },
         },
       );
 
       if (response.status === 200 && onCommentAdded) {
+        // Update comments UI in real-time
         const commentPayload = {
           ...response.data,
           user: {
@@ -44,19 +38,19 @@ const CommentPopup = ({ postId, comments, onClose, onCommentAdded }) => {
             profileImage: user.profileImage,
           },
         };
-
         onCommentAdded(commentPayload);
         setNewComment('');
       }
     } catch (err) {
-      console.error('❌ Error submitting comment:', err);
+      console.error('❌ Failed to submit comment:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-2xl p-4 w-full max-w-lg shadow-lg relative max-h-[90vh] overflow-hidden">
-        {/* Close Button */}
         <button
           className="absolute top-2 right-2 text-gray-500 hover:text-red-500"
           onClick={onClose}
@@ -76,7 +70,7 @@ const CommentPopup = ({ postId, comments, onClose, onCommentAdded }) => {
                     comment.user?.profileImage ||
                     'https://via.placeholder.com/150'
                   }
-                  alt="User Profile"
+                  alt="User"
                   className="w-10 h-10 rounded-full object-cover"
                 />
                 <div className="flex-1">
