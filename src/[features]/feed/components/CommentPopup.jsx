@@ -14,13 +14,31 @@ const CommentPopup = ({ postId, comments, onClose, onCommentAdded }) => {
   const handleSubmit = async () => {
     if (!newComment.trim()) return;
 
-    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = localStorage.getItem('userId');
+    const userJson = localStorage.getItem('user');
+    let userInfo;
 
-    if (!user || !user.id) {
-      console.error('❌ User not found in localStorage or missing ID.');
+    try {
+      const parsedUser = userJson ? JSON.parse(userJson) : null;
+      userInfo = parsedUser || {
+        id: userId,
+        fullName: localStorage.getItem('userName') || 'Unknown User',
+        username: localStorage.getItem('userName') || 'unknown',
+        profileImage:
+          localStorage.getItem('userImage') ||
+          'https://via.placeholder.com/150',
+      };
+    } catch (e) {
+      console.error('Error parsing user data:', e);
       return;
     }
 
+    if (!userId) {
+      console.error('User ID not found in localStorage.');
+      return;
+    }
+
+    setLoading(true);
     console.log('Submitting comment:', newComment);
 
     try {
@@ -30,7 +48,7 @@ const CommentPopup = ({ postId, comments, onClose, onCommentAdded }) => {
         {
           headers: {
             'Content-Type': 'text/plain',
-            userId: user.id,
+            userId: userInfo.id,
           },
         },
       );
@@ -39,9 +57,9 @@ const CommentPopup = ({ postId, comments, onClose, onCommentAdded }) => {
         const commentPayload = {
           ...response.data,
           user: {
-            fullName: user.fullName,
-            username: user.username,
-            profileImage: user.profileImage,
+            fullName: userInfo.fullName,
+            username: userInfo.username,
+            profileImage: userInfo.profileImage,
           },
         };
 

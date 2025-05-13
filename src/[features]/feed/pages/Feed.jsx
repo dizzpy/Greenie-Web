@@ -116,8 +116,25 @@ function Feed() {
       {/* Comment Popup */}
       {selectedPost && (
         <CommentPopup
-          comments={selectedPost.comments}
+          postId={selectedPost.postId}
+          comments={selectedPost.comments || []}
           onClose={() => setSelectedPost(null)}
+          onCommentAdded={(newComment) => {
+            setPosts((prevPosts) =>
+              prevPosts.map((post) =>
+                post.postId === selectedPost.postId
+                  ? {
+                      ...post,
+                      comments: [...(post.comments || []), newComment],
+                    }
+                  : post,
+              ),
+            );
+            setSelectedPost((prev) => ({
+              ...prev,
+              comments: [...(prev.comments || []), newComment],
+            }));
+          }}
         />
       )}
     </div>
