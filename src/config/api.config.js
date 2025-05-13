@@ -11,7 +11,8 @@ export const API_CONFIG = {
     POSTS: {
       CREATE: '/api/posts/create',
       GET_ALL: '/api/posts/all',
-      USER_DETAILS: '/api/posts/user-details', // getting user details
+      // USER_DETAILS: '/api/posts/user-details', // getting user details
+      USER_DETAILS: (userId) => `/api/posts/user-details/${userId}`, // ✅ get post details by user
       LIKE: (postId) => `/api/posts/${postId}/like`, // ✅ like post
       UNLIKE: (postId) => `/api/posts/${postId}/unlike`, // ✅ unlike post
       GET_LIKES: (postId) => `/api/posts/${postId}/likes/all`, // ✅ get like count
