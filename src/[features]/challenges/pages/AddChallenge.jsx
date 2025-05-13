@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import NavBar from '../../../components/Shared/NavBar';
 import { API_CONFIG } from '../../../config/api.config';
+import { useNavigate } from 'react-router-dom';
 
 function AddChallenge() {
   const [formData, setFormData] = useState({
@@ -10,6 +11,8 @@ function AddChallenge() {
     description: '',
     photoUrl: '',
   });
+
+  const navigate = useNavigate();
 
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
@@ -82,8 +85,11 @@ function AddChallenge() {
           </div>
         )}
 
-        <button className="text-text-gray text-xl flex items-center mb-4">
-          ← Add Challenge
+        <button
+          onClick={() => navigate('/challenges')}
+          className="text-text-gray text-xl flex items-center mb-4 hover:text-black transition"
+        >
+          <span className="mr-2">&larr;</span> Back to Challenges
         </button>
 
         {/* Image URL Input Section */}
